@@ -1,0 +1,22 @@
+import { timer } from "./timer.ts";
+
+/**
+ * Creates a {@linkcode ReadableStream} that emits count at every `interval`.
+ *
+ * @example
+ * ```ts
+ * import { interval } from "@milly/streams/readable/interval";
+ * import { take } from "@milly/streams/transformer/take";
+ *
+ * // output : --100ms-> 0 --100ms-> 1 --100ms-> 2 --100ms-> 3 |
+ * const output = interval(100).pipeThrough(take(4));
+ * const result = await Array.fromAsync(output);
+ * console.log(result); // [0, 1, 2, 3]
+ * ```
+ *
+ * @param period The delay between each value emitted in the interval.
+ * @returns A ReadableStream that emits count at the specified interval.
+ */
+export function interval(period: number): ReadableStream<number> {
+  return timer(period, period);
+}

@@ -1,0 +1,101 @@
+{
+  "version": "3",
+  "packages": {
+    "specifiers": {
+      "jsr:@milly/streamtest@0.13.0": "jsr:@milly/streamtest@0.13.0",
+      "jsr:@std/assert@0.224.0": "jsr:@std/assert@0.224.0",
+      "jsr:@std/assert@0.225.3": "jsr:@std/assert@0.225.3",
+      "jsr:@std/assert@^0.224.0": "jsr:@std/assert@0.224.0",
+      "jsr:@std/async@0.224.0": "jsr:@std/async@0.224.0",
+      "jsr:@std/async@0.224.1": "jsr:@std/async@0.224.1",
+      "jsr:@std/async@^0.224.0": "jsr:@std/async@0.224.1",
+      "jsr:@std/data-structures@^0.224.0": "jsr:@std/data-structures@0.224.1",
+      "jsr:@std/fmt@^0.224.0": "jsr:@std/fmt@0.224.0",
+      "jsr:@std/fs@^0.224.0": "jsr:@std/fs@0.224.0",
+      "jsr:@std/internal@^0.224.0": "jsr:@std/internal@0.224.0",
+      "jsr:@std/internal@^1.0.0": "jsr:@std/internal@1.0.0",
+      "jsr:@std/io@^0.224.0": "jsr:@std/io@0.224.0",
+      "jsr:@std/log@0.224.0": "jsr:@std/log@0.224.0",
+      "jsr:@std/testing@0.224.0": "jsr:@std/testing@0.224.0",
+      "jsr:@std/testing@^0.224.0": "jsr:@std/testing@0.224.0"
+    },
+    "jsr": {
+      "@milly/streamtest@0.13.0": {
+        "integrity": "06e248d470c44775851a816f027cfcfb29b2d7a16449920d653487a3cebe637a",
+        "dependencies": [
+          "jsr:@std/assert@0.224.0",
+          "jsr:@std/log@0.224.0",
+          "jsr:@std/testing@0.224.0"
+        ]
+      },
+      "@std/assert@0.224.0": {
+        "integrity": "8643233ec7aec38a940a8264a6e3eed9bfa44e7a71cc6b3c8874213ff401967f",
+        "dependencies": [
+          "jsr:@std/fmt@^0.224.0",
+          "jsr:@std/internal@^0.224.0"
+        ]
+      },
+      "@std/assert@0.225.3": {
+        "integrity": "b3c2847aecf6955b50644cdb9cf072004ea3d1998dd7579fc0acb99dbb23bd4f",
+        "dependencies": [
+          "jsr:@std/internal@^1.0.0"
+        ]
+      },
+      "@std/async@0.224.0": {
+        "integrity": "b6da423eeafbd0003fe88d950e069368c6a156f8b5293b7adbd9c8903a8f8d66"
+      },
+      "@std/async@0.224.1": {
+        "integrity": "2fda2c8151cc5811a6ca37fe825f1f71c95e02a374abb6ef868e0e19eca814a5"
+      },
+      "@std/data-structures@0.224.0": {
+        "integrity": "b6e83a27374c9ff8bce121c494fbad84bca9bf09eeed9eaa7418b97b522e25a4"
+      },
+      "@std/data-structures@0.224.1": {
+        "integrity": "266365f90014e5c52bccf1eadd65f7782a2af2c84e4052ef8316698a3572cac3"
+      },
+      "@std/fmt@0.224.0": {
+        "integrity": "e20e9a2312a8b5393272c26191c0a68eda8d2c4b08b046bad1673148f1d69851"
+      },
+      "@std/fs@0.224.0": {
+        "integrity": "52a5ec89731ac0ca8f971079339286f88c571a4d61686acf75833f03a89d8e69"
+      },
+      "@std/internal@0.224.0": {
+        "integrity": "afc50644f9cdf4495eeb80523a8f6d27226b4b36c45c7c195dfccad4b8509291"
+      },
+      "@std/internal@1.0.0": {
+        "integrity": "ac6a6dfebf838582c4b4f61a6907374e27e05bedb6ce276e0f1608fe84e7cd9a"
+      },
+      "@std/io@0.224.0": {
+        "integrity": "0aff885d21d829c050b8a08b1d71b54aed5841aecf227f8d77e99ec529a11e8e"
+      },
+      "@std/log@0.224.0": {
+        "integrity": "24c8a38f3f322e3d33c3137d5562acad25830c01bd5838ade6c5a62118882deb",
+        "dependencies": [
+          "jsr:@std/assert@^0.224.0",
+          "jsr:@std/fmt@^0.224.0",
+          "jsr:@std/fs@^0.224.0",
+          "jsr:@std/io@^0.224.0"
+        ]
+      },
+      "@std/testing@0.224.0": {
+        "integrity": "371b8a929aa7132240d5dd766a439be8f780ef5c176ab194e0bcab72370c761e",
+        "dependencies": [
+          "jsr:@std/assert@^0.224.0",
+          "jsr:@std/async@^0.224.0",
+          "jsr:@std/data-structures@^0.224.0"
+        ]
+      }
+    }
+  },
+  "remote": {},
+  "workspace": {
+    "dependencies": [
+      "jsr:@milly/streamtest@0.13.0",
+      "jsr:@std/assert@0.225.3",
+      "jsr:@std/async@0.224.1",
+      "jsr:@std/bytes@0.224.0",
+      "jsr:@std/log@0.224.1",
+      "jsr:@std/testing@0.224.0"
+    ]
+  }
+}
