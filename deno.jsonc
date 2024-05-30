@@ -52,6 +52,7 @@
   },
   "publish": {
     "exclude": [
+      "**/*_test.ts",
       ".github/"
     ]
   },
