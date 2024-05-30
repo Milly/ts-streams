@@ -10,6 +10,7 @@
     "./readable/error": "./readable/error.ts",
     "./readable/from": "./readable/from.ts",
     "./readable/from-event": "./readable/from_event.ts",
+    "./readable/from-message": "./readable/from_message.ts",
     "./readable/interval": "./readable/interval.ts",
     "./readable/merge-with": "./readable/merge_with.ts",
     "./readable/range": "./readable/range.ts",
