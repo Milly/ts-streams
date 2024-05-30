@@ -20,3 +20,11 @@ export type StreamSource<T> = AsyncIterable<T> | Iterable<T | PromiseLike<T>>;
  * @returns Generated values.
  */
 export type ProjectFn<I, O> = (value: I, index: number) => O;
+
+/**
+ * A function type that receives input values.
+ *
+ * @param value The current chunk from the source.
+ * @param index The index of the current chunk from the source.
+ */
+export type WriteFn<T> = (value: T, index: number) => void;
