@@ -14,6 +14,7 @@
     "@milly/streams/readable/error": "./readable/error.ts",
     "@milly/streams/readable/from": "./readable/from.ts",
     "@milly/streams/readable/from-event": "./readable/from_event.ts",
+    "@milly/streams/readable/from-message": "./readable/from_message.ts",
     "@milly/streams/readable/interval": "./readable/interval.ts",
     "@milly/streams/readable/merge-with": "./readable/merge_with.ts",
     "@milly/streams/readable/range": "./readable/range.ts",
