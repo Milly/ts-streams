@@ -42,6 +42,7 @@
     "./transformer/take-last": "./transformer/take_last.ts",
     "./transformer/tap": "./transformer/tap.ts",
     "./transformer/terminate": "./transformer/terminate.ts",
+    "./writable/post-message": "./writable/post_message.ts",
     "./types": "./types.ts",
     "./util": "./util/mod.ts",
     "./util/array-from": "./util/array_from.ts",

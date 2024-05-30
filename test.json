@@ -46,6 +46,7 @@
     "@milly/streams/transformer/take-last": "./transformer/take_last.ts",
     "@milly/streams/transformer/tap": "./transformer/tap.ts",
     "@milly/streams/transformer/terminate": "./transformer/terminate.ts",
+    "@milly/streams/writable/post-message": "./writable/post_message.ts",
     "@milly/streams/types": "./types.ts",
     "@milly/streams/util": "./util/mod.ts",
     "@milly/streams/util/array-from": "./util/array_from.ts",
