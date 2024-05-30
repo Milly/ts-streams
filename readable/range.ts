@@ -1,3 +1,9 @@
+/**
+ * Provides {@link range}.
+ *
+ * @module
+ */
+
 import { empty } from "./empty.ts";
 
 /**

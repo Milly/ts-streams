@@ -1,3 +1,9 @@
+/**
+ * Provides {@link interval}.
+ *
+ * @module
+ */
+
 import { timer } from "./timer.ts";
 
 /**

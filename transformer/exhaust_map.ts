@@ -1,3 +1,9 @@
+/**
+ * Provides {@link exhaustMap}.
+ *
+ * @module
+ */
+
 import type { ProjectFn, StreamSource } from "../types.ts";
 import { toReadableStream } from "../_internal/to_readable_stream.ts";
 

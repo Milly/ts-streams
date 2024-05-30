@@ -1,4 +1,10 @@
 /**
+ * Provides {@link bufferCount}.
+ *
+ * @module
+ */
+
+/**
  * Returns a {@linkcode TransformStream} that buffers a number of chunks from
  * the writable side by `bufferSize` then emits buffered values as an array to
  * the readable side.

@@ -1,4 +1,10 @@
 /**
+ * Provides {@link error}.
+ *
+ * @module
+ */
+
+/**
  * Returns a {@linkcode ReadableStream} that emits no values and immediately
  * cancels.
  *

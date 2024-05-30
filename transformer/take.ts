@@ -1,3 +1,9 @@
+/**
+ * Provides {@link take}.
+ *
+ * @module
+ */
+
 import { terminate } from "./terminate.ts";
 
 /**

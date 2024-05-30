@@ -1,3 +1,9 @@
+/**
+ * Provides {@link switchAll}.
+ *
+ * @module
+ */
+
 import { identity } from "../_internal/identity.ts";
 import type { StreamSource } from "../types.ts";
 import { switchMap } from "./switch_map.ts";

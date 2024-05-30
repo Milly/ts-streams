@@ -1,3 +1,9 @@
+/**
+ * Provides {@link fromMessage}.
+ *
+ * @module
+ */
+
 /** Message target type for {@linkcode fromMessage}. */
 // deno-lint-ignore no-explicit-any
 export interface FromMessageTarget<T = any> {

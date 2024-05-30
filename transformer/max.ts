@@ -1,3 +1,9 @@
+/**
+ * Provides {@link max}.
+ *
+ * @module
+ */
+
 import { reduce } from "./reduce.ts";
 
 /**

@@ -1,3 +1,9 @@
+/**
+ * Provides {@link concatWith}.
+ *
+ * @module
+ */
+
 import type { StreamSource } from "../types.ts";
 import { toReadableStream } from "../_internal/to_readable_stream.ts";
 import { concatAll } from "../transformer/concat_all.ts";

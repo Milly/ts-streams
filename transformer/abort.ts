@@ -1,4 +1,10 @@
 /**
+ * Provides {@link abort}.
+ *
+ * @module
+ */
+
+/**
  * Returns a {@linkcode TransformStream} that emits no values and immediately
  * aborts.
  *

@@ -1,3 +1,9 @@
+/**
+ * Provides {@link count}.
+ *
+ * @module
+ */
+
 import { reduce } from "./reduce.ts";
 
 /**

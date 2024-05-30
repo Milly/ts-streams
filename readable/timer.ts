@@ -1,4 +1,10 @@
 /**
+ * Provides {@link timer}.
+ *
+ * @module
+ */
+
+/**
  * Creates a {@linkcode ReadableStream} that waits a `delay` then emits 0.
  *
  * If `interval` is specified, first waits for `delay` then emits 0, and emits

@@ -1,3 +1,9 @@
+/**
+ * Provides {@link mergeWith}.
+ *
+ * @module
+ */
+
 import type { StreamSource } from "../types.ts";
 import { toReadableStream } from "../_internal/to_readable_stream.ts";
 import { mergeAll } from "../transformer/merge_all.ts";

@@ -1,3 +1,9 @@
+/**
+ * Provides {@link mergeAll}.
+ *
+ * @module
+ */
+
 import { identity } from "../_internal/identity.ts";
 import type { StreamSource } from "../types.ts";
 import { mergeMap } from "./merge_map.ts";

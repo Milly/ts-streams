@@ -1,3 +1,9 @@
+/**
+ * Provides {@link fromEvent}.
+ *
+ * @module
+ */
+
 /** Event target type for {@linkcode fromEvent}. */
 export interface EventTargetLike<E = Event> {
   addEventListener(

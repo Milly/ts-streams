@@ -1,3 +1,9 @@
+/**
+ * Provides {@link map}.
+ *
+ * @module
+ */
+
 import type { ProjectFn } from "../types.ts";
 
 /**

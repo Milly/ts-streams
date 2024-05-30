@@ -1,4 +1,10 @@
 /**
+ * Provides {@link scan}.
+ *
+ * @module
+ */
+
+/**
  * Returns a {@linkcode TransformStream} that calls the `accumulator` for each
  * chunks from the writable side, and emits each result of the accumulator.
  *

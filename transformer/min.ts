@@ -1,3 +1,9 @@
+/**
+ * Provides {@link min}.
+ *
+ * @module
+ */
+
 import { reduce } from "./reduce.ts";
 
 /**

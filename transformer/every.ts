@@ -1,4 +1,10 @@
 /**
+ * Provides {@link every}.
+ *
+ * @module
+ */
+
+/**
  * Returns a {@linkcode TransformStream} that emits whether all chunks from
  * the writable side satisfy the specified predicate.
  *

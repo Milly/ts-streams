@@ -1,3 +1,9 @@
+/**
+ * Provides {@link delay}.
+ *
+ * @module
+ */
+
 import { timer } from "../readable/timer.ts";
 import { map } from "./map.ts";
 import { mergeMap } from "./merge_map.ts";

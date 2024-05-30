@@ -1,4 +1,10 @@
 /**
+ * Provides {@link reduce}.
+ *
+ * @module
+ */
+
+/**
  * Returns a {@linkcode TransformStream} that calls the `accumulator` for each
  * chunks from the writable side, and emits the accumulator result when the
  * writable side closes.

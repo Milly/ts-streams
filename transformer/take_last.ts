@@ -1,3 +1,9 @@
+/**
+ * Provides {@link takeLast}.
+ *
+ * @module
+ */
+
 import { terminate } from "./terminate.ts";
 
 /**

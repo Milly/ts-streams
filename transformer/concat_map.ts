@@ -1,3 +1,9 @@
+/**
+ * Provides {@link concatMap}.
+ *
+ * @module
+ */
+
 import type { ProjectFn, StreamSource } from "../types.ts";
 import { mergeMap } from "./merge_map.ts";
 

@@ -1,4 +1,10 @@
 /**
+ * Provides {@link write}.
+ *
+ * @module
+ */
+
+/**
  * Writes values to the {@linkcode WritableStream}.
  *
  * If a promise is specified, the resolved value will be written.

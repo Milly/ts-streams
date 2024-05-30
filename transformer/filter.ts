@@ -1,4 +1,10 @@
 /**
+ * Provides {@link filter}.
+ *
+ * @module
+ */
+
+/**
  * Returns a {@linkcode TransformStream} that filter items by a specified
  * predicate.
  *

@@ -1,4 +1,10 @@
 /**
+ * Provides {@link tap}.
+ *
+ * @module
+ */
+
+/**
  * Represents callback functions that are called when a stream event occurs in
  * the `tap` method.
  */

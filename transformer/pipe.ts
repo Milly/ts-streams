@@ -1,4 +1,10 @@
 /**
+ * Provides {@link pipe}.
+ *
+ * @module
+ */
+
+/**
  * Returns a {@linkcode TransformStream} that pipes multiple TransformStreams
  * serially.
  *
