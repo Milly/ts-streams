@@ -1,5 +1,5 @@
 /**
- * Provides {@link max}.
+ * Provides {@link min}.
  *
  * @module
  */
@@ -7,30 +7,30 @@
 import { reduce } from "./reduce.ts";
 
 /**
- * Returns a {@linkcode TransformStream} that emits largest value from the
+ * Returns a {@linkcode TransformStream} that emits smallest value from the
  * writable side.
  *
  * @example
  * ```ts
- * import { max } from "@milly/streams/transformer/max";
+ * import { min } from "@milly/streams/transform/min";
  * import { from } from "@milly/streams/readable/from";
  *
  * const source = from([12, 42, 3, 8, 25]);
- * const output = source.pipeThrough(max());
+ * const output = source.pipeThrough(min());
  * const result = await Array.fromAsync(output);
- * console.log(result); // [42]
+ * console.log(result); // [3]
  * ```
  *
  * @template T The type of chunks.
  * @param comparer The compare function that will use instead of the default two-value comparison behavior.
- * @returns A TransformStream that emits largest value.
+ * @returns A TransformStream that emits smallest value.
  */
-export function max<T>(
+export function min<T>(
   comparer?: (a: T, b: T) => number,
 ): TransformStream<T, T> {
   return reduce(
     comparer
-      ? ((a, b) => comparer(a, b) > 0 ? a : b)
-      : ((a, b) => a > b ? a : b),
+      ? ((a, b) => comparer(a, b) < 0 ? a : b)
+      : ((a, b) => a < b ? a : b),
   );
 }

@@ -11,7 +11,7 @@
  *
  * @example
  * ```ts
- * import { bufferCount } from "@milly/streams/transformer/buffer-count";
+ * import { bufferCount } from "@milly/streams/transform/buffer-count";
  * import { from } from "@milly/streams/readable/from";
  *
  * const source = from([1, 2, 3, 4, 5, 6, 7, 8]);

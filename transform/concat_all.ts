@@ -17,7 +17,7 @@ import { mergeMap } from "./merge_map.ts";
  *
  * @example
  * ```ts
- * import { concatAll } from "@milly/streams/transformer/concat-all";
+ * import { concatAll } from "@milly/streams/transform/concat-all";
  * import { from } from "@milly/streams/readable/from";
  *
  * const source = from([

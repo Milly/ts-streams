@@ -10,11 +10,11 @@
  *
  * @example
  * ```ts
- * import { pipe } from "@milly/streams/transformer/pipe";
- * import { filter } from "@milly/streams/transformer/filter";
+ * import { pipe } from "@milly/streams/transform/pipe";
+ * import { filter } from "@milly/streams/transform/filter";
  * import { interval } from "@milly/streams/readable/interval";
- * import { map } from "@milly/streams/transformer/map";
- * import { take } from "@milly/streams/transformer/take";
+ * import { map } from "@milly/streams/transform/map";
+ * import { take } from "@milly/streams/transform/take";
  *
  * const source = interval(100);
  * const output = source.pipeThrough(pipe(

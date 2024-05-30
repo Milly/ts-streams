@@ -1,5 +1,5 @@
 /**
- * Provides {@link switchMap}.
+ * Provides {@link exhaustMap}.
  *
  * @module
  */
@@ -9,31 +9,30 @@ import { toReadableStream } from "../_internal/to_readable_stream.ts";
 
 /**
  * Returns a {@linkcode TransformStream} that projects each source value to
- * a {@linkcode ReadableStream} which is merged into the output ReadableStream,
- * emitting values only from most recently projected ReadableStream.
+ * a {@linkcode ReadableStream} which is merged into the output
+ * ReadableStream only if the previous projected ReadableStream has completed.
  *
  * @example
  * ```ts
- * import { switchMap } from "@milly/streams/transformer/switch-map";
+ * import { exhaustMap } from "@milly/streams/transform/exhaust-map";
  * import { timer } from "@milly/streams/readable/timer";
- * import { map } from "@milly/streams/transformer/map";
- * import { pipe } from "@milly/streams/transformer/pipe";
- * import { take } from "@milly/streams/transformer/take";
+ * import { map } from "@milly/streams/transform/map";
+ * import { pipe } from "@milly/streams/transform/pipe";
+ * import { take } from "@milly/streams/transform/take";
  *
  * // source     : 0 -300ms------> 1 -300ms------> 2 |
- * // project[0] : 0 -200ms-> 0 -> |
- * // project[1] :                 1 -200ms-> 1 -> |
+ * // project[0] : 0 -200ms-> 0 -200ms-> 0 |
  * // project[2] :                                 2 -200ms-> 2 -200ms-> 2 |
- * // output     : 0 -------> 0 -> 1 -------> 1 -> 2 -------> 2 -------> 2 |
+ * // output     : 0 -------> 0 -------> 0 ------> 2 -------> 2 -------> 2 |
  * const source = timer(0, 300).pipeThrough(take(3));
- * const output = source.pipeThrough(switchMap((value) =>
+ * const output = source.pipeThrough(exhaustMap((value) =>
  *   timer(0, 200).pipeThrough(pipe(
  *     take(3),
  *     map(() => value),
  *   ))
  * ));
  * const result = await Array.fromAsync(output);
- * console.log(result); // [0, 0, 1, 1, 2, 2, 2]
+ * console.log(result); // [0, 0, 1, 0, 1, 2, 1, 2, 2]
  * ```
  *
  * @template I The type of chunks from the writable side.
@@ -41,26 +40,26 @@ import { toReadableStream } from "../_internal/to_readable_stream.ts";
  * @param project A function that accepts up to two arguments. It is called one time for each chunk from the writable side.
  * @returns A TransformStream that projects each source value into a ReadableStream and merges it into the output.
  */
-export function switchMap<I, O>(
+export function exhaustMap<I, O>(
   project: ProjectFn<I, StreamSource<O>>,
 ): TransformStream<I, O> {
   if (typeof project !== "function") {
     throw new TypeError("No project function found");
   }
 
-  const SWITCH = {};
-  let aborter: AbortController | undefined;
+  const aborter = new AbortController();
+  const { signal } = aborter;
   let streamIndex = 0;
   let streamCount = 0;
   let writableClosed = false;
 
   const dispose = () => {
     // deno-lint-ignore no-explicit-any
-    readableController = writableController = aborter = null as any;
+    readableController = writableController = null as any;
   };
 
   const abort = (reason: unknown) => {
-    aborter?.abort(reason);
+    aborter.abort(reason);
     writableController?.error(reason);
     readableController?.error(reason);
     dispose();
@@ -75,22 +74,19 @@ export function switchMap<I, O>(
 
   const activate = async (value: I) => {
     ++streamCount;
-    aborter?.abort(SWITCH);
-    aborter = new AbortController();
     try {
-      await toReadableStream(project(value, streamIndex++)).pipeTo(
+      await toReadableStream(project(value, streamIndex)).pipeTo(
         new WritableStream({
           write(chunk) {
             readableController.enqueue(chunk);
           },
         }),
-        { signal: aborter.signal },
+        { signal },
       );
-    } catch (e: unknown) {
-      if (e !== SWITCH) abort(e);
-    } finally {
       --streamCount;
       flush();
+    } catch (e: unknown) {
+      abort(e);
     }
   };
 
@@ -110,7 +106,10 @@ export function switchMap<I, O>(
       writableController = controller;
     },
     write(chunk) {
-      activate(chunk);
+      if (streamCount === 0) {
+        activate(chunk);
+      }
+      ++streamIndex;
     },
     close() {
       writableClosed = true;

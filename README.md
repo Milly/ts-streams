@@ -13,7 +13,7 @@ TypeScript modules that provides utilities for
 ```typescript
 import { from } from "@milly/streams/readable/from";
 import { fromMessage } from "@milly/streams/readable/from-message";
-import { switchMap } from "@milly/streams/transformer/switch-map";
+import { switchMap } from "@milly/streams/transform/switch-map";
 import { forEach } from "@milly/streams/writable/for-each";
 import { postMessage } from "@milly/streams/writable/post-message";
 import { delay } from "@std/async/delay";

@@ -14,8 +14,8 @@ import { mergeMap } from "./merge_map.ts";
  *
  * @example
  * ```ts
- * import { delay } from "@milly/streams/transformer/delay";
- * import { take } from "@milly/streams/transformer/take";
+ * import { delay } from "@milly/streams/transform/delay";
+ * import { take } from "@milly/streams/transform/take";
  * import { timer } from "@milly/streams/readable/timer";
  *
  * // source : -100ms-> 0 --200ms--> 1 --200ms--> 2 |

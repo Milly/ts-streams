@@ -10,7 +10,7 @@
  *
  * @example
  * ```ts
- * import { terminate } from "@milly/streams/transformer/terminate";
+ * import { terminate } from "@milly/streams/transform/terminate";
  * import { from } from "@milly/streams/readable/from";
  *
  * const source = from([1, 2, 3]);

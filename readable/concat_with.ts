@@ -6,7 +6,7 @@
 
 import type { StreamSource } from "../types.ts";
 import { toReadableStream } from "../_internal/to_readable_stream.ts";
-import { concatAll } from "../transformer/concat_all.ts";
+import { concatAll } from "../transform/concat_all.ts";
 
 /**
  * Creates a {@linkcode ReadableStream} that emits each higher-order

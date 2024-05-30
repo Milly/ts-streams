@@ -14,12 +14,12 @@ import { mergeMap } from "./merge_map.ts";
  *
  * @example
  * ```ts
- * import { concatMap } from "@milly/streams/transformer/concat-map";
+ * import { concatMap } from "@milly/streams/transform/concat-map";
  * import { from } from "@milly/streams/readable/from";
  * import { interval } from "@milly/streams/readable/interval";
- * import { map } from "@milly/streams/transformer/map";
- * import { pipe } from "@milly/streams/transformer/pipe";
- * import { take } from "@milly/streams/transformer/take";
+ * import { map } from "@milly/streams/transform/map";
+ * import { pipe } from "@milly/streams/transform/pipe";
+ * import { take } from "@milly/streams/transform/take";
  *
  * // source     : 3 5 |
  * // project[0] : -300ms-> 30 -300ms-> 31 |

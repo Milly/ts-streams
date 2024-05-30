@@ -15,9 +15,9 @@ import { mergeMap } from "./merge_map.ts";
  *
  * @example
  * ```ts
- * import { mergeAll } from "@milly/streams/transformer/merge-all";
+ * import { mergeAll } from "@milly/streams/transform/merge-all";
  * import { from } from "@milly/streams/readable/from";
- * import { map } from "@milly/streams/transformer/map";
+ * import { map } from "@milly/streams/transform/map";
  * import { timer } from "@milly/streams/readable/timer";
  *
  * // source[0] : 0 ------300ms----------> 0 ------300ms--------> 0 |

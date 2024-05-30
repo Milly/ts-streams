@@ -83,10 +83,10 @@ export interface TapController {
  *
  * @example
  * ```ts
- * import { tap } from "@milly/streams/transformer/tap";
+ * import { tap } from "@milly/streams/transform/tap";
  * import { from } from "@milly/streams/readable/from";
- * import { map } from "@milly/streams/transformer/map";
- * import { pipe } from "@milly/streams/transformer/pipe";
+ * import { map } from "@milly/streams/transform/map";
+ * import { pipe } from "@milly/streams/transform/pipe";
  *
  * const source = from([1, 2, 3]);
  * const output = source.pipeThrough(pipe(

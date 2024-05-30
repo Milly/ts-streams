@@ -13,7 +13,7 @@
  * @example
  * ```ts
  * import { timer } from "@milly/streams/readable/timer";
- * import { take } from "@milly/streams/transformer/take";
+ * import { take } from "@milly/streams/transform/take";
  *
  * // output1 : --100ms-> 0
  * const output1 = timer(100);

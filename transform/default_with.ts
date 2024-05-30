@@ -13,7 +13,7 @@ import { toReadableStream } from "../_internal/to_readable_stream.ts";
  *
  * @example
  * ```ts
- * import { defaultWith } from "@milly/streams/transformer/default-with";
+ * import { defaultWith } from "@milly/streams/transform/default-with";
  * import { from } from "@milly/streams/readable/from";
  *
  * const source = from([]);
