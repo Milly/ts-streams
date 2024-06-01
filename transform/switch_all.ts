@@ -1,3 +1,9 @@
+/**
+ * Provides {@link switchAll}.
+ *
+ * @module
+ */
+
 import { identity } from "../_internal/identity.ts";
 import type { StreamSource } from "../types.ts";
 import { switchMap } from "./switch_map.ts";
@@ -9,11 +15,11 @@ import { switchMap } from "./switch_map.ts";
  *
  * @example
  * ```ts
- * import { switchAll } from "@milly/streams/transformer/switch-all";
+ * import { switchAll } from "@milly/streams/transform/switch-all";
  * import { timer } from "@milly/streams/readable/timer";
- * import { map } from "@milly/streams/transformer/map";
- * import { pipe } from "@milly/streams/transformer/pipe";
- * import { take } from "@milly/streams/transformer/take";
+ * import { map } from "@milly/streams/transform/map";
+ * import { pipe } from "@milly/streams/transform/pipe";
+ * import { take } from "@milly/streams/transform/take";
  *
  * // source:timer  : 0 -300ms------> 1 -300ms------> 2 |
  * // source:map[0] : 0 -200ms-> 0 -200ms-> 0 |

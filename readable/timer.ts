@@ -1,4 +1,10 @@
 /**
+ * Provides {@link timer}.
+ *
+ * @module
+ */
+
+/**
  * Creates a {@linkcode ReadableStream} that waits a `delay` then emits 0.
  *
  * If `interval` is specified, first waits for `delay` then emits 0, and emits
@@ -7,7 +13,7 @@
  * @example
  * ```ts
  * import { timer } from "@milly/streams/readable/timer";
- * import { take } from "@milly/streams/transformer/take";
+ * import { take } from "@milly/streams/transform/take";
  *
  * // output1 : --100ms-> 0
  * const output1 = timer(100);

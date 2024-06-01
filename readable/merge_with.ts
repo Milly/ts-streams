@@ -1,6 +1,12 @@
+/**
+ * Provides {@link mergeWith}.
+ *
+ * @module
+ */
+
 import type { StreamSource } from "../types.ts";
 import { toReadableStream } from "../_internal/to_readable_stream.ts";
-import { mergeAll } from "../transformer/merge_all.ts";
+import { mergeAll } from "../transform/merge_all.ts";
 
 /**
  * Creates a {@linkcode ReadableStream} that merges and emits all higher-order
@@ -9,9 +15,9 @@ import { mergeAll } from "../transformer/merge_all.ts";
  * @example
  * ```ts
  * import { mergeWith } from "@milly/streams/readable/merge-with";
- * import { map } from "@milly/streams/transformer/map";
- * import { pipe } from "@milly/streams/transformer/pipe";
- * import { take } from "@milly/streams/transformer/take";
+ * import { map } from "@milly/streams/transform/map";
+ * import { pipe } from "@milly/streams/transform/pipe";
+ * import { take } from "@milly/streams/transform/take";
  * import { timer } from "@milly/streams/readable/timer";
  *
  * // input[0] : 1 --300ms--------------> 1 --300ms------------> 1

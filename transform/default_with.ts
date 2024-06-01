@@ -1,3 +1,9 @@
+/**
+ * Provides {@link defaultWith}.
+ *
+ * @module
+ */
+
 import type { StreamSource } from "../types.ts";
 import { toReadableStream } from "../_internal/to_readable_stream.ts";
 
@@ -7,7 +13,7 @@ import { toReadableStream } from "../_internal/to_readable_stream.ts";
  *
  * @example
  * ```ts
- * import { defaultWith } from "@milly/streams/transformer/default-with";
+ * import { defaultWith } from "@milly/streams/transform/default-with";
  * import { from } from "@milly/streams/readable/from";
  *
  * const source = from([]);

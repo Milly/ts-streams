@@ -1,3 +1,9 @@
+/**
+ * Provides {@link interval}.
+ *
+ * @module
+ */
+
 import { timer } from "./timer.ts";
 
 /**
@@ -6,7 +12,7 @@ import { timer } from "./timer.ts";
  * @example
  * ```ts
  * import { interval } from "@milly/streams/readable/interval";
- * import { take } from "@milly/streams/transformer/take";
+ * import { take } from "@milly/streams/transform/take";
  *
  * // output : --100ms-> 0 --100ms-> 1 --100ms-> 2 --100ms-> 3 |
  * const output = interval(100).pipeThrough(take(4));

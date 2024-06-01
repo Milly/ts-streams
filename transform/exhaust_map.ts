@@ -1,25 +1,31 @@
+/**
+ * Provides {@link exhaustMap}.
+ *
+ * @module
+ */
+
 import type { ProjectFn, StreamSource } from "../types.ts";
 import { toReadableStream } from "../_internal/to_readable_stream.ts";
 
 /**
  * Returns a {@linkcode TransformStream} that projects each source value to
- * a {@linkcode ReadableStream} which is merged into the output ReadableStream.
+ * a {@linkcode ReadableStream} which is merged into the output
+ * ReadableStream only if the previous projected ReadableStream has completed.
  *
  * @example
  * ```ts
- * import { mergeMap } from "@milly/streams/transformer/merge-map";
+ * import { exhaustMap } from "@milly/streams/transform/exhaust-map";
  * import { timer } from "@milly/streams/readable/timer";
- * import { map } from "@milly/streams/transformer/map";
- * import { pipe } from "@milly/streams/transformer/pipe";
- * import { take } from "@milly/streams/transformer/take";
+ * import { map } from "@milly/streams/transform/map";
+ * import { pipe } from "@milly/streams/transform/pipe";
+ * import { take } from "@milly/streams/transform/take";
  *
  * // source     : 0 -300ms------> 1 -300ms------> 2 |
  * // project[0] : 0 -200ms-> 0 -200ms-> 0 |
- * // project[1] :                 1 -200ms-> 1 -200ms-> 1 |
  * // project[2] :                                 2 -200ms-> 2 -200ms-> 2 |
- * // output     : 0 -------> 0 -> 1 --> 0 -> 1 -> 2 --> 1 -> 2 -------> 2 |
+ * // output     : 0 -------> 0 -------> 0 ------> 2 -------> 2 -------> 2 |
  * const source = timer(0, 300).pipeThrough(take(3));
- * const output = source.pipeThrough(mergeMap((value) =>
+ * const output = source.pipeThrough(exhaustMap((value) =>
  *   timer(0, 200).pipeThrough(pipe(
  *     take(3),
  *     map(() => value),
@@ -31,32 +37,25 @@ import { toReadableStream } from "../_internal/to_readable_stream.ts";
  *
  * @template I The type of chunks from the writable side.
  * @template O The type of chunks to the readable side.
- * @param project A function to execute for each chunk from the source. Its return value is iterable and each chunk is merged into the output.
  * @param project A function that accepts up to two arguments. It is called one time for each chunk from the writable side.
- * @param options.concurrent Number of projects to read in parallel. Default is `Infinity`.
  * @returns A TransformStream that projects each source value into a ReadableStream and merges it into the output.
  */
-export function mergeMap<I, O>(
+export function exhaustMap<I, O>(
   project: ProjectFn<I, StreamSource<O>>,
-  options?: {
-    concurrent?: number;
-  },
 ): TransformStream<I, O> {
   if (typeof project !== "function") {
     throw new TypeError("No project function found");
   }
-  const { concurrent = Infinity } = options ?? {};
 
   const aborter = new AbortController();
   const { signal } = aborter;
-  let buffer: I[] = [];
   let streamIndex = 0;
   let streamCount = 0;
   let writableClosed = false;
 
   const dispose = () => {
     // deno-lint-ignore no-explicit-any
-    readableController = writableController = buffer = null as any;
+    readableController = writableController = null as any;
   };
 
   const abort = (reason: unknown) => {
@@ -76,7 +75,7 @@ export function mergeMap<I, O>(
   const activate = async (value: I) => {
     ++streamCount;
     try {
-      await toReadableStream(project(value, streamIndex++)).pipeTo(
+      await toReadableStream(project(value, streamIndex)).pipeTo(
         new WritableStream({
           write(chunk) {
             readableController.enqueue(chunk);
@@ -85,12 +84,7 @@ export function mergeMap<I, O>(
         { signal },
       );
       --streamCount;
-      const next = buffer.shift();
-      if (next) {
-        activate(next);
-      } else {
-        flush();
-      }
+      flush();
     } catch (e: unknown) {
       abort(e);
     }
@@ -112,11 +106,10 @@ export function mergeMap<I, O>(
       writableController = controller;
     },
     write(chunk) {
-      if (streamCount < concurrent) {
+      if (streamCount === 0) {
         activate(chunk);
-      } else {
-        buffer.push(chunk);
       }
+      ++streamIndex;
     },
     close() {
       writableClosed = true;

@@ -1,4 +1,10 @@
 /**
+ * Provides {@link every}.
+ *
+ * @module
+ */
+
+/**
  * Returns a {@linkcode TransformStream} that emits whether all chunks from
  * the writable side satisfy the specified predicate.
  *
@@ -6,7 +12,7 @@
  *
  * @example
  * ```ts
- * import { every } from "@milly/streams/transformer/every";
+ * import { every } from "@milly/streams/transform/every";
  * import { from } from "@milly/streams/readable/from";
  *
  * const source = from([2, 4, 6]);

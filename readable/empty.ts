@@ -1,4 +1,10 @@
 /**
+ * Provides {@link empty}.
+ *
+ * @module
+ */
+
+/**
  * Returns a {@linkcode ReadableStream} that emits no values and immediately
  * closes.
  *

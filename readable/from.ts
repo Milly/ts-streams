@@ -1,3 +1,9 @@
+/**
+ * Provides {@link from}.
+ *
+ * @module
+ */
+
 import type { StreamSource } from "../types.ts";
 import { getIterator, iteratorNext } from "../_internal/iterator.ts";
 

@@ -1,4 +1,10 @@
 /**
+ * Provides {@link scan}.
+ *
+ * @module
+ */
+
+/**
  * Returns a {@linkcode TransformStream} that calls the `accumulator` for each
  * chunks from the writable side, and emits each result of the accumulator.
  *
@@ -8,7 +14,7 @@
  *
  * @example
  * ```ts
- * import { scan } from "@milly/streams/transformer/scan";
+ * import { scan } from "@milly/streams/transform/scan";
  * import { from } from "@milly/streams/readable/from";
  *
  * const source = from([1, 2, 3]);
@@ -37,7 +43,7 @@ export function scan<I, A = I>(
  *
  * @example
  * ```ts
- * import { scan } from "@milly/streams/transformer/scan";
+ * import { scan } from "@milly/streams/transform/scan";
  * import { from } from "@milly/streams/readable/from";
  *
  * const source = from([1, 2, 3]);

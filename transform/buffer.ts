@@ -1,3 +1,9 @@
+/**
+ * Provides {@link buffer}.
+ *
+ * @module
+ */
+
 import { concatWith } from "../readable/concat_with.ts";
 import { toReadableStream } from "../_internal/to_readable_stream.ts";
 import { map } from "./map.ts";
@@ -8,9 +14,9 @@ import { map } from "./map.ts";
  *
  * @example
  * ```ts
- * import { buffer } from "@milly/streams/transformer/buffer";
+ * import { buffer } from "@milly/streams/transform/buffer";
  * import { timer } from "@milly/streams/readable/timer";
- * import { take } from "@milly/streams/transformer/take";
+ * import { take } from "@milly/streams/transform/take";
  *
  * // source  : 0 ----100ms----> 1 ----100ms----> 2 ----100ms------> 3   |
  * // emitter : -----150ms---------> 0      --100ms--> 1   |

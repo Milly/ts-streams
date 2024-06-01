@@ -1,3 +1,9 @@
+/**
+ * Provides {@link max}.
+ *
+ * @module
+ */
+
 import { reduce } from "./reduce.ts";
 
 /**
@@ -6,7 +12,7 @@ import { reduce } from "./reduce.ts";
  *
  * @example
  * ```ts
- * import { max } from "@milly/streams/transformer/max";
+ * import { max } from "@milly/streams/transform/max";
  * import { from } from "@milly/streams/readable/from";
  *
  * const source = from([12, 42, 3, 8, 25]);

@@ -1,3 +1,9 @@
+/**
+ * Provides {@link forEach}.
+ *
+ * @module
+ */
+
 import type { WriteFn } from "../types.ts";
 
 /**

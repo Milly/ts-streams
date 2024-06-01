@@ -1,3 +1,9 @@
+/**
+ * Provides {@link takeLast}.
+ *
+ * @module
+ */
+
 import { terminate } from "./terminate.ts";
 
 /**
@@ -5,7 +11,7 @@ import { terminate } from "./terminate.ts";
  *
  * @example
  * ```ts
- * import { takeLast } from "@milly/streams/transformer/take-last";
+ * import { takeLast } from "@milly/streams/transform/take-last";
  * import { from } from "@milly/streams/readable/from";
  *
  * const source = from([1, 2, 3, 4, 5]);

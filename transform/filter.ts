@@ -1,4 +1,10 @@
 /**
+ * Provides {@link filter}.
+ *
+ * @module
+ */
+
+/**
  * Returns a {@linkcode TransformStream} that filter items by a specified
  * predicate.
  *
@@ -6,7 +12,7 @@
  *
  * @example
  * ```ts
- * import { filter } from "@milly/streams/transformer/filter";
+ * import { filter } from "@milly/streams/transform/filter";
  * import { from } from "@milly/streams/readable/from";
  *
  * const source = from([1, "a", 2, "b", 3, "c"]);
@@ -33,7 +39,7 @@ export function filter<I, O extends I>(
  *
  * @example
  * ```ts
- * import { filter } from "@milly/streams/transformer/filter";
+ * import { filter } from "@milly/streams/transform/filter";
  * import { from } from "@milly/streams/readable/from";
  *
  * const source = from([1, 2, 3, 4, 5, 6, 7]);

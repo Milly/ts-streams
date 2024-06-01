@@ -1,10 +1,16 @@
 /**
+ * Provides {@link terminate}.
+ *
+ * @module
+ */
+
+/**
  * Returns a {@linkcode TransformStream} that emits no values and immediately
  * terminates.
  *
  * @example
  * ```ts
- * import { terminate } from "@milly/streams/transformer/terminate";
+ * import { terminate } from "@milly/streams/transform/terminate";
  * import { from } from "@milly/streams/readable/from";
  *
  * const source = from([1, 2, 3]);

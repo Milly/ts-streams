@@ -1,4 +1,10 @@
 /**
+ * Provides {@link reduce}.
+ *
+ * @module
+ */
+
+/**
  * Returns a {@linkcode TransformStream} that calls the `accumulator` for each
  * chunks from the writable side, and emits the accumulator result when the
  * writable side closes.
@@ -8,7 +14,7 @@
  *
  * @example
  * ```ts
- * import { reduce } from "@milly/streams/transformer/reduce";
+ * import { reduce } from "@milly/streams/transform/reduce";
  * import { from } from "@milly/streams/readable/from";
  *
  * const source = from([1, 2, 3]);
@@ -37,7 +43,7 @@ export function reduce<I, A = I>(
  *
  * @example
  * ```ts
- * import { reduce } from "@milly/streams/transformer/reduce";
+ * import { reduce } from "@milly/streams/transform/reduce";
  * import { from } from "@milly/streams/readable/from";
  *
  * const source = from([1, 2, 3]);

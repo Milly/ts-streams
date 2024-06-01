@@ -1,11 +1,17 @@
 /**
+ * Provides {@link bufferCount}.
+ *
+ * @module
+ */
+
+/**
  * Returns a {@linkcode TransformStream} that buffers a number of chunks from
  * the writable side by `bufferSize` then emits buffered values as an array to
  * the readable side.
  *
  * @example
  * ```ts
- * import { bufferCount } from "@milly/streams/transformer/buffer-count";
+ * import { bufferCount } from "@milly/streams/transform/buffer-count";
  * import { from } from "@milly/streams/readable/from";
  *
  * const source = from([1, 2, 3, 4, 5, 6, 7, 8]);

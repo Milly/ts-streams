@@ -1,3 +1,9 @@
+/**
+ * Provides {@link fromMessage}.
+ *
+ * @module
+ */
+
 /** Message target type for {@linkcode fromMessage}. */
 // deno-lint-ignore no-explicit-any
 export interface FromMessageTarget<T = any> {
@@ -39,7 +45,7 @@ export interface FromMessageOptions<T, R> {
  * @example
  * ```ts
  * import { fromMessage } from "@milly/streams/readable/from-message";
- * import { take } from "@milly/streams/transformer/take";
+ * import { take } from "@milly/streams/transform/take";
  *
  * const { port1, port2 } = new MessageChannel();
  * const output = fromMessage(port1).pipeThrough(take(3));
@@ -71,7 +77,7 @@ export function fromMessage<T, R = T>(
  * @example
  * ```ts
  * import { fromMessage } from "@milly/streams/readable/from-message";
- * import { take } from "@milly/streams/transformer/take";
+ * import { take } from "@milly/streams/transform/take";
  *
  * const { port1, port2 } = new MessageChannel();
  * const output = fromMessage(port1).pipeThrough(take(3));

@@ -1,3 +1,9 @@
+/**
+ * Provides {@link min}.
+ *
+ * @module
+ */
+
 import { reduce } from "./reduce.ts";
 
 /**
@@ -6,7 +12,7 @@ import { reduce } from "./reduce.ts";
  *
  * @example
  * ```ts
- * import { min } from "@milly/streams/transformer/min";
+ * import { min } from "@milly/streams/transform/min";
  * import { from } from "@milly/streams/readable/from";
  *
  * const source = from([12, 42, 3, 8, 25]);

@@ -1,3 +1,9 @@
+/**
+ * Provides {@link count}.
+ *
+ * @module
+ */
+
 import { reduce } from "./reduce.ts";
 
 /**
@@ -6,7 +12,7 @@ import { reduce } from "./reduce.ts";
  *
  * @example
  * ```ts
- * import { count } from "@milly/streams/transformer/count";
+ * import { count } from "@milly/streams/transform/count";
  * import { from } from "@milly/streams/readable/from";
  *
  * const source = from(["a", "b", "c", "d"]);

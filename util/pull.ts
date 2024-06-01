@@ -1,4 +1,10 @@
 /**
+ * Provides {@link pull}.
+ *
+ * @module
+ */
+
+/**
  * Pulls the next chunk from the {@linkcode ReadableStream}.
  *
  * ```ts

@@ -1,3 +1,9 @@
+/**
+ * Provides {@link postMessage}.
+ *
+ * @module
+ */
+
 /** Message target type for {@linkcode postMessage}. */
 // deno-lint-ignore no-explicit-any
 export interface PostMessageTarget<T = any> {

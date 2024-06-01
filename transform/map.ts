@@ -1,3 +1,9 @@
+/**
+ * Provides {@link map}.
+ *
+ * @module
+ */
+
 import type { ProjectFn } from "../types.ts";
 
 /**
@@ -13,7 +19,7 @@ import type { ProjectFn } from "../types.ts";
  *
  * @example
  * ```ts
- * import { map } from "@milly/streams/transformer/map";
+ * import { map } from "@milly/streams/transform/map";
  * import { from } from "@milly/streams/readable/from";
  *
  * const source = from([1, 2, 3]);
