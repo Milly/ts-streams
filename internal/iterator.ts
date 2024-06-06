@@ -23,6 +23,9 @@ export function getIterator<T, U>(
     if (!isObject(iterator)) {
       throw new TypeError("[Symbol.iterator]() returned a non-object value");
     }
+  } else if (obj instanceof ReadableStream) {
+    // NOTE: Webkit does not implement ReadableStream[@@asyncIterator].
+    iterator = readableStreamValues(obj);
   } else {
     throw new TypeError("obj is not iterable");
   }
@@ -30,6 +33,33 @@ export function getIterator<T, U>(
     throw new TypeError("iterator.next() is not a function");
   }
   return iterator;
+}
+
+/**
+ * Ref: https://streams.spec.whatwg.org/#rs-asynciterator
+ */
+function readableStreamValues<T>(stream: ReadableStream<T>): AsyncIterator<T> {
+  const reader = stream.getReader();
+  return {
+    async next() {
+      try {
+        const res = await reader.read();
+        if (res.done) {
+          reader.releaseLock();
+        }
+        return res as IteratorResult<T>;
+      } catch (e) {
+        reader.releaseLock();
+        throw e;
+      }
+    },
+    async return(value: unknown) {
+      const cancelPromise = reader.cancel(value);
+      reader.releaseLock();
+      await cancelPromise;
+      return { done: true, value };
+    },
+  };
 }
 
 /**
