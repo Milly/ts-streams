@@ -1,4 +1,4 @@
-import { describe, it } from "@std/testing/bdd";
+import { describe, it } from "#bdd";
 import {
   assertEquals,
   assertInstanceOf,
