@@ -8,12 +8,13 @@
     "test": "glob -x -c \"tsx --test --test-reporter=spec\" -i \"node_modules/**\" \"**/*_test.ts\""
   },
   "devDependencies": {
+    "@lambdalisue/async": "npm:@jsr/lambdalisue__async@^2.1.1",
     "@milly/streamtest": "npm:@jsr/milly__streamtest@^1.0.0-rc1",
     "@std/assert": "npm:@jsr/std__assert@^0.226.0",
     "@std/async": "npm:@jsr/std__async@^0.224.1",
     "@std/testing": "npm:@jsr/std__testing@^0.225.0",
     "glob": "^10.4.1",
-    "tsx": "^4.11.2"
+    "tsx": "^4.12.0"
   },
   "imports": {
     "#bdd": {

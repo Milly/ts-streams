@@ -4,6 +4,8 @@
  * @module
  */
 
+import { deferred } from "../internal/deferred.ts";
+
 /**
  * Represents callback functions that are called when a stream event occurs in
  * the `tap` method.
@@ -152,7 +154,7 @@ export function tap<T>(
     }
   };
 
-  let readableReady = Promise.withResolvers<void>();
+  let readableReady = deferred<void>();
   let readableController!: ReadableStreamDefaultController<T>;
   const readable = new ReadableStream<T>({
     start(controller) {
@@ -189,7 +191,7 @@ export function tap<T>(
         abort(e);
         throw e;
       }
-      readableReady = Promise.withResolvers();
+      readableReady = deferred();
       readableController.enqueue(chunk);
       await readableReady.promise;
     },
