@@ -5,7 +5,7 @@
  */
 
 import type { StreamSource } from "../types.ts";
-import { getIterator, iteratorNext } from "../_internal/iterator.ts";
+import { getIterator, iteratorNext } from "../internal/iterator.ts";
 
 /**
  * Creates a {@linkcode ReadableStream} that emits the resolved element values

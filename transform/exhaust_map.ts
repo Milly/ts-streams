@@ -5,7 +5,7 @@
  */
 
 import type { ProjectFn, StreamSource } from "../types.ts";
-import { toReadableStream } from "../_internal/to_readable_stream.ts";
+import { toReadableStream } from "../internal/to_readable_stream.ts";
 
 /**
  * Returns a {@linkcode TransformStream} that projects each source value to

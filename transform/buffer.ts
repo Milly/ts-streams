@@ -5,7 +5,8 @@
  */
 
 import { concatWith } from "../readable/concat_with.ts";
-import { toReadableStream } from "../_internal/to_readable_stream.ts";
+import { deferred } from "../internal/deferred.ts";
+import { toReadableStream } from "../internal/to_readable_stream.ts";
 import { map } from "./map.ts";
 
 /**
@@ -38,7 +39,7 @@ export function buffer<T>(
   const CLOSED = {};
   const abortController = new AbortController();
   const { signal } = abortController;
-  const writableClosed = Promise.withResolvers<void>();
+  const writableClosed = deferred<void>();
   let buffer: T[] = [];
 
   const dispose = () => {

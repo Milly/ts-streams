@@ -4,6 +4,8 @@
  * @module
  */
 
+import { deferred } from "../internal/deferred.ts";
+
 /**
  * Creates a {@linkcode ReadableStream} that waits a `delay` then emits 0.
  *
@@ -33,7 +35,7 @@
 export function timer(delay: number): ReadableStream<0>;
 export function timer(delay: number, interval: number): ReadableStream<number>;
 export function timer(delay: number, interval = -1): ReadableStream<number> {
-  const { promise, resolve } = Promise.withResolvers<void>();
+  const { promise, resolve } = deferred<void>();
   let timer: number | undefined;
   let count = 0;
   return new ReadableStream({

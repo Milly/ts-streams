@@ -63,7 +63,7 @@
     "node_modules/"
   ],
   "tasks": {
-    "check": "deno lint && deno fmt --check && deno check *.ts _internal/**/*.ts readable/**/*.ts tests/**/*.ts transform/**/*.ts util/**/*.ts writable/**/*.ts",
+    "check": "deno lint && deno fmt --check && deno check *.ts internal/**/*.ts readable/**/*.ts tests/**/*.ts transform/**/*.ts util/**/*.ts writable/**/*.ts",
     "test": "deno test --parallel --shuffle",
     "test:all": "deno task check && deno task test:doc && npm run test",
     "test:doc": "deno task test --doc",
@@ -75,6 +75,7 @@
   },
   "imports": {
     "#bdd": "./tests/util/bdd.deno.ts",
+    "@lambdalisue/async": "jsr:@lambdalisue/async@^2.1.1",
     "@milly/streams": "./mod.ts",
     "@milly/streams/readable": "./readable/mod.ts",
     "@milly/streams/readable/concat-with": "./readable/concat_with.ts",

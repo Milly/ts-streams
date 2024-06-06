@@ -5,7 +5,7 @@
  */
 
 import type { StreamSource } from "../types.ts";
-import { toReadableStream } from "../_internal/to_readable_stream.ts";
+import { toReadableStream } from "../internal/to_readable_stream.ts";
 import { mergeAll } from "../transform/merge_all.ts";
 
 /**
