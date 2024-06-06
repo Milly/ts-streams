@@ -5,7 +5,7 @@
  */
 
 import { concatWith } from "../readable/concat_with.ts";
-import { toReadableStream } from "../_internal/to_readable_stream.ts";
+import { toReadableStream } from "../internal/to_readable_stream.ts";
 import { map } from "./map.ts";
 
 /**

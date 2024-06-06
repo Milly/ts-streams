@@ -4,7 +4,7 @@
  * @module
  */
 
-import { identity } from "../_internal/identity.ts";
+import { identity } from "../internal/identity.ts";
 import type { StreamSource } from "../types.ts";
 import { exhaustMap } from "./exhaust_map.ts";
 
