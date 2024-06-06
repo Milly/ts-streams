@@ -1,9 +1,6 @@
 {
   "name": "@milly/streams",
   "type": "module",
-  "exports": {
-    ".": "./mod.ts"
-  },
   "scripts": {
     "test": "glob -x -c \"tsx --test --test-reporter=spec\" -i \"node_modules/**\" \"**/*_test.ts\""
   },
