@@ -12,27 +12,54 @@ permissions:
   contents: read
 
 jobs:
-  test:
+
+  check:
     strategy:
       matrix:
         runner:
           - ubuntu-latest
         deno-version:
-          - "v1.x"
+          - v1.x
     runs-on: ${{ matrix.runner }}
     steps:
+
       - uses: actions/checkout@v4
 
       - uses: denoland/setup-deno@v1
         with:
-          deno-version: "${{ matrix.deno-version }}"
+          deno-version: ${{ matrix.deno-version }}
 
       - uses: actions/cache@v4
         with:
-          key: deno-${{ hashFiles('deno.lock', '.github/workflows/**') }}
-          restore-keys: deno-
-          path: |
-            /home/runner/.cache/deno
+          key: deno-${{ runner.os }}-${{ hashFiles('deno.lock', '.github/workflows/**') }}
+          restore-keys: deno-${{ runner.os }}-
+          path: ~/.cache/deno
+
+      - name: Check
+        run: deno task check
+
+  test-deno:
+    needs: check
+    strategy:
+      matrix:
+        runner:
+          - ubuntu-latest
+        deno-version:
+          - v1.x
+    runs-on: ${{ matrix.runner }}
+    steps:
+
+      - uses: actions/checkout@v4
+
+      - uses: denoland/setup-deno@v1
+        with:
+          deno-version: ${{ matrix.deno-version }}
+
+      - uses: actions/cache@v4
+        with:
+          key: deno-${{ runner.os }}-${{ hashFiles('deno.lock', '.github/workflows/**') }}
+          restore-keys: deno-${{ runner.os }}-
+          path: ~/.cache/deno
 
       - name: Check
         run: deno task check
@@ -47,3 +74,27 @@ jobs:
         with:
           files: ./lcov
           token: ${{ secrets.CODECOV_TOKEN }}
+
+  test-node:
+    needs: check
+    strategy:
+      matrix:
+        runner:
+          - ubuntu-latest
+        node-version:
+          - 22
+    runs-on: ${{ matrix.runner }}
+    steps:
+
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+
+      - name: Setup
+        run: npm ci
+
+      - name: Test
+        run: npm run test
