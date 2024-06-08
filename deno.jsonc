@@ -50,24 +50,32 @@
     "./util/pull": "./util/pull.ts",
     "./util/write": "./util/write.ts"
   },
+  "test": {
+    "exclude": [
+      "scripts/",
+      "tests/browser/"
+    ]
+  },
   "publish": {
     "exclude": [
       "**/*_test.ts",
       "package-lock.json",
       "package.json",
+      "scripts/",
       "tests/"
     ]
   },
   "exclude": [
     ".*/",
-    "node_modules/"
+    "node_modules/",
+    "test-results/"
   ],
   "tasks": {
     "check": "deno lint && deno fmt --check && deno check *.ts internal/**/*.ts readable/**/*.ts tests/**/*.ts transform/**/*.ts util/**/*.ts writable/**/*.ts",
-    "test": "deno test --parallel --shuffle",
-    "test:all": "deno task check && deno task test:doc && npm run test",
+    "test": "deno test",
+    "test:all": "deno task check && deno task test:doc && npm run test && npm run test:browser:all",
     "test:doc": "deno task test --doc",
-    "test:coverage": "deno task coverage:clean && deno task test:doc --coverage=.coverage",
+    "test:coverage": "deno task coverage:clean && deno task test:doc --parallel --shuffle --coverage=.coverage",
     "coverage": "deno coverage .coverage",
     "coverage:clean": "rm -rf .coverage",
     "update": "deno run --allow-env --allow-read --allow-write=. --allow-run=git,deno --allow-net=jsr.io jsr:@molt/cli deno.jsonc",
