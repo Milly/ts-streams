@@ -1,5 +1,5 @@
 import { describe, it } from "#bdd";
-import { assertInstanceOf } from "@std/assert";
+import { assertInstanceOf, assertThrows } from "@std/assert";
 import { assertEquals } from "@std/assert";
 import { assertType, type IsExact } from "@std/testing/types";
 import { spy } from "@std/testing/mock";
@@ -30,6 +30,27 @@ describe("filter()", () => {
       assertType<IsExact<typeof output, ReadableStream<X>>>(true);
       assertInstanceOf(output, ReadableStream);
     });
+  });
+  describe("throws if `options.predicate` is", () => {
+    // deno-lint-ignore no-explicit-any
+    const tests: [name: string, predicate: any][] = [
+      ["null", null],
+      ["undefined", undefined],
+      ["string", "foo"],
+      ["number", 42],
+      ["object", { foo: 42 }],
+      ["symbol", Symbol.for("some-symbol")],
+      ["Promise", Promise.resolve(() => true)],
+    ];
+    for (const [name, predicate] of tests) {
+      it(name, () => {
+        assertThrows(
+          () => filter(predicate),
+          TypeError,
+          "'predicate' is not a function",
+        );
+      });
+    }
   });
   describe("returns a TransformStream and", () => {
     it("calls `predicate` with each chunk value and index", async () => {

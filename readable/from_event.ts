@@ -123,6 +123,9 @@ export function fromEvent<E, R>(
     ? { predicate: optionsOrPredicate }
     : optionsOrPredicate;
   const { once, signal, capture, predicate } = options ?? {};
+  if (predicate !== undefined && typeof predicate !== "function") {
+    throw new TypeError("'predicate' is not a function");
+  }
   let index = 0;
   let teardown: () => void;
   return new ReadableStream({

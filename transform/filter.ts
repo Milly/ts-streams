@@ -58,6 +58,9 @@ export function filter<T>(
 export function filter<T>(
   predicate: (value: T, index: number) => boolean,
 ): TransformStream<T, T> {
+  if (typeof predicate !== "function") {
+    throw new TypeError("'predicate' is not a function");
+  }
   let index = -1;
   return new TransformStream({
     transform(chunk, controller) {

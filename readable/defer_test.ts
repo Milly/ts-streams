@@ -70,6 +70,7 @@ describe("defer()", () => {
       ["number", 42],
       ["object", { foo: 42 }],
       ["symbol", Symbol.for("some-symbol")],
+      ["Promise", Promise.resolve(() => [])],
       ["ArrayLike", { length: 2, "0": "a", "1": "b" }],
     ];
     for (const [name, inputFactory] of tests) {

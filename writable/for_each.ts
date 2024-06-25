@@ -29,6 +29,9 @@ import type { WriteFn } from "../types.ts";
  * @returns A WritableStream that calls `fn` one time for each chunk written.
  */
 export function forEach<T>(fn: WriteFn<T>): WritableStream<T> {
+  if (typeof fn !== "function") {
+    throw new TypeError("'fn' is not a function");
+  }
   let index = 0;
   return new WritableStream({
     write(chunk) {

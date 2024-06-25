@@ -75,6 +75,30 @@ describe("fromMessage()", () => {
       fromMessage(target, { force: true });
     });
   });
+  describe("throws if `options.predicate` is", () => {
+    // deno-lint-ignore no-explicit-any
+    const tests: [name: string, predicate: any][] = [
+      ["null", null],
+      ["string", "foo"],
+      ["number", 42],
+      ["object", { foo: 42 }],
+      ["symbol", Symbol.for("some-symbol")],
+      ["Promise", Promise.resolve(() => true)],
+    ];
+    for (const [name, predicate] of tests) {
+      it(name, () => {
+        const target: FromMessageTarget<string> = {
+          onmessage: null,
+        };
+
+        assertThrows(
+          () => fromMessage(target, { predicate }),
+          TypeError,
+          "'predicate' is not a function",
+        );
+      });
+    }
+  });
   describe("returns a ReadableStream and", () => {
     it("set or delete the message handler to the `target`", async () => {
       const target = { onmessage: null };

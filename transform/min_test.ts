@@ -1,5 +1,5 @@
 import { describe, it } from "#bdd";
-import { assertInstanceOf } from "@std/assert";
+import { assertInstanceOf, assertThrows } from "@std/assert";
 import { assertType, type IsExact } from "@std/testing/types";
 import { delay } from "@std/async/delay";
 import { testStream } from "@milly/streamtest";
@@ -14,6 +14,26 @@ describe("min()", () => {
 
     assertType<IsExact<typeof output, ReadableStream<X>>>(true);
     assertInstanceOf(output, ReadableStream);
+  });
+  describe("throws if `comparer` is", () => {
+    // deno-lint-ignore no-explicit-any
+    const tests: [name: string, comparer: any][] = [
+      ["null", null],
+      ["string", "foo"],
+      ["number", 42],
+      ["object", { foo: 42 }],
+      ["symbol", Symbol.for("some-symbol")],
+      ["Promise", Promise.resolve(() => 0)],
+    ];
+    for (const [name, comparer] of tests) {
+      it(name, () => {
+        assertThrows(
+          () => min(comparer),
+          TypeError,
+          "'comparer' is not a function",
+        );
+      });
+    }
   });
   describe("returns a TransformStream and", () => {
     it("emits smallest chunk", async () => {

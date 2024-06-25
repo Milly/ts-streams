@@ -38,6 +38,7 @@ describe("scan()", () => {
       ["number", 42],
       ["object", { foo: 42 }],
       ["symbol", Symbol.for("some-symbol")],
+      ["Promise", Promise.resolve(() => 0)],
     ];
     for (const [name, accumulator] of tests) {
       it(name, () => {

@@ -112,6 +112,9 @@ export function fromMessage<T, R>(
   if (target.onmessage != null && !force) {
     throw new TypeError("target.onmessage is not empty");
   }
+  if (predicate !== undefined && typeof predicate !== "function") {
+    throw new TypeError("'predicate' is not a function");
+  }
   let index = 0;
   return new ReadableStream({
     start(controller) {

@@ -39,6 +39,7 @@ describe("map()", () => {
       ["number", 42],
       ["object", { foo: 42 }],
       ["symbol", Symbol.for("some-symbol")],
+      ["Promise", Promise.resolve(() => 0)],
     ];
     for (const [name, project] of tests) {
       it(name, () => {

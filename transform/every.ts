@@ -28,6 +28,9 @@
 export function every<T>(
   predicate: (value: T, index: number) => boolean,
 ): TransformStream<T, boolean> {
+  if (typeof predicate !== "function") {
+    throw new TypeError("'predicate' is not a function");
+  }
   let index = -1;
   let closed = false;
   return new TransformStream({
