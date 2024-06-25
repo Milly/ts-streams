@@ -3,6 +3,7 @@ import { assertInstanceOf, assertThrows } from "@std/assert";
 import { assertEquals } from "@std/assert";
 import { assertType, type IsExact } from "@std/testing/types";
 import { spy } from "@std/testing/mock";
+import { delay } from "@std/async/delay";
 import { testStream } from "@milly/streamtest";
 import { filter } from "./filter.ts";
 
@@ -14,6 +15,17 @@ describe("filter()", () => {
 
       const output = source.pipeThrough(
         filter((x) => x != null),
+      );
+
+      assertType<IsExact<typeof output, ReadableStream<X>>>(true);
+      assertInstanceOf(output, ReadableStream);
+    });
+    it("with template <T, T> if `predicate` is `(x) => Promise<boolean>`", () => {
+      type X = { x: number };
+      const source = new ReadableStream<X>();
+
+      const output = source.pipeThrough(
+        filter((x) => Promise.resolve(x != null)),
       );
 
       assertType<IsExact<typeof output, ReadableStream<X>>>(true);
@@ -53,83 +65,177 @@ describe("filter()", () => {
     }
   });
   describe("returns a TransformStream and", () => {
-    it("calls `predicate` with each chunk value and index", async () => {
-      await testStream(async ({ readable, writable, run }) => {
-        const source = readable("a--b-c-(d|)");
-        const predicate = spy((_: string, index: number) => index % 2 === 1);
+    describe("if `predicate` is `(x) => boolean`", () => {
+      it("calls `predicate` with each chunk value and index", async () => {
+        await testStream(async ({ readable, writable, run }) => {
+          const source = readable("a--b-c-(d|)");
+          const predicate = spy((_: string, index: number) => index % 2 === 1);
 
-        const actual = source.pipeThrough(filter(predicate));
-        await run([actual], async (actual) => {
-          await actual.pipeTo(writable());
+          const actual = source.pipeThrough(filter(predicate));
+          await run([actual], async (actual) => {
+            await actual.pipeTo(writable());
+          });
+
+          assertEquals(predicate.calls.map((c) => c.args), [
+            ["a", 0],
+            ["b", 1],
+            ["c", 2],
+            ["d", 3],
+          ]);
         });
+      });
+      it("filters chunks by `predicate`", async () => {
+        await testStream(async ({ readable, assertReadable }) => {
+          const source = readable("a-b-c---d---e(f|)");
+          const expected = "       --b-----d----(f|)";
 
-        assertEquals(predicate.calls, [
-          { args: ["a", 0], returned: false },
-          { args: ["b", 1], returned: true },
-          { args: ["c", 2], returned: false },
-          { args: ["d", 3], returned: true },
-        ]);
+          const actual = source.pipeThrough(
+            filter((_, index) => index % 2 === 1),
+          );
+
+          await assertReadable(actual, expected);
+        });
+      });
+      it("terminates when `predicat` throws", async () => {
+        await testStream(async ({ readable, assertReadable }) => {
+          const source = readable("-a-b-c-d-e-f-g|", {}, "error");
+          const expectedSource = " -a-b-c-d-e-(f!)";
+          const expected = "       -----c-----#";
+
+          const actual = source.pipeThrough(filter((value) => {
+            if (value === "f") throw "error";
+            return value === "c";
+          }));
+
+          await assertReadable(actual, expected, {}, "error");
+          await assertReadable(source, expectedSource, {}, "error");
+        });
+      });
+      it("terminates when the writable side aborts", async () => {
+        await testStream(async ({ readable, assertReadable }) => {
+          const source = readable("-a-b-c-d-e-#", {}, "error");
+          const expected = "       -----c-----#";
+
+          const actual = source.pipeThrough(filter((value) => value === "c"));
+
+          await assertReadable(actual, expected, {}, "error");
+        });
+      });
+      it("terminates when the readable side cancels", async () => {
+        await testStream(async ({ readable, run, assertReadable }) => {
+          const source = readable("-a-b-c-d-e-f-g|");
+          const expectedSource = " -a-b-c-(d!)";
+          const expected = "       ---b---(d!)";
+
+          const actual = source.pipeThrough(
+            filter((_, index) => index % 2 === 1),
+          );
+
+          await run([actual], async (actual) => {
+            await actual.pipeTo(
+              new WritableStream({
+                write(chunk, controller) {
+                  if (chunk === "d") controller.error("break");
+                },
+              }),
+            ).catch(() => {});
+          });
+
+          await assertReadable(actual, expected, {}, "break");
+          await assertReadable(source, expectedSource, {}, "break");
+        });
       });
     });
-    it("filters chunks by `predicate`", async () => {
-      await testStream(async ({ readable, assertReadable }) => {
-        const source = readable("a-b-c---d---e(f|)");
-        const expected = "       --b-----d----(f|)";
+    describe("if `predicate` is `(x) => Promise<boolean>`", () => {
+      it("calls `predicate` with each chunk value and index", async () => {
+        await testStream(async ({ readable, writable, run }) => {
+          const source = readable("a--b-c-(d|)");
+          const predicate = spy(async (_: string, index: number) => {
+            await delay(0);
+            return index % 2 === 1;
+          });
 
-        const actual = source.pipeThrough(
-          filter((_, index) => index % 2 === 1),
-        );
+          const actual = source.pipeThrough(filter(predicate));
+          await run([actual], async (actual) => {
+            await actual.pipeTo(writable());
+          });
 
-        await assertReadable(actual, expected);
+          assertEquals(predicate.calls.map((c) => c.args), [
+            ["a", 0],
+            ["b", 1],
+            ["c", 2],
+            ["d", 3],
+          ]);
+        });
       });
-    });
-    it("terminates when `predicat` throws", async () => {
-      await testStream(async ({ readable, assertReadable }) => {
-        const source = readable("-a-b-c-d-e-f-g|", {}, "error");
-        const expectedSource = " -a-b-c-d-e-(f!)";
-        const expected = "       -----c-----#";
+      it("filters chunks by `predicate`", async () => {
+        await testStream(async ({ readable, assertReadable }) => {
+          const source = readable("a-b-c---d---e(f|)");
+          const expected = "       --b-----d----(f|)";
 
-        const actual = source.pipeThrough(filter((value) => {
-          if (value === "f") throw "error";
-          return value === "c";
-        }));
-
-        await assertReadable(actual, expected, {}, "error");
-        await assertReadable(source, expectedSource, {}, "error");
-      });
-    });
-    it("terminates when the writable side aborts", async () => {
-      await testStream(async ({ readable, assertReadable }) => {
-        const source = readable("-a-b-c-d-e-#", {}, "error");
-        const expected = "       -----c-----#";
-
-        const actual = source.pipeThrough(filter((value) => value === "c"));
-
-        await assertReadable(actual, expected, {}, "error");
-      });
-    });
-    it("terminates when the readable side cancels", async () => {
-      await testStream(async ({ readable, run, assertReadable }) => {
-        const source = readable("-a-b-c-d-e-f-g|");
-        const expectedSource = " -a-b-c-(d!)";
-        const expected = "       ---b---(d!)";
-
-        const actual = source.pipeThrough(
-          filter((_, index) => index % 2 === 1),
-        );
-
-        await run([actual], async (actual) => {
-          await actual.pipeTo(
-            new WritableStream({
-              write(chunk, controller) {
-                if (chunk === "d") controller.error("break");
-              },
+          const actual = source.pipeThrough(
+            filter(async (_, index) => {
+              await delay(0);
+              return index % 2 === 1;
             }),
-          ).catch(() => {});
-        });
+          );
 
-        await assertReadable(actual, expected, {}, "break");
-        await assertReadable(source, expectedSource, {}, "break");
+          await assertReadable(actual, expected);
+        });
+      });
+      it("terminates when `predicat` rejects", async () => {
+        await testStream(async ({ readable, assertReadable }) => {
+          const source = readable("-a-b-c-d-e-f-g|", {}, "error");
+          const expectedSource = " -a-b-c-d-e-(f!)";
+          const expected = "       -----c-----#";
+
+          const actual = source.pipeThrough(filter(async (value) => {
+            await delay(0);
+            if (value === "f") throw "error";
+            return value === "c";
+          }));
+
+          await assertReadable(actual, expected, {}, "error");
+          await assertReadable(source, expectedSource, {}, "error");
+        });
+      });
+      it("terminates when the writable side aborts", async () => {
+        await testStream(async ({ readable, assertReadable }) => {
+          const source = readable("-a-b-c-d-e-#", {}, "error");
+          const expected = "       -----c-----#";
+
+          const actual = source.pipeThrough(filter(async (value) => {
+            await delay(0);
+            return value === "c";
+          }));
+
+          await assertReadable(actual, expected, {}, "error");
+        });
+      });
+      it("terminates when the readable side cancels", async () => {
+        await testStream(async ({ readable, run, assertReadable }) => {
+          const source = readable("-a-b-c-d-e-f-g|");
+          const expectedSource = " -a-b-c-(d!)";
+          const expected = "       ---b---(d!)";
+
+          const actual = source.pipeThrough(filter(async (_, index) => {
+            await delay(0);
+            return index % 2 === 1;
+          }));
+
+          await run([actual], async (actual) => {
+            await actual.pipeTo(
+              new WritableStream({
+                write(chunk, controller) {
+                  if (chunk === "d") controller.error("break");
+                },
+              }),
+            ).catch(() => {});
+          });
+
+          await assertReadable(actual, expected, {}, "break");
+          await assertReadable(source, expectedSource, {}, "break");
+        });
       });
     });
   });

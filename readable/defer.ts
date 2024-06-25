@@ -4,7 +4,7 @@
  * @module
  */
 
-import type { StreamSource } from "../types.ts";
+import type { FactoryFn } from "../types.ts";
 import { toReadableStream } from "../internal/to_readable_stream.ts";
 
 /**
@@ -31,9 +31,7 @@ import { toReadableStream } from "../internal/to_readable_stream.ts";
  * @param inputFactory A function called when the stream piped.
  * @returns A ReadableStream that emits the resolved element values of the input.
  */
-export function defer<T>(
-  inputFactory: () => StreamSource<T>,
-): ReadableStream<T> {
+export function defer<T>(inputFactory: FactoryFn<T>): ReadableStream<T> {
   if (typeof inputFactory !== "function") {
     throw new TypeError("'inputFactory' is not a function");
   }
@@ -41,7 +39,7 @@ export function defer<T>(
   let reader: ReadableStreamDefaultReader<T> | undefined;
   return new ReadableStream<T>({
     async pull(controller) {
-      reader ??= toReadableStream(inputFactory()).getReader();
+      reader ??= toReadableStream(await inputFactory()).getReader();
       try {
         const res = await reader.read();
         if (res.done) {

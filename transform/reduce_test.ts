@@ -7,28 +7,82 @@ import {
 } from "@std/assert";
 import { assertType, type IsExact } from "@std/testing/types";
 import { assertSpyCallArgs, assertSpyCalls, spy } from "@std/testing/mock";
+import { delay } from "@std/async/delay";
 import { testStream } from "@milly/streamtest";
 import { reduce } from "./reduce.ts";
 
+const NOOP = () => {};
+
 describe("reduce()", () => {
   describe("returns a TransformStream type", () => {
-    it("with template <I, I | A> if no `initialValue` specified", () => {
-      const source = new ReadableStream<number>();
+    describe("if no `initialValue` is specified", () => {
+      it("with template <I, I | A>", () => {
+        const accumulator = (
+          _prev: number | string,
+          _value: number,
+          _index: number,
+        ): string => "a";
 
-      const output = source.pipeThrough(reduce(() => "a"));
+        const stream = reduce(accumulator);
 
-      assertType<IsExact<typeof output, ReadableStream<number | string>>>(true);
-      assertInstanceOf(output, ReadableStream);
+        assertType<
+          IsExact<typeof stream, TransformStream<number, number | string>>
+        >(true);
+        assertInstanceOf(stream.readable, ReadableStream);
+        assertInstanceOf(stream.writable, WritableStream);
+      });
+      it("with template <I | Promise<I>, I | Awaited<A>>", () => {
+        const accumulator = (
+          _prev: number | string,
+          _value: number,
+          _index: number,
+        ): string => "a";
+
+        const stream = reduce(accumulator);
+
+        assertType<
+          IsExact<typeof stream, TransformStream<number, number | string>>
+        >(true);
+        assertInstanceOf(stream.readable, ReadableStream);
+        assertInstanceOf(stream.writable, WritableStream);
+      });
     });
-    it("with template <I, A | V> if `initialValue` specified", () => {
-      const source = new ReadableStream<number>();
+    describe("if `initialValue` is specified", () => {
+      it("with template <I, A | V>", () => {
+        const accumulator = (
+          _prev: string | boolean,
+          _value: number,
+          _index: number,
+        ): string => "a";
+        const initialValue: boolean = true;
 
-      const output = source.pipeThrough(reduce(() => "a", true));
+        const stream = reduce(accumulator, initialValue);
 
-      assertType<IsExact<typeof output, ReadableStream<string | boolean>>>(
-        true,
-      );
-      assertInstanceOf(output, ReadableStream);
+        assertType<
+          IsExact<typeof stream, TransformStream<number, string | boolean>>
+        >(true);
+        assertInstanceOf(stream.readable, ReadableStream);
+        assertInstanceOf(stream.writable, WritableStream);
+      });
+      it("with template <I | Promise<I>, Awaited<A | V>>", () => {
+        const accumulator = (
+          _prev: string | boolean,
+          _value: number,
+          _index: number,
+        ): Promise<string> => Promise.resolve("a");
+        const initialValue: Promise<boolean> = Promise.resolve(true);
+
+        const stream = reduce(accumulator, initialValue);
+
+        assertType<
+          IsExact<
+            typeof stream,
+            TransformStream<number | Promise<number>, string | boolean>
+          >
+        >(true);
+        assertInstanceOf(stream.readable, ReadableStream);
+        assertInstanceOf(stream.writable, WritableStream);
+      });
     });
   });
   describe("throws if `accumulator` is", () => {
@@ -52,12 +106,12 @@ describe("reduce()", () => {
       });
     }
   });
-  describe("returns a TransformStream and", () => {
+  describe("if `accumulator` returns not a Promise", () => {
     it("calls `accumulator` with each chunk value and index", async () => {
       await testStream(async ({ readable, writable, run }) => {
         const source = readable("abc(d|)");
         const accumulator = spy(
-          (prev: string, value: string, _: number) => prev + value,
+          (prev: string, value: string, _: number): string => prev + value,
         );
 
         const actual = source.pipeThrough(reduce(accumulator));
@@ -72,57 +126,6 @@ describe("reduce()", () => {
         ]);
       });
     });
-    it("calls `accumulator` with `initialValue` if specified", async () => {
-      await testStream(async ({ readable, writable, run }) => {
-        const source = readable("abc(d|)");
-        const accumulator = spy(
-          (prev: string, value: string, _index: number) => prev + value,
-        );
-
-        const actual = source.pipeThrough(reduce(accumulator, "X"));
-        await run([actual], async (actual) => {
-          await actual.pipeTo(writable());
-        });
-
-        assertEquals(accumulator.calls, [
-          { args: ["X", "a", 0], returned: "Xa" },
-          { args: ["Xa", "b", 1], returned: "Xab" },
-          { args: ["Xab", "c", 2], returned: "Xabc" },
-          { args: ["Xabc", "d", 3], returned: "Xabcd" },
-        ]);
-      });
-    });
-    describe("calls `accumulator` with `initialValue` that is", () => {
-      const tests: [name: string, initialValue: unknown][] = [
-        ["null", null],
-        ["undefined", undefined],
-        ["string", "XYZ"],
-        ["number", 0],
-        ["NaN", NaN],
-        ["false", false],
-        ["empty string", ""],
-      ];
-      for (const [name, initialValue] of tests) {
-        it(name, async () => {
-          await testStream(async ({ readable, writable, run }) => {
-            const source = readable("a--b-c---d|");
-            const accumulator = spy(
-              (prev: unknown, value: string) => `${prev}` + value,
-            );
-
-            const actual = source.pipeThrough(
-              reduce(accumulator, initialValue),
-            );
-            await run([actual], async (actual) => {
-              await actual.pipeTo(writable());
-            });
-
-            assertSpyCallArgs(accumulator, 0, [initialValue, "a", 0]);
-            assertSpyCalls(accumulator, 4);
-          });
-        });
-      }
-    });
     it("emits accumulated result when the writable side closes", async () => {
       await testStream(async ({ readable, assertReadable }) => {
         const source = readable("a--b-c---d|");
@@ -130,7 +133,9 @@ describe("reduce()", () => {
         const expectedValues = {
           A: "abcd",
         };
-        const accumulator = spy((prev: string, value: string) => prev + value);
+        const accumulator = spy(
+          (prev: string, value: string, _: number): string => prev + value,
+        );
 
         const actual = source.pipeThrough(reduce(accumulator));
 
@@ -138,60 +143,45 @@ describe("reduce()", () => {
         assertSpyCalls(accumulator, 3);
       });
     });
-    it("emits accumulated result if `initialValue` specified", async () => {
-      await testStream(async ({ readable, assertReadable }) => {
-        const source = readable("a--b-c---d|");
-        const expected = "       ----------(A|)";
-        const expectedValues = {
-          A: "Xabcd",
-        };
-        const accumulator = spy((prev: string, value: string) => prev + value);
+    describe("if `initialValue` is specified", () => {
+      it("calls `accumulator` with `initialValue`", async () => {
+        await testStream(async ({ readable, writable, run }) => {
+          const source = readable("abc(d|)");
+          const accumulator = spy((
+            prev: string,
+            value: string,
+            _index: number,
+          ): string => prev + value);
 
-        const actual = source.pipeThrough(reduce(accumulator, "X"));
+          const actual = source.pipeThrough(reduce(accumulator, "X"));
+          await run([actual], async (actual) => {
+            await actual.pipeTo(writable());
+          });
 
-        await assertReadable(actual, expected, expectedValues);
-        assertSpyCalls(accumulator, 4);
+          assertEquals(accumulator.calls, [
+            { args: ["X", "a", 0], returned: "Xa" },
+            { args: ["Xa", "b", 1], returned: "Xab" },
+            { args: ["Xab", "c", 2], returned: "Xabc" },
+            { args: ["Xabc", "d", 3], returned: "Xabcd" },
+          ]);
+        });
       });
-    });
-    it("emits first chunk if the writable side emits only it", async () => {
-      await testStream(async ({ readable, assertReadable }) => {
-        const source = readable("-a------|", { a: 3 });
-        const expected = "       --------(A|)";
-        const accumulator = spy(
-          (prev: number | string, value: number) => prev + " " + value,
-        );
+      it("emits accumulated result when the writable side closes", async () => {
+        await testStream(async ({ readable, assertReadable }) => {
+          const source = readable("a--b-c---d|");
+          const expected = "       ----------(A|)";
+          const expectedValues = {
+            A: "Xabcd",
+          };
+          const accumulator = spy(
+            (prev: string, value: string): string => prev + value,
+          );
 
-        const actual = source.pipeThrough(reduce(accumulator));
+          const actual = source.pipeThrough(reduce(accumulator, "X"));
 
-        await assertReadable(actual, expected, { A: 3 });
-        assertSpyCalls(accumulator, 0);
-      });
-    });
-    it("does not emits if the writable side emits no chunks", async () => {
-      await testStream(async ({ readable, assertReadable }) => {
-        const source = readable("--------|");
-        const expected = "       --------|";
-        const accumulator = spy((prev: string, value: string) => prev + value);
-
-        const actual = source.pipeThrough(reduce(accumulator));
-
-        await assertReadable(actual, expected);
-        assertSpyCalls(accumulator, 0);
-      });
-    });
-    it("emits `initialValue` if specified and if the writable side emits no chunks", async () => {
-      await testStream(async ({ readable, assertReadable }) => {
-        const source = readable("--------|");
-        const expected = "       --------(A|)";
-        const expectedValues = {
-          A: "XYZ",
-        };
-        const accumulator = spy((prev: string, value: string) => prev + value);
-
-        const actual = source.pipeThrough(reduce(accumulator, "XYZ"));
-
-        await assertReadable(actual, expected, expectedValues);
-        assertSpyCalls(accumulator, 0);
+          await assertReadable(actual, expected, expectedValues);
+          assertSpyCalls(accumulator, 4);
+        });
       });
     });
     it("terminates when `accumulator` throws", async () => {
@@ -199,26 +189,32 @@ describe("reduce()", () => {
         const source = readable("-a--b-c---d--e-f-g|", {}, "error");
         const expectedSource = " -a--b-c---(d!)";
         const expected = "       ----------#";
-        const accumulator = (prev: string, value: string) => {
-          if (value === "d") throw "error";
-          return prev + value;
-        };
+        const accumulator = spy(
+          (prev: string, value: string, _index: number): string => {
+            if (value === "d") throw "error";
+            return prev + value;
+          },
+        );
 
         const actual = source.pipeThrough(reduce(accumulator));
 
         await assertReadable(actual, expected, {}, "error");
         await assertReadable(source, expectedSource, {}, "error");
+        assertSpyCalls(accumulator, 3);
       });
     });
     it("terminates when the writable side aborts", async () => {
       await testStream(async ({ readable, assertReadable }) => {
         const source = readable("a--b-c---#", {}, "error");
         const expected = "       ---------#";
-        const accumulator = (prev: string, value: string) => prev + value;
+        const accumulator = spy(
+          (prev: string, value: string, _index: number): string => prev + value,
+        );
 
         const actual = source.pipeThrough(reduce(accumulator));
 
         await assertReadable(actual, expected, {}, "error");
+        assertSpyCalls(accumulator, 2);
       });
     });
     it("terminates when the readable side cancels", async () => {
@@ -227,7 +223,9 @@ describe("reduce()", () => {
         const dest = writable("  --------#", "break");
         const expectedSource = " -a-b-c-d!";
         const expected = "       --------!";
-        const accumulator = (prev: string, value: string) => prev + value;
+        const accumulator = spy(
+          (prev: string, value: string, _index: number): string => prev + value,
+        );
 
         const actual = source.pipeThrough(reduce(accumulator));
 
@@ -238,6 +236,355 @@ describe("reduce()", () => {
 
         await assertReadable(actual, expected, {}, "break");
         await assertReadable(source, expectedSource, {}, "break");
+        assertSpyCalls(accumulator, 3);
+      });
+    });
+  });
+  describe("if `accumulator` returns a Promise", () => {
+    it("calls `accumulator` with each chunk value and index", async () => {
+      await testStream(async ({ readable, writable, run }) => {
+        const source = readable("abc(d|)");
+        const accumulator = spy(
+          async (prev: string, value: string, _: number): Promise<string> => {
+            await delay(0);
+            return prev + value;
+          },
+        );
+
+        const actual = source.pipeThrough(reduce(accumulator));
+        await run([actual], async (actual) => {
+          await actual.pipeTo(writable());
+        });
+
+        assertEquals(accumulator.calls.map((c) => c.args), [
+          ["a", "b", 1],
+          ["ab", "c", 2],
+          ["abc", "d", 3],
+        ]);
+      });
+    });
+    it("emits accumulated result when the writable side closes", async () => {
+      await testStream(async ({ readable, assertReadable }) => {
+        const source = readable("a--b-c---d|");
+        const expected = "       ----------(A|)";
+        const expectedValues = {
+          A: "abcd",
+        };
+        const accumulator = spy(
+          async (
+            prev: string,
+            value: string,
+            _index: number,
+          ): Promise<string> => {
+            await delay(0);
+            return prev + value;
+          },
+        );
+
+        const actual = source.pipeThrough(reduce(accumulator));
+
+        await assertReadable(actual, expected, expectedValues);
+        assertSpyCalls(accumulator, 3);
+      });
+    });
+    describe("if `initialValue` is specified", () => {
+      it("calls `accumulator` with `initialValue`", async () => {
+        await testStream(async ({ readable, writable, run }) => {
+          const source = readable("abc(d|)");
+          const accumulator = spy(
+            async (
+              prev: string,
+              value: string,
+              _index: number,
+            ): Promise<string> => {
+              await delay(0);
+              return prev + value;
+            },
+          );
+
+          const actual = source.pipeThrough(reduce(accumulator, "X"));
+          await run([actual], async (actual) => {
+            await actual.pipeTo(writable());
+          });
+
+          assertEquals(accumulator.calls.map((c) => c.args), [
+            ["X", "a", 0],
+            ["Xa", "b", 1],
+            ["Xab", "c", 2],
+            ["Xabc", "d", 3],
+          ]);
+        });
+      });
+      it("emits accumulated result when the writable side closes", async () => {
+        await testStream(async ({ readable, assertReadable }) => {
+          const source = readable("a--b-c---d|");
+          const expected = "       ----------(A|)";
+          const expectedValues = {
+            A: "Xabcd",
+          };
+          const accumulator = spy(
+            async (
+              prev: string,
+              value: string,
+              _index: number,
+            ): Promise<string> => {
+              await delay(0);
+              return prev + value;
+            },
+          );
+
+          const actual = source.pipeThrough(reduce(accumulator, "X"));
+
+          await assertReadable(actual, expected, expectedValues);
+          assertSpyCalls(accumulator, 4);
+        });
+      });
+    });
+    it("terminates when `accumulator` rejects", async () => {
+      await testStream(async ({ readable, assertReadable }) => {
+        const source = readable("-a--b-c---d--e-f-g|", {}, "error");
+        const expectedSource = " -a--b-c---(d!)";
+        const expected = "       ----------#";
+        const accumulator = spy(
+          async (
+            prev: string,
+            value: string,
+            _index: number,
+          ): Promise<string> => {
+            await delay(0);
+            if (value === "d") throw "error";
+            return prev + value;
+          },
+        );
+
+        const actual = source.pipeThrough(reduce(accumulator));
+
+        await assertReadable(actual, expected, {}, "error");
+        await assertReadable(source, expectedSource, {}, "error");
+        assertSpyCalls(accumulator, 3);
+      });
+    });
+    it("terminates when the writable side aborts", async () => {
+      await testStream(async ({ readable, assertReadable }) => {
+        const source = readable("a--b-c---#", {}, "error");
+        const expected = "       ---------#";
+        const accumulator = spy(
+          async (
+            prev: string,
+            value: string,
+            _index: number,
+          ): Promise<string> => {
+            await delay(0);
+            return prev + value;
+          },
+        );
+
+        const actual = source.pipeThrough(reduce(accumulator));
+
+        await assertReadable(actual, expected, {}, "error");
+        assertSpyCalls(accumulator, 2);
+      });
+    });
+    it("terminates when the readable side cancels", async () => {
+      await testStream(async ({ readable, writable, run, assertReadable }) => {
+        const source = readable("-a-b-c-d-e-f-g|");
+        const dest = writable("  --------#", "break");
+        const expectedSource = " -a-b-c-d!";
+        const expected = "       --------!";
+        const accumulator = spy(
+          async (
+            prev: string,
+            value: string,
+            _index: number,
+          ): Promise<string> => {
+            await delay(0);
+            return prev + value;
+          },
+        );
+
+        const actual = source.pipeThrough(reduce(accumulator));
+
+        await run([actual], async (actual) => {
+          const reason = await assertRejects(() => actual.pipeTo(dest));
+          assertEquals(reason, "break");
+        });
+
+        await assertReadable(actual, expected, {}, "break");
+        await assertReadable(source, expectedSource, {}, "break");
+        assertSpyCalls(accumulator, 3);
+      });
+    });
+  });
+  describe("if `initialValue` is specified", () => {
+    const tests: [name: string, initialValue: unknown, argValue: unknown][] = [
+      ["null", null, null],
+      ["undefined", undefined, undefined],
+      ["string", "XYZ", "XYZ"],
+      ["number", 0, 0],
+      ["NaN", Number.NaN, Number.NaN],
+      ["false", false, false],
+      ["empty string", "", ""],
+      ["resolved value of Promise", Promise.resolve("foo"), "foo"],
+    ];
+    for (const [name, initialValue, argValue] of tests) {
+      it(`calls \`accumulator\` with ${name}`, async () => {
+        await testStream(async ({ readable, writable, run }) => {
+          const source = readable("a--b-c---d|");
+          const accumulator = spy((
+            prev: unknown,
+            value: string,
+            _index: number,
+          ): string => prev + value);
+
+          const actual = source.pipeThrough(reduce(accumulator, initialValue));
+          await run([actual], async (actual) => {
+            await actual.pipeTo(writable());
+          });
+
+          assertSpyCallArgs(accumulator, 0, [argValue, "a", 0]);
+          assertSpyCalls(accumulator, 4);
+        });
+      });
+    }
+  });
+  describe("if `initialValue` rejects", () => {
+    it("does not calls `accumulator`", async () => {
+      await testStream(async ({ readable, writable, run }) => {
+        const source = readable("-a--b--c--|");
+        const accumulator = spy(
+          (_prev: string, _value: string, _index: number): string => "a",
+        );
+        const initialValue = delay(500).then(() => {
+          throw "error";
+        });
+
+        const actual = source.pipeThrough(reduce(accumulator, initialValue));
+        await run([actual], async (actual) => {
+          await actual.pipeTo(writable()).catch(NOOP);
+        });
+
+        assertSpyCalls(accumulator, 0);
+      });
+    });
+    it("terminates when `initialValue` rejects", async () => {
+      await testStream(async ({ readable, assertReadable }) => {
+        const source = readable("-a--b--c--|");
+        const expectedSource = " -a---!";
+        const expected = "       -----#";
+        const accumulator = (
+          _prev: string,
+          _value: string,
+          _index: number,
+        ): string => "a";
+        const initialValue = delay(500).then(() => {
+          throw "error";
+        });
+
+        const actual = source.pipeThrough(reduce(accumulator, initialValue));
+
+        await assertReadable(actual, expected, {}, "error");
+        await assertReadable(source, expectedSource, {}, "error");
+      });
+    });
+  });
+  describe("if the writable side emits no chunks", () => {
+    it("does not calls `accumulator`", async () => {
+      await testStream(async ({ readable, writable, run }) => {
+        const source = readable("--------|");
+        const accumulator = spy(
+          (_prev: string, _value: string, _: number): string => "a",
+        );
+
+        const actual = source.pipeThrough(reduce(accumulator));
+        await run([actual], async (actual) => {
+          await actual.pipeTo(writable());
+        });
+
+        assertSpyCalls(accumulator, 0);
+      });
+    });
+    it("does not emits", async () => {
+      await testStream(async ({ readable, assertReadable }) => {
+        const source = readable("--------|");
+        const expected = "       --------|";
+        const accumulator = (
+          prev: string,
+          value: string,
+          _index: number,
+        ): string => prev + value;
+
+        const actual = source.pipeThrough(reduce(accumulator));
+
+        await assertReadable(actual, expected);
+      });
+    });
+    describe("if `initialValue` is specified", () => {
+      it("does not calls `accumulator`", async () => {
+        await testStream(async ({ readable, writable, run }) => {
+          const source = readable("--------|");
+          const accumulator = spy(
+            (_prev: string, _value: string, _index: number): string => "a",
+          );
+
+          const actual = source.pipeThrough(reduce(accumulator, "XYZ"));
+          await run([actual], async (actual) => {
+            await actual.pipeTo(writable());
+          });
+
+          assertSpyCalls(accumulator, 0);
+        });
+      });
+      it("emits `initialValue` when the writable side closes", async () => {
+        await testStream(async ({ readable, assertReadable }) => {
+          const source = readable("--------|");
+          const expected = "       --------(A|)";
+          const expectedValues = {
+            A: "XYZ",
+          };
+          const accumulator = (
+            _prev: string,
+            _value: string,
+            _index: number,
+          ): string => "a";
+
+          const actual = source.pipeThrough(reduce(accumulator, "XYZ"));
+
+          await assertReadable(actual, expected, expectedValues);
+        });
+      });
+    });
+  });
+  describe("if the writable side emits only one chunk", () => {
+    it("does not calls `accumulator`", async () => {
+      await testStream(async ({ readable, writable, run }) => {
+        const source = readable("-a------|", { a: 3 });
+        const accumulator = spy((
+          _prev: number | string,
+          _value: number,
+          _index: number,
+        ): string => "a");
+
+        const actual = source.pipeThrough(reduce(accumulator));
+        await run([actual], async (actual) => {
+          await actual.pipeTo(writable());
+        });
+
+        assertSpyCalls(accumulator, 0);
+      });
+    });
+    it("emits first chunk when the writable side closes", async () => {
+      await testStream(async ({ readable, assertReadable }) => {
+        const source = readable("-a------|", { a: 3 });
+        const expected = "       --------(A|)";
+        const accumulator = (
+          _prev: number | string,
+          _value: number,
+          _index: number,
+        ): string => "a";
+
+        const actual = source.pipeThrough(reduce(accumulator));
+
+        await assertReadable(actual, expected, { A: 3 });
       });
     });
   });

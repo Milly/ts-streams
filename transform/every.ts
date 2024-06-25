@@ -26,7 +26,7 @@
  * @returns A TransformStream that emits whether all chunks satisfy the predicate
  */
 export function every<T>(
-  predicate: (value: T, index: number) => boolean,
+  predicate: (value: T, index: number) => boolean | Promise<boolean>,
 ): TransformStream<T, boolean> {
   if (typeof predicate !== "function") {
     throw new TypeError("'predicate' is not a function");
@@ -34,8 +34,8 @@ export function every<T>(
   let index = -1;
   let closed = false;
   return new TransformStream({
-    transform(chunk, controller) {
-      if (!predicate(chunk, ++index)) {
+    async transform(chunk, controller) {
+      if (!await predicate(chunk, ++index)) {
         controller.enqueue(false);
         controller.terminate();
         closed = true;

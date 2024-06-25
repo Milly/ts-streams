@@ -10,7 +10,7 @@ import { from } from "../readable/from.ts";
 import { arrayFrom } from "./array_from.ts";
 
 describe("arrayFrom()", () => {
-  describe("ReadableStream as `stream`", () => {
+  describe("if `stream` is ReadableStream", () => {
     it("returns the all chunk in the stream", async () => {
       const stream = from([1, 2, 3]);
 
@@ -35,7 +35,7 @@ describe("arrayFrom()", () => {
       assertEquals(actual, "error");
       assertFalse(stream.locked, "should stream unlocked");
     });
-    describe("with `mapFn`", () => {
+    describe("if `mapFn` is specified", () => {
       it("returns all awaited mapped values in the stream", async () => {
         const stream = from([1, 2, 3]);
         const mapFn = spy(returnsNext([10, Promise.resolve(11), 12]));
@@ -92,7 +92,7 @@ describe("arrayFrom()", () => {
       });
     });
   });
-  describe("AsyncIterable as `stream`", () => {
+  describe("if `stream` is AsyncIterable", () => {
     it("returns all chunk values in the stream", async () => {
       let streamClosed = false;
       const stream = {
@@ -145,7 +145,7 @@ describe("arrayFrom()", () => {
       assertEquals(actual, "error");
       assert(streamClosed, "should closes async iterator");
     });
-    describe("with `mapFn`", () => {
+    describe("if `mapFn` is specified", () => {
       it("returns all awaited mapped values in the stream", async () => {
         let streamClosed = false;
         const stream = {
@@ -213,7 +213,7 @@ describe("arrayFrom()", () => {
       });
     });
   });
-  describe("Iterable as `stream`", () => {
+  describe("if `stream` is Iterable", () => {
     it("returns all awaited chunk values in the stream", async () => {
       let streamClosed = false;
       const stream = {
@@ -267,7 +267,7 @@ describe("arrayFrom()", () => {
       // Ref: https://github.com/tc39/ecma262/pull/2600
       assert(streamClosed, "should closes sync iterator");
     });
-    describe("with `mapFn`", () => {
+    describe("if `mapFn` is specified", () => {
       it("returns all awaited mapped values in the stream", async () => {
         let streamClosed = false;
         const stream = {
@@ -335,7 +335,7 @@ describe("arrayFrom()", () => {
       });
     });
   });
-  describe("ArrayLike as `stream`", () => {
+  describe("if `stream` is ArrayLike", () => {
     it("returns all awaited chunk values in the stream", async () => {
       const stream = {
         length: 3,
@@ -369,7 +369,7 @@ describe("arrayFrom()", () => {
 
       assertEquals(actual, "error");
     });
-    describe("with `mapFn`", () => {
+    describe("if `mapFn` is specified", () => {
       it("returns all awaited mapped values in the stream", async () => {
         const stream = {
           length: 3,

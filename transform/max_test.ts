@@ -1,19 +1,59 @@
 import { describe, it } from "#bdd";
-import { assertInstanceOf, assertThrows } from "@std/assert";
+import {
+  assertEquals,
+  assertInstanceOf,
+  assertRejects,
+  assertThrows,
+} from "@std/assert";
 import { assertType, type IsExact } from "@std/testing/types";
+import { assertSpyCalls, spy } from "@std/testing/mock";
 import { delay } from "@std/async/delay";
 import { testStream } from "@milly/streamtest";
 import { max } from "./max.ts";
 
 describe("max()", () => {
-  it("returns a TransformStream<T, T> type", () => {
-    type X = { x: number };
-    const source = new ReadableStream<X>();
+  describe("returns a TransformStream type", () => {
+    describe("if no `comparer` is specified", () => {
+      it("with template <T | Promise<T>, T>", () => {
+        type T = { x: number };
 
-    const output = source.pipeThrough(max());
+        const stream = max<T>();
 
-    assertType<IsExact<typeof output, ReadableStream<X>>>(true);
-    assertInstanceOf(output, ReadableStream);
+        assertType<
+          IsExact<typeof stream, TransformStream<T | Promise<T>, T>>
+        >(true);
+        assertInstanceOf(stream.readable, ReadableStream);
+        assertInstanceOf(stream.writable, WritableStream);
+      });
+    });
+    describe("if return type of `comparer` is number", () => {
+      it("with template <T | Promise<T>, T>", () => {
+        type T = { x: number };
+        const comparer = (_a: T, _b: T): number => 0;
+
+        const stream = max(comparer);
+
+        assertType<
+          IsExact<typeof stream, TransformStream<T | Promise<T>, T>>
+        >(true);
+        assertInstanceOf(stream.readable, ReadableStream);
+        assertInstanceOf(stream.writable, WritableStream);
+      });
+    });
+    describe("if return type of `comparer` is Promise<number>", () => {
+      it("with template <T | Promise<T>, T>", () => {
+        type T = { x: number };
+        const comparer = (_a: T, _b: T): Promise<number> => Promise.resolve(0);
+
+        const stream = max(comparer);
+
+        assertType<
+          IsExact<typeof stream, TransformStream<T | Promise<T>, T>>
+        >(true);
+        assertInstanceOf(stream.readable, ReadableStream);
+        assertInstanceOf(stream.writable, WritableStream);
+      });
+    });
   });
   describe("throws if `comparer` is", () => {
     // deno-lint-ignore no-explicit-any
@@ -35,10 +75,10 @@ describe("max()", () => {
       });
     }
   });
-  describe("returns a TransformStream and", () => {
-    it("emits largest chunk", async () => {
+  describe("if no `comparer` is specified", () => {
+    it("emits largest chunk when the writable side closes", async () => {
       await testStream(async ({ readable, assertReadable }) => {
-        const values = { a: 8, b: 120, c: 80, d: 0 };
+        const values = { a: 8, b: 120, c: -80, d: 0 };
         const source = readable("a--b-c---d|", values);
         const expected = "       ----------(A|)";
         const expectedValues = { A: 120 };
@@ -48,38 +88,104 @@ describe("max()", () => {
         await assertReadable(actual, expected, expectedValues);
       });
     });
-    it("emits largest chunk with comparer", async () => {
-      await testStream(async ({ readable, assertReadable }) => {
-        const source = readable("c--a-d---b|");
-        const expected = "       ----------(d|)";
+    describe("if the writable side emits no chunks", () => {
+      it("does not emits", async () => {
+        await testStream(async ({ readable, assertReadable }) => {
+          const source = readable("--------|");
+          const expected = "       --------|";
 
-        const actual = source.pipeThrough(
-          max((a, b) => a.charCodeAt(0) - b.charCodeAt(0)),
-        );
+          const actual = source.pipeThrough(max());
 
-        await assertReadable(actual, expected);
+          await assertReadable(actual, expected);
+        });
       });
     });
-    it("does not emits if the writable side emits no chunks", async () => {
+    describe("if the writable side emits only one chunk", () => {
+      it("emits first chunk when the writable side closes", async () => {
+        await testStream(async ({ readable, assertReadable }) => {
+          const source = readable("-a------|", { a: 3 });
+          const expected = "       --------(A|)";
+
+          const actual = source.pipeThrough(max());
+
+          await assertReadable(actual, expected, { A: 3 });
+        });
+      });
+    });
+    it("terminates when the writable side aborts", async () => {
       await testStream(async ({ readable, assertReadable }) => {
-        const source = readable("--------|");
-        const expected = "       --------|";
+        const source = readable("a--b-c---#", {}, "error");
+        const expected = "       ---------#";
 
         const actual = source.pipeThrough(max());
 
+        await assertReadable(actual, expected, {}, "error");
+      });
+    });
+    it("terminates when the readable side cancels", async () => {
+      await testStream(async ({ readable, writable, run, assertReadable }) => {
+        const source = readable("-a-b-c-d-e-f-g|");
+        const dest = writable("  --------#", "break");
+        const expectedSource = " -a-b-c-d!";
+        const expected = "       --------!";
+
+        const actual = source.pipeThrough(max());
+
+        await run([actual], async (actual) => {
+          const reason = await assertRejects(() => actual.pipeTo(dest));
+          assertEquals(reason, "break");
+        });
+
+        await assertReadable(actual, expected, {}, "break");
+        await assertReadable(source, expectedSource, {}, "break");
+      });
+    });
+  });
+  describe("if `comparer` returns not a Promise", () => {
+    it("calls `comparer` with each chunk value and index", async () => {
+      await testStream(async ({ readable, writable, run }) => {
+        const source = readable("abc(d|)");
+        const comparer = spy(
+          (_a: string, _b: string, _index: number): number => 1,
+        );
+
+        const actual = source.pipeThrough(max(comparer));
+
+        await run([actual], async (actual) => {
+          await actual.pipeTo(writable());
+        });
+
+        assertEquals(comparer.calls.map((c) => c.args), [
+          ["a", "b", 1],
+          ["a", "c", 2],
+          ["a", "d", 3],
+        ]);
+      });
+    });
+    it("emits largest chunk when the writable side closes", async () => {
+      await testStream(async ({ readable, assertReadable }) => {
+        const source = readable("c--a-d---b|");
+        const expected = "       ----------(d|)";
+        const comparer = (a: string, b: string, _index: number): number => {
+          return a.charCodeAt(0) - b.charCodeAt(0);
+        };
+
+        const actual = source.pipeThrough(max(comparer));
+
         await assertReadable(actual, expected);
       });
     });
-    it("terminates when the comparer throws", async () => {
+    it("terminates when `comparer` throws", async () => {
       await testStream(async ({ readable, assertReadable }) => {
         const source = readable("-a--b-c---d--e-f-g|", {}, "error");
         const expectedSource = " -a--b-c---(d!)";
         const expected = "       ----------#";
-
-        const actual = source.pipeThrough(max((_a, b) => {
+        const comparer = (_a: string, b: string, _index: number): number => {
           if (b === "d") throw "error";
           return 1;
-        }));
+        };
+
+        const actual = source.pipeThrough(max(comparer));
 
         await assertReadable(actual, expected, {}, "error");
         await assertReadable(source, expectedSource, {}, "error");
@@ -89,33 +195,196 @@ describe("max()", () => {
       await testStream(async ({ readable, assertReadable }) => {
         const source = readable("a--b-c---#", {}, "error");
         const expected = "       ---------#";
+        const comparer = (_a: string, _b: string, _index: number): number => 1;
 
-        const actual = source.pipeThrough(max(() => 1));
+        const actual = source.pipeThrough(max(comparer));
 
         await assertReadable(actual, expected, {}, "error");
       });
     });
     it("terminates when the readable side cancels", async () => {
-      await testStream(async ({ readable, run, assertReadable }) => {
+      await testStream(async ({ readable, writable, run, assertReadable }) => {
         const source = readable("-a-b-c-d-e-f-g|");
+        const dest = writable("  --------#", "break");
         const expectedSource = " -a-b-c-d!";
         const expected = "       --------!";
+        const comparer = (_a: string, _b: string, _index: number): number => 1;
 
-        const actual = source.pipeThrough(max(() => 1));
+        const actual = source.pipeThrough(max(comparer));
 
         await run([actual], async (actual) => {
-          await actual.pipeTo(
-            new WritableStream({
-              async start(controller) {
-                await delay(800);
-                controller.error("break");
-              },
-            }),
-          ).catch(() => {});
+          const reason = await assertRejects(() => actual.pipeTo(dest));
+          assertEquals(reason, "break");
         });
 
         await assertReadable(actual, expected, {}, "break");
         await assertReadable(source, expectedSource, {}, "break");
+      });
+    });
+  });
+  describe("if `comparer` returns a Promise", () => {
+    it("calls `comparer` with each chunk value and index", async () => {
+      await testStream(async ({ readable, writable, run }) => {
+        const source = readable("abc(d|)");
+        const comparer = spy(
+          async (_a: string, _b: string, _index: number): Promise<number> => {
+            await delay(0);
+            return 1;
+          },
+        );
+
+        const actual = source.pipeThrough(max(comparer));
+
+        await run([actual], async (actual) => {
+          await actual.pipeTo(writable());
+        });
+
+        assertEquals(comparer.calls.map((c) => c.args), [
+          ["a", "b", 1],
+          ["a", "c", 2],
+          ["a", "d", 3],
+        ]);
+      });
+    });
+    it("emits largest chunk when the writable side closes", async () => {
+      await testStream(async ({ readable, assertReadable }) => {
+        const source = readable("c--a-d---b|");
+        const expected = "       ----------(d|)";
+        const comparer = async (
+          a: string,
+          b: string,
+          _index: number,
+        ): Promise<number> => {
+          await delay(0);
+          return a.charCodeAt(0) - b.charCodeAt(0);
+        };
+
+        const actual = source.pipeThrough(max(comparer));
+
+        await assertReadable(actual, expected);
+      });
+    });
+    it("terminates when `comparer` throws", async () => {
+      await testStream(async ({ readable, assertReadable }) => {
+        const source = readable("-a--b-c---d--e-f-g|", {}, "error");
+        const expectedSource = " -a--b-c---(d!)";
+        const expected = "       ----------#";
+        const comparer = async (
+          _a: string,
+          b: string,
+          _index: number,
+        ): Promise<number> => {
+          await delay(0);
+          if (b === "d") throw "error";
+          return 1;
+        };
+
+        const actual = source.pipeThrough(max(comparer));
+
+        await assertReadable(actual, expected, {}, "error");
+        await assertReadable(source, expectedSource, {}, "error");
+      });
+    });
+    it("terminates when the writable side aborts", async () => {
+      await testStream(async ({ readable, assertReadable }) => {
+        const source = readable("a--b-c---#", {}, "error");
+        const expected = "       ---------#";
+        const comparer = async (
+          _a: string,
+          _b: string,
+          _index: number,
+        ): Promise<number> => {
+          await delay(0);
+          return 1;
+        };
+
+        const actual = source.pipeThrough(max(comparer));
+
+        await assertReadable(actual, expected, {}, "error");
+      });
+    });
+    it("terminates when the readable side cancels", async () => {
+      await testStream(async ({ readable, writable, run, assertReadable }) => {
+        const source = readable("-a-b-c-d-e-f-g|");
+        const dest = writable("  --------#", "break");
+        const expectedSource = " -a-b-c-d!";
+        const expected = "       --------!";
+        const comparer = async (
+          _a: string,
+          _b: string,
+          _index: number,
+        ): Promise<number> => {
+          await delay(0);
+          return 1;
+        };
+
+        const actual = source.pipeThrough(max(comparer));
+
+        await run([actual], async (actual) => {
+          const reason = await assertRejects(() => actual.pipeTo(dest));
+          assertEquals(reason, "break");
+        });
+
+        await assertReadable(actual, expected, {}, "break");
+        await assertReadable(source, expectedSource, {}, "break");
+      });
+    });
+  });
+  describe("if the writable side emits no chunks", () => {
+    it("does not calls `comparer`", async () => {
+      await testStream(async ({ readable, writable, run }) => {
+        const source = readable("--------|");
+        const comparer = spy(
+          (_a: string, _b: string, _index: number): number => 1,
+        );
+
+        const actual = source.pipeThrough(max(comparer));
+
+        await run([actual], async (actual) => {
+          await actual.pipeTo(writable());
+        });
+
+        assertSpyCalls(comparer, 0);
+      });
+    });
+    it("does not emits", async () => {
+      await testStream(async ({ readable, assertReadable }) => {
+        const source = readable("--------|");
+        const expected = "       --------|";
+        const comparer = (_a: string, _b: string, _index: number): number => 1;
+
+        const actual = source.pipeThrough(max(comparer));
+
+        await assertReadable(actual, expected);
+      });
+    });
+  });
+  describe("if the writable side emits only one chunk", () => {
+    it("does not calls `comparer`", async () => {
+      await testStream(async ({ readable, writable, run }) => {
+        const source = readable("-a------|", { a: 3 });
+        const comparer = spy(
+          (_a: number, _b: number, _index: number): number => 1,
+        );
+
+        const actual = source.pipeThrough(max(comparer));
+
+        await run([actual], async (actual) => {
+          await actual.pipeTo(writable());
+        });
+
+        assertSpyCalls(comparer, 0);
+      });
+    });
+    it("emits first chunk when the writable side closes", async () => {
+      await testStream(async ({ readable, assertReadable }) => {
+        const source = readable("-a------|", { a: 3 });
+        const expected = "       --------(A|)";
+        const comparer = (_a: number, _b: number, _index: number): number => 1;
+
+        const actual = source.pipeThrough(max(comparer));
+
+        await assertReadable(actual, expected, { A: 3 });
       });
     });
   });

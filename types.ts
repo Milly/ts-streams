@@ -11,6 +11,11 @@
 export type StreamSource<T> = AsyncIterable<T> | Iterable<T | PromiseLike<T>>;
 
 /**
+ * A function type that returns a stream source value.
+ */
+export type FactoryFn<T> = () => StreamSource<T> | Promise<StreamSource<T>>;
+
+/**
  * A function type that receives input values and generates output values.
  *
  * @template I The type of the input value.
@@ -27,4 +32,4 @@ export type ProjectFn<I, O> = (value: I, index: number) => O;
  * @param value The current chunk from the source.
  * @param index The index of the current chunk from the source.
  */
-export type WriteFn<T> = (value: T, index: number) => void;
+export type WriteFn<T> = (value: T, index: number) => void | Promise<void>;
