@@ -28,5 +28,6 @@ export * from "./switch_all.ts";
 export * from "./switch_map.ts";
 export * from "./take.ts";
 export * from "./take_last.ts";
+export * from "./take_while.ts";
 export * from "./tap.ts";
 export * from "./terminate.ts";
