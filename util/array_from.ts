@@ -53,19 +53,20 @@ export async function arrayFrom<T, R>(
   }
   const buf: (T | R)[] = [];
   let index = 0;
-  try {
-    for (;;) {
-      const res = await iteratorNext(iterator);
-      if (res.done) {
-        return buf;
-      }
+  for (;;) {
+    const res = await iteratorNext(iterator);
+    if (res.done) {
+      return buf;
+    }
+    try {
       let value: T | R = await res.value;
       if (mapFn) {
         value = await mapFn(value, index++);
       }
       buf.push(value);
+    } catch (e) {
+      await iterator.return?.();
+      throw e;
     }
-  } finally {
-    iterator.return?.();
   }
 }

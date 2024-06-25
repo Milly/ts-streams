@@ -42,11 +42,9 @@ jobs:
     needs: check
     strategy:
       matrix:
-        runner:
-          - ubuntu-latest
         deno-version:
           - v1.x
-    runs-on: ${{ matrix.runner }}
+    runs-on: ubuntu-latest
     steps:
 
       - uses: actions/checkout@v4
@@ -60,9 +58,6 @@ jobs:
           key: deno-${{ runner.os }}-${{ hashFiles('deno.lock', '.github/workflows/**') }}
           restore-keys: deno-${{ runner.os }}-
           path: ~/.cache/deno
-
-      - name: Check
-        run: deno task check
 
       - name: Test
         run: deno task test:coverage
@@ -79,13 +74,11 @@ jobs:
     needs: check
     strategy:
       matrix:
-        runner:
-          - ubuntu-latest
         node-version:
           - 18
           - 20
           - 22
-    runs-on: ${{ matrix.runner }}
+    runs-on: ubuntu-latest
     steps:
 
       - uses: actions/checkout@v4
@@ -100,3 +93,35 @@ jobs:
 
       - name: Test
         run: npm run test
+
+  test-browser:
+    needs: check
+    strategy:
+      matrix:
+        browser:
+          - chromium
+          - firefox
+        experimental: [false]
+        include:
+          - browser: webkit
+            experimental: true
+    timeout-minutes: 20
+    runs-on: ubuntu-latest
+    continue-on-error: ${{ matrix.experimental }}
+    steps:
+
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: npm
+
+      - name: Setup
+        run: npm ci
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+
+      - name: Run Playwright tests
+        run: npm run test:browser:${{ matrix.browser }}

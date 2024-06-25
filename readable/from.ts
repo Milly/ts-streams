@@ -7,6 +7,8 @@
 import type { StreamSource } from "../types.ts";
 import { getIterator, iteratorNext } from "../internal/iterator.ts";
 
+const NOOP = () => {};
+
 /**
  * Creates a {@linkcode ReadableStream} that emits the resolved element values
  * of the input which is an {@linkcode AsyncIterable} or {@linkcode Iterable}.
@@ -28,9 +30,10 @@ import { getIterator, iteratorNext } from "../internal/iterator.ts";
  */
 export function from<T>(input: StreamSource<T>): ReadableStream<T> {
   const iterator = getIterator(input);
+  let nextPromise: Promise<unknown> = Promise.resolve();
   return new ReadableStream({
     async pull(controller) {
-      const res = await iteratorNext(iterator);
+      const res = await (nextPromise = iteratorNext(iterator));
       if (res.done) {
         controller.close();
       } else {
@@ -38,6 +41,8 @@ export function from<T>(input: StreamSource<T>): ReadableStream<T> {
       }
     },
     async cancel(reason) {
+      // NOTE: Should not call iterator.return() while iterator.next() is pending.
+      await nextPromise.catch(NOOP);
       await iterator.return?.(reason);
     },
   }, { highWaterMark: 0 });
