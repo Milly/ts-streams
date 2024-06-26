@@ -137,6 +137,7 @@
     "@milly/streams/util/array-from": "./util/array_from.ts",
     "@milly/streams/util/pull": "./util/pull.ts",
     "@milly/streams/util/write": "./util/write.ts",
+    "@milly/streams/writable": "./writable/mod.ts",
     "@milly/streams/writable/for-each": "./writable/for_each.ts",
     "@milly/streams/writable/post-message": "./writable/post_message.ts",
     "@milly/streamtest": "jsr:@milly/streamtest@^1.0.0",
