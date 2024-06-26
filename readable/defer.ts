@@ -35,7 +35,7 @@ export function defer<T>(
   inputFactory: () => StreamSource<T>,
 ): ReadableStream<T> {
   if (typeof inputFactory !== "function") {
-    throw new TypeError("No inputFactory function found");
+    throw new TypeError("'inputFactory' is not a function");
   }
 
   let reader: ReadableStreamDefaultReader<T> | undefined;

@@ -31,6 +31,7 @@ describe("defaultWith()", () => {
         assertThrows(
           () => defaultWith(defaultFactory),
           TypeError,
+          "'defaultFactory' is not a function",
         );
       });
     }

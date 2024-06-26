@@ -86,6 +86,7 @@ describe("mergeMap()", () => {
         assertThrows(
           () => mergeMap(project),
           TypeError,
+          "'project' is not a function",
         );
       });
     }

@@ -46,6 +46,7 @@ describe("map()", () => {
         assertThrows(
           () => map(project),
           TypeError,
+          "'project' is not a function",
         );
       });
     }

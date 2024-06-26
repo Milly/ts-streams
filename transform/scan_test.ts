@@ -45,6 +45,7 @@ describe("scan()", () => {
         assertThrows(
           () => scan(accumulator),
           TypeError,
+          "'accumulator' is not a function",
         );
       });
     }

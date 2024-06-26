@@ -78,6 +78,7 @@ describe("defer()", () => {
         assertThrows(
           () => defer(inputFactory),
           TypeError,
+          "'inputFactory' is not a function",
         );
       });
     }

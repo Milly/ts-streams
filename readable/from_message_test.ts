@@ -61,14 +61,14 @@ describe("fromMessage()", () => {
       assertThrows(
         () => fromMessage(target),
         TypeError,
-        "target.onmessage is not empty",
+        "'target.onmessage' is not empty",
       );
     });
     it("throws if `force` is false", () => {
       assertThrows(
         () => fromMessage(target, { force: false }),
         TypeError,
-        "target.onmessage is not empty",
+        "'target.onmessage' is not empty",
       );
     });
     it("does not throws if `force` is true", () => {

@@ -86,6 +86,7 @@ describe("exhaustMap()", () => {
         assertThrows(
           () => exhaustMap(project),
           TypeError,
+          "'project' is not a function",
         );
       });
     }

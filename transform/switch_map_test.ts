@@ -86,6 +86,7 @@ describe("switchMap()", () => {
         assertThrows(
           () => switchMap(project),
           TypeError,
+          "'project' is not a function",
         );
       });
     }

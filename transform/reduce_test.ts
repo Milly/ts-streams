@@ -47,6 +47,7 @@ describe("reduce()", () => {
         assertThrows(
           () => reduce(accumulator),
           TypeError,
+          "'accumulator' is not a function",
         );
       });
     }
