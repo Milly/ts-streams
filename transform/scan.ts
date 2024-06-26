@@ -31,8 +31,12 @@
  * @returns A TransformStream that emits the accumulated value.
  */
 export function scan<I, A = I>(
-  accumulator: (previousValue: I | A, value: I, index: number) => A,
-): TransformStream<I, I | A>;
+  accumulator: (
+    previousValue: I | Awaited<A>,
+    value: I,
+    index: number,
+  ) => A,
+): TransformStream<I | Promise<I>, I | Awaited<A>>;
 /**
  * Returns a {@linkcode TransformStream} that calls the `accumulator` for each
  * chunks from the writable side, and emits each result of the accumulator.
@@ -63,26 +67,36 @@ export function scan<I, A = I>(
  * @returns A TransformStream that emits the accumulated value.
  */
 export function scan<I, A, V = A>(
-  accumulator: (previousValue: A | V, value: I, index: number) => A,
+  accumulator: (
+    previousValue: Awaited<A | V>,
+    value: I,
+    index: number,
+  ) => A,
   initialValue: V,
-): TransformStream<I, A>;
+): TransformStream<I | Promise<I>, Awaited<A>>;
 export function scan<I, A, V>(
-  accumulator: (previousValue: I | A | V, value: I, index: number) => A,
+  accumulator: (
+    previousValue: I | Awaited<A | V>,
+    value: I,
+    index: number,
+  ) => A,
   ...args: [initialValue?: V]
-): TransformStream<I, I | A> {
+): TransformStream<I | Promise<I>, I | Awaited<A>> {
   if (typeof accumulator !== "function") {
     throw new TypeError("'accumulator' is not a function");
   }
   let index = 0;
-  let acc: I | A | V;
+  let acc: I | Awaited<A | V>;
   let hasAcc = args.length > 0;
-  if (hasAcc) acc = args[0]!;
   return new TransformStream({
-    transform(chunk, controller) {
+    async start() {
+      if (hasAcc) acc = await args[0]!;
+    },
+    async transform(chunk, controller) {
       if (hasAcc) {
-        acc = accumulator(acc, chunk, index);
+        acc = await accumulator(acc, await chunk, index);
       } else {
-        acc = chunk;
+        acc = await chunk;
         hasAcc = true;
       }
       ++index;

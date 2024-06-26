@@ -37,21 +37,21 @@ import { getIterator, iteratorNext } from "../internal/iterator.ts";
 export async function arrayFrom<T, R>(
   stream: StreamSource<T> | ArrayLike<T | Promise<T>>,
   mapFn: (element: T, index: number) => R,
-): Promise<R[]>;
+): Promise<Awaited<R>[]>;
 export async function arrayFrom<T>(
   stream: StreamSource<T> | ArrayLike<T | Promise<T>>,
-): Promise<T[]>;
+): Promise<Awaited<T>[]>;
 export async function arrayFrom<T, R>(
   stream: StreamSource<T> | ArrayLike<T | Promise<T>>,
   mapFn?: (element: T, index: number) => R,
-): Promise<(T | R)[]> {
+): Promise<Awaited<T | R>[]> {
   let iterator: AsyncIterator<T> | Iterator<T | PromiseLike<T>>;
   try {
     iterator = getIterator(stream as AsyncIterable<T>);
   } catch {
     iterator = Array.from(stream as ArrayLike<T>)[Symbol.iterator]();
   }
-  const buf: (T | R)[] = [];
+  const buf: Awaited<T | R>[] = [];
   let index = 0;
   for (;;) {
     const res = await iteratorNext(iterator);
@@ -59,7 +59,7 @@ export async function arrayFrom<T, R>(
       return buf;
     }
     try {
-      let value: T | R = await res.value;
+      let value: Awaited<T | R> = await res.value;
       if (mapFn) {
         value = await mapFn(value, index++);
       }

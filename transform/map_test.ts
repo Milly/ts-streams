@@ -2,6 +2,7 @@ import { describe, it } from "#bdd";
 import { assertEquals, assertInstanceOf, assertThrows } from "@std/assert";
 import { assertType, type IsExact } from "@std/testing/types";
 import { spy } from "@std/testing/mock";
+import { delay } from "@std/async/delay";
 import { testStream } from "@milly/streamtest";
 import { map } from "./map.ts";
 
@@ -90,8 +91,9 @@ describe("map()", () => {
       await testStream(async ({ readable, assertReadable }) => {
         const source = readable("a--b-cd---e|");
         const expected = "       A--B-CD---E|";
-        const project = (value: string): Promise<string> => {
-          return Promise.resolve(value.toUpperCase());
+        const project = async (value: string): Promise<string> => {
+          await delay(0);
+          return value.toUpperCase();
         };
 
         const actual = source.pipeThrough(map(project));

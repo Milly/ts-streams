@@ -26,14 +26,15 @@ import { reduce } from "./reduce.ts";
  * @returns A TransformStream that emits largest value.
  */
 export function max<T>(
-  comparer?: (a: T, b: T, index: number) => number,
+  comparer?: (a: T, b: T, index: number) => number | Promise<number>,
 ): TransformStream<T | Promise<T>, T> {
   if (comparer === undefined) {
     return reduce((a: T, b: T): T => a > b ? a : b);
   }
   if (typeof comparer === "function") {
     return reduce(
-      (a: T, b: T, index: number): T => comparer(a, b, index) > 0 ? a : b,
+      async (a: T, b: T, index: number): Promise<T> =>
+        (await comparer(a, b, index)) > 0 ? a : b,
     );
   }
   throw new TypeError("'comparer' is not a function");

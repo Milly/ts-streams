@@ -7,7 +7,7 @@ import { testStream } from "@milly/streamtest";
 import { tap, type TapCallbacks, type TapController } from "./tap.ts";
 
 describe("tap()", () => {
-  describe("with `callbackWriteFn`", () => {
+  describe("if `callbackWriteFn` is specified", () => {
     describe("returns a TransformStream<T, T> and", () => {
       it("emits the source chunk type", () => {
         const source = new ReadableStream<number>();
@@ -71,7 +71,7 @@ describe("tap()", () => {
       });
     });
   });
-  describe("with `TapCallbacks`", () => {
+  describe("if `callbacksAndOptions` is specified", () => {
     describe("returns a TransformStream<T, T> and", () => {
       it("emits the source chunk type", () => {
         const source = new ReadableStream<number>();

@@ -34,8 +34,8 @@ export function forEach<T>(fn: WriteFn<T>): WritableStream<T> {
   }
   let index = 0;
   return new WritableStream({
-    write(chunk) {
-      fn(chunk, index++);
+    async write(chunk) {
+      await fn(chunk, index++);
     },
   });
 }

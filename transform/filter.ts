@@ -53,18 +53,18 @@ export function filter<I, O extends I>(
  * @returns A TransformStream that emits filtered chunks.
  */
 export function filter<T>(
-  predicate: (value: T, index: number) => boolean,
+  predicate: (value: T, index: number) => boolean | Promise<boolean>,
 ): TransformStream<T, T>;
 export function filter<T>(
-  predicate: (value: T, index: number) => boolean,
+  predicate: (value: T, index: number) => boolean | Promise<boolean>,
 ): TransformStream<T, T> {
   if (typeof predicate !== "function") {
     throw new TypeError("'predicate' is not a function");
   }
   let index = -1;
   return new TransformStream({
-    transform(chunk, controller) {
-      if (predicate(chunk, ++index)) {
+    async transform(chunk, controller) {
+      if (await predicate(chunk, ++index)) {
         controller.enqueue(chunk);
       }
     },

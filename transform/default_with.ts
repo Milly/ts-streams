@@ -4,7 +4,7 @@
  * @module
  */
 
-import type { StreamSource } from "../types.ts";
+import type { FactoryFn } from "../types.ts";
 import { toReadableStream } from "../internal/to_readable_stream.ts";
 
 /**
@@ -28,7 +28,7 @@ import { toReadableStream } from "../internal/to_readable_stream.ts";
  * @returns A TransformStream that emits the default value if the writable side emits no chunks.
  */
 export function defaultWith<I, D = I>(
-  defaultFactory: () => StreamSource<D>,
+  defaultFactory: FactoryFn<D>,
 ): TransformStream<I, I | D> {
   if (typeof defaultFactory !== "function") {
     throw new TypeError("'defaultFactory' is not a function");
@@ -50,7 +50,7 @@ export function defaultWith<I, D = I>(
       } else {
         let defaultInput: ReadableStream<D>;
         try {
-          defaultInput = toReadableStream(defaultFactory());
+          defaultInput = toReadableStream(await defaultFactory());
         } catch (e: unknown) {
           await output.abort(e);
           throw e;
