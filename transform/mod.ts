@@ -24,6 +24,7 @@ export * from "./min.ts";
 export * from "./pipe.ts";
 export * from "./reduce.ts";
 export * from "./scan.ts";
+export * from "./skip.ts";
 export * from "./switch_all.ts";
 export * from "./switch_map.ts";
 export * from "./take.ts";
