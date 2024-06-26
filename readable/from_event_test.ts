@@ -3,6 +3,7 @@ import {
   assertEquals,
   assertInstanceOf,
   assertStrictEquals,
+  assertThrows,
 } from "@std/assert";
 import { assertType, type IsExact } from "@std/testing/types";
 import { assertSpyCallArg, assertSpyCalls, spy, stub } from "@std/testing/mock";
@@ -73,6 +74,30 @@ describe("fromEvent()", () => {
       assertType<IsExact<typeof actual, ReadableStream<T>>>(true);
       assertInstanceOf(actual, ReadableStream);
     });
+  });
+  describe("throws if `options.predicate` is", () => {
+    const target = {
+      addEventListener() {},
+      removeEventListener() {},
+    };
+    // deno-lint-ignore no-explicit-any
+    const tests: [name: string, predicate: any][] = [
+      ["null", null],
+      ["string", "foo"],
+      ["number", 42],
+      ["object", { foo: 42 }],
+      ["symbol", Symbol.for("some-symbol")],
+      ["Promise", Promise.resolve(() => true)],
+    ];
+    for (const [name, predicate] of tests) {
+      it(name, () => {
+        assertThrows(
+          () => fromEvent(target, "progress", { predicate }),
+          TypeError,
+          "'predicate' is not a function",
+        );
+      });
+    }
   });
   describe("returns a ReadableStream and", () => {
     it("adds or removes the event listener to the `target`", async () => {

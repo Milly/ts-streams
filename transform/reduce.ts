@@ -71,7 +71,7 @@ export function reduce<I, A, V>(
   ...args: [initialValue?: V]
 ): TransformStream<I, I | A | V> {
   if (typeof accumulator !== "function") {
-    throw new TypeError("No accumulator function found");
+    throw new TypeError("'accumulator' is not a function");
   }
   let index = 0;
   let acc: I | A | V;

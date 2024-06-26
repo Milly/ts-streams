@@ -105,6 +105,9 @@ export function postMessage<T>(
     ? { transfer: optionsOrTransfer }
     : optionsOrTransfer;
   const { transfer } = options ?? {};
+  if (transfer !== undefined && typeof transfer !== "function") {
+    throw new TypeError("'transfer' is not a function");
+  }
   let index = 0;
   return new WritableStream({
     write(chunk) {

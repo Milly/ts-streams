@@ -3,6 +3,7 @@ import {
   assertEquals,
   assertInstanceOf,
   assertRejects,
+  assertThrows,
   unimplemented,
 } from "@std/assert";
 import { assertType, type IsExact } from "@std/testing/types";
@@ -38,6 +39,30 @@ describe("postMessage()", () => {
       assertType<IsExact<typeof actual, WritableStream<X>>>(true);
       assertInstanceOf(actual, WritableStream);
     });
+  });
+  describe("throws if `transfer` is", () => {
+    const target: PostMessageTarget = {
+      postMessage: () => unimplemented(),
+    };
+
+    // deno-lint-ignore no-explicit-any
+    const tests: [name: string, transfer: any][] = [
+      ["null", null],
+      ["string", "foo"],
+      ["number", 42],
+      ["object", { foo: 42 }],
+      ["symbol", Symbol.for("some-symbol")],
+      ["Promise", Promise.resolve(() => 0)],
+    ];
+    for (const [name, transfer] of tests) {
+      it(name, () => {
+        assertThrows(
+          () => postMessage(target, { transfer }),
+          TypeError,
+          "'transfer' is not a function",
+        );
+      });
+    }
   });
   describe("returns a WritableStream and", () => {
     it("posts data as a message to `target`", async () => {

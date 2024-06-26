@@ -24,12 +24,14 @@ describe("defaultWith()", () => {
       ["number", 42],
       ["object", { foo: 42 }],
       ["symbol", Symbol.for("some-symbol")],
+      ["Promise", Promise.resolve(() => [])],
     ];
     for (const [name, defaultFactory] of tests) {
       it(name, () => {
         assertThrows(
           () => defaultWith(defaultFactory),
           TypeError,
+          "'defaultFactory' is not a function",
         );
       });
     }

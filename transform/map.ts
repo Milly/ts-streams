@@ -37,7 +37,7 @@ export function map<I, O>(
   project: ProjectFn<I, O>,
 ): TransformStream<I, Awaited<O>> {
   if (typeof project !== "function") {
-    throw new TypeError("No project function found");
+    throw new TypeError("'project' is not a function");
   }
   let index = -1;
   return new TransformStream({

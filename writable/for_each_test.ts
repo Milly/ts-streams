@@ -1,5 +1,10 @@
 import { describe, it } from "#bdd";
-import { assertEquals, assertInstanceOf, assertRejects } from "@std/assert";
+import {
+  assertEquals,
+  assertInstanceOf,
+  assertRejects,
+  assertThrows,
+} from "@std/assert";
 import { assertType, type IsExact } from "@std/testing/types";
 import { assertSpyCallArgs, assertSpyCalls, spy } from "@std/testing/mock";
 import { delay } from "@std/async/delay";
@@ -17,6 +22,27 @@ describe("forEach()", () => {
       assertType<IsExact<typeof actual, WritableStream<X>>>(true);
       assertInstanceOf(actual, WritableStream);
     });
+  });
+  describe("throws if `fn` is", () => {
+    // deno-lint-ignore no-explicit-any
+    const tests: [name: string, fn: any][] = [
+      ["null", null],
+      ["undefined", undefined],
+      ["string", "foo"],
+      ["number", 42],
+      ["object", { foo: 42 }],
+      ["symbol", Symbol.for("some-symbol")],
+      ["Promise", Promise.resolve(() => {})],
+    ];
+    for (const [name, fn] of tests) {
+      it(name, () => {
+        assertThrows(
+          () => forEach(fn),
+          TypeError,
+          "'fn' is not a function",
+        );
+      });
+    }
   });
   describe("returns a WritableStream and", () => {
     it("calls `fn`", async () => {

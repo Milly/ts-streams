@@ -79,12 +79,14 @@ describe("mergeMap()", () => {
       ["number", 42],
       ["object", { foo: 42 }],
       ["symbol", Symbol.for("some-symbol")],
+      ["Promise", Promise.resolve(() => [])],
     ];
     for (const [name, project] of tests) {
       it(name, () => {
         assertThrows(
           () => mergeMap(project),
           TypeError,
+          "'project' is not a function",
         );
       });
     }

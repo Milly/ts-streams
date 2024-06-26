@@ -61,19 +61,43 @@ describe("fromMessage()", () => {
       assertThrows(
         () => fromMessage(target),
         TypeError,
-        "target.onmessage is not empty",
+        "'target.onmessage' is not empty",
       );
     });
     it("throws if `force` is false", () => {
       assertThrows(
         () => fromMessage(target, { force: false }),
         TypeError,
-        "target.onmessage is not empty",
+        "'target.onmessage' is not empty",
       );
     });
     it("does not throws if `force` is true", () => {
       fromMessage(target, { force: true });
     });
+  });
+  describe("throws if `options.predicate` is", () => {
+    // deno-lint-ignore no-explicit-any
+    const tests: [name: string, predicate: any][] = [
+      ["null", null],
+      ["string", "foo"],
+      ["number", 42],
+      ["object", { foo: 42 }],
+      ["symbol", Symbol.for("some-symbol")],
+      ["Promise", Promise.resolve(() => true)],
+    ];
+    for (const [name, predicate] of tests) {
+      it(name, () => {
+        const target: FromMessageTarget<string> = {
+          onmessage: null,
+        };
+
+        assertThrows(
+          () => fromMessage(target, { predicate }),
+          TypeError,
+          "'predicate' is not a function",
+        );
+      });
+    }
   });
   describe("returns a ReadableStream and", () => {
     it("set or delete the message handler to the `target`", async () => {

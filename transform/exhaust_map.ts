@@ -44,7 +44,7 @@ export function exhaustMap<I, O>(
   project: ProjectFn<I, StreamSource<O>>,
 ): TransformStream<I, O> {
   if (typeof project !== "function") {
-    throw new TypeError("No project function found");
+    throw new TypeError("'project' is not a function");
   }
 
   const aborter = new AbortController();

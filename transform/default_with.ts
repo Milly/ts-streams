@@ -31,7 +31,7 @@ export function defaultWith<I, D = I>(
   defaultFactory: () => StreamSource<D>,
 ): TransformStream<I, I | D> {
   if (typeof defaultFactory !== "function") {
-    throw new TypeError("No defaultFactory function found");
+    throw new TypeError("'defaultFactory' is not a function");
   }
 
   let hasChunk = false;
