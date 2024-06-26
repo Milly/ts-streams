@@ -4,6 +4,8 @@
  * @module
  */
 
+import type { AccumulateFn } from "../types.ts";
+
 /**
  * Returns a {@linkcode TransformStream} that calls the `accumulator` for each
  * chunks from the writable side, and emits each result of the accumulator.
@@ -31,11 +33,7 @@
  * @returns A TransformStream that emits the accumulated value.
  */
 export function scan<I, A = I>(
-  accumulator: (
-    previousValue: I | Awaited<A>,
-    value: I,
-    index: number,
-  ) => A,
+  accumulator: AccumulateFn<I, A, I | Awaited<A>>,
 ): TransformStream<I | Promise<I>, I | Awaited<A>>;
 /**
  * Returns a {@linkcode TransformStream} that calls the `accumulator` for each
@@ -67,19 +65,11 @@ export function scan<I, A = I>(
  * @returns A TransformStream that emits the accumulated value.
  */
 export function scan<I, A, V = A>(
-  accumulator: (
-    previousValue: Awaited<A | V>,
-    value: I,
-    index: number,
-  ) => A,
+  accumulator: AccumulateFn<I, A, Awaited<A | V>>,
   initialValue: V,
 ): TransformStream<I | Promise<I>, Awaited<A>>;
 export function scan<I, A, V>(
-  accumulator: (
-    previousValue: I | Awaited<A | V>,
-    value: I,
-    index: number,
-  ) => A,
+  accumulator: AccumulateFn<I, A, I | Awaited<A | V>>,
   ...args: [initialValue?: V]
 ): TransformStream<I | Promise<I>, I | Awaited<A>> {
   if (typeof accumulator !== "function") {
