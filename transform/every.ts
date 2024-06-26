@@ -32,19 +32,15 @@ export function every<T>(
     throw new TypeError("'predicate' is not a function");
   }
   let index = -1;
-  let closed = false;
   return new TransformStream({
     async transform(chunk, controller) {
       if (!await predicate(chunk, ++index)) {
         controller.enqueue(false);
         controller.terminate();
-        closed = true;
       }
     },
     flush(controller) {
-      if (!closed) {
-        controller.enqueue(true);
-      }
+      controller.enqueue(true);
     },
   });
 }
