@@ -22,7 +22,7 @@ import { terminate } from "./terminate.ts";
  *
  * @template T The type of chunks.
  * @param count The number of values to emits.
- * @returns A TransformStream that emits first count chunks.
+ * @returns A TransformStream that emits the first count chunks.
  */
 export function take<T>(count = 1): TransformStream<T, T> {
   if (count <= 0) return terminate();
