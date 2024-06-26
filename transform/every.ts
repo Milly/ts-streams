@@ -4,6 +4,9 @@
  * @module
  */
 
+import type { PredicateFn } from "../types.ts";
+import type { Falsy } from "../internal/types.ts";
+
 /**
  * Returns a {@linkcode TransformStream} that emits whether all chunks from
  * the writable side satisfy the specified predicate.
@@ -26,25 +29,27 @@
  * @returns A TransformStream that emits whether all chunks satisfy the predicate
  */
 export function every<T>(
-  predicate: (value: T, index: number) => boolean | Promise<boolean>,
+  predicate: PredicateFn<T>,
+): TransformStream<T, boolean>;
+export function every<T>(
+  predicate: BooleanConstructor,
+): TransformStream<T, Exclude<T, Falsy> extends never ? false : boolean>;
+export function every<T>(
+  predicate: PredicateFn<T>,
 ): TransformStream<T, boolean> {
   if (typeof predicate !== "function") {
     throw new TypeError("'predicate' is not a function");
   }
   let index = -1;
-  let closed = false;
   return new TransformStream({
     async transform(chunk, controller) {
       if (!await predicate(chunk, ++index)) {
         controller.enqueue(false);
         controller.terminate();
-        closed = true;
       }
     },
     flush(controller) {
-      if (!closed) {
-        controller.enqueue(true);
-      }
+      controller.enqueue(true);
     },
   });
 }
