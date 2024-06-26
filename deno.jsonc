@@ -42,6 +42,7 @@
     "./transform/take-last": "./transform/take_last.ts",
     "./transform/tap": "./transform/tap.ts",
     "./transform/terminate": "./transform/terminate.ts",
+    "./writable": "./writable/mod.ts",
     "./writable/for-each": "./writable/for_each.ts",
     "./writable/post-message": "./writable/post_message.ts",
     "./types": "./types.ts",
