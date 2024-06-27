@@ -5,6 +5,6 @@
  * @module
  */
 
-export * from "./array_from.ts";
 export * from "./pull.ts";
+export * from "./to_array.ts";
 export * from "./write.ts";

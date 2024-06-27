@@ -7,14 +7,14 @@ import {
   spy,
 } from "@std/testing/mock";
 import { from } from "../readable/from.ts";
-import { arrayFrom } from "./array_from.ts";
+import { toArray } from "./to_array.ts";
 
-describe("arrayFrom()", () => {
+describe("toArray()", () => {
   describe("if `stream` is ReadableStream", () => {
     it("returns the all chunk in the stream", async () => {
       const stream = from([1, 2, 3]);
 
-      const actual = await arrayFrom(stream);
+      const actual = await toArray(stream);
 
       assertEquals(actual, [1, 2, 3]);
       assertFalse(stream.locked, "should stream unlocked");
@@ -22,7 +22,7 @@ describe("arrayFrom()", () => {
     it("returns [] if the stream is empty", async () => {
       const stream = from([]);
 
-      const actual = await arrayFrom(stream);
+      const actual = await toArray(stream);
 
       assertEquals(actual, []);
       assertFalse(stream.locked, "should stream unlocked");
@@ -30,7 +30,7 @@ describe("arrayFrom()", () => {
     it("throws if the stream is rejected", async () => {
       const stream = from([1, 2, Promise.reject("error")]);
 
-      const actual = await assertRejects(() => arrayFrom(stream));
+      const actual = await assertRejects(() => toArray(stream));
 
       assertEquals(actual, "error");
       assertFalse(stream.locked, "should stream unlocked");
@@ -40,7 +40,7 @@ describe("arrayFrom()", () => {
         const stream = from([1, 2, 3]);
         const mapFn = spy(returnsNext([10, Promise.resolve(11), 12]));
 
-        const actual = await arrayFrom(stream, mapFn);
+        const actual = await toArray(stream, mapFn);
 
         assertEquals(actual, [10, 11, 12]);
         assertSpyCalls(mapFn, 3);
@@ -64,7 +64,7 @@ describe("arrayFrom()", () => {
         const error = new Error("error");
         const mapFn = spy(returnsNext([10, 11, error]));
 
-        const actual = await assertRejects(() => arrayFrom(stream, mapFn));
+        const actual = await assertRejects(() => toArray(stream, mapFn));
 
         assertEquals(actual, error);
         assertFalse(stream.locked, "should stream unlocked");
@@ -84,7 +84,7 @@ describe("arrayFrom()", () => {
         });
         const mapFn = spy(returnsNext([10, 11, Promise.reject("error")]));
 
-        const actual = await assertRejects(() => arrayFrom(stream, mapFn));
+        const actual = await assertRejects(() => toArray(stream, mapFn));
 
         assertEquals(actual, "error");
         assertFalse(stream.locked, "should stream unlocked");
@@ -107,7 +107,7 @@ describe("arrayFrom()", () => {
         },
       };
 
-      const actual = await arrayFrom(stream);
+      const actual = await toArray(stream);
 
       assertEquals(actual, [1, 2, 3]);
       assert(streamClosed, "should closes async iterator");
@@ -121,7 +121,7 @@ describe("arrayFrom()", () => {
         },
       };
 
-      const actual = await arrayFrom(stream);
+      const actual = await toArray(stream);
 
       assertEquals(actual, []);
       assert(streamClosed, "should closes async iterator");
@@ -140,7 +140,7 @@ describe("arrayFrom()", () => {
         },
       };
 
-      const actual = await assertRejects(() => arrayFrom(stream));
+      const actual = await assertRejects(() => toArray(stream));
 
       assertEquals(actual, "error");
       assert(streamClosed, "should closes async iterator");
@@ -161,7 +161,7 @@ describe("arrayFrom()", () => {
         };
         const mapFn = spy(returnsNext([10, Promise.resolve(11), 12]));
 
-        const actual = await arrayFrom(stream, mapFn);
+        const actual = await toArray(stream, mapFn);
 
         assertEquals(actual, [10, 11, 12]);
         assertSpyCalls(mapFn, 3);
@@ -186,7 +186,7 @@ describe("arrayFrom()", () => {
         const error = new Error("error");
         const mapFn = spy(returnsNext([10, 11, error]));
 
-        const actual = await assertRejects(() => arrayFrom(stream, mapFn));
+        const actual = await assertRejects(() => toArray(stream, mapFn));
 
         assertEquals(actual, error);
         assert(streamClosed, "should closes async iterator");
@@ -206,7 +206,7 @@ describe("arrayFrom()", () => {
         };
         const mapFn = spy(returnsNext([10, 11, Promise.reject("error")]));
 
-        const actual = await assertRejects(() => arrayFrom(stream, mapFn));
+        const actual = await assertRejects(() => toArray(stream, mapFn));
 
         assertEquals(actual, "error");
         assert(streamClosed, "should closes async iterator");
@@ -228,7 +228,7 @@ describe("arrayFrom()", () => {
         },
       };
 
-      const actual = await arrayFrom(stream);
+      const actual = await toArray(stream);
 
       assertEquals(actual, [1, 2, 3]);
       assert(streamClosed, "should closes sync iterator");
@@ -242,7 +242,7 @@ describe("arrayFrom()", () => {
         },
       };
 
-      const actual = await arrayFrom(stream);
+      const actual = await toArray(stream);
 
       assertEquals(actual, []);
       assert(streamClosed, "should closes sync iterator");
@@ -261,7 +261,7 @@ describe("arrayFrom()", () => {
         },
       };
 
-      const actual = await assertRejects(() => arrayFrom(stream));
+      const actual = await assertRejects(() => toArray(stream));
 
       assertEquals(actual, "error");
       // Ref: https://github.com/tc39/ecma262/pull/2600
@@ -283,7 +283,7 @@ describe("arrayFrom()", () => {
         };
         const mapFn = spy(returnsNext([10, Promise.resolve(11), 12]));
 
-        const actual = await arrayFrom(stream, mapFn);
+        const actual = await toArray(stream, mapFn);
 
         assertEquals(actual, [10, 11, 12]);
         assertSpyCalls(mapFn, 3);
@@ -308,7 +308,7 @@ describe("arrayFrom()", () => {
         const error = new Error("error");
         const mapFn = spy(returnsNext([10, 11, error]));
 
-        const actual = await assertRejects(() => arrayFrom(stream, mapFn));
+        const actual = await assertRejects(() => toArray(stream, mapFn));
 
         assertEquals(actual, error);
         assert(streamClosed, "should closes sync iterator");
@@ -328,7 +328,7 @@ describe("arrayFrom()", () => {
         };
         const mapFn = spy(returnsNext([10, 11, Promise.reject("error")]));
 
-        const actual = await assertRejects(() => arrayFrom(stream, mapFn));
+        const actual = await assertRejects(() => toArray(stream, mapFn));
 
         assertEquals(actual, "error");
         assert(streamClosed, "should closes sync iterator");
@@ -344,7 +344,7 @@ describe("arrayFrom()", () => {
         2: Promise.resolve(3),
       };
 
-      const actual = await arrayFrom(stream);
+      const actual = await toArray(stream);
 
       assertEquals(actual, [1, 2, 3]);
     });
@@ -353,7 +353,7 @@ describe("arrayFrom()", () => {
         length: 0,
       };
 
-      const actual = await arrayFrom(stream);
+      const actual = await toArray(stream);
 
       assertEquals(actual, []);
     });
@@ -365,7 +365,7 @@ describe("arrayFrom()", () => {
         2: Promise.reject("error"),
       };
 
-      const actual = await assertRejects(() => arrayFrom(stream));
+      const actual = await assertRejects(() => toArray(stream));
 
       assertEquals(actual, "error");
     });
@@ -379,7 +379,7 @@ describe("arrayFrom()", () => {
         };
         const mapFn = spy(returnsNext([10, Promise.resolve(11), 12]));
 
-        const actual = await arrayFrom(stream, mapFn);
+        const actual = await toArray(stream, mapFn);
 
         assertEquals(actual, [10, 11, 12]);
         assertSpyCalls(mapFn, 3);
@@ -397,7 +397,7 @@ describe("arrayFrom()", () => {
         const error = new Error("error");
         const mapFn = spy(returnsNext([10, 11, error]));
 
-        const actual = await assertRejects(() => arrayFrom(stream, mapFn));
+        const actual = await assertRejects(() => toArray(stream, mapFn));
 
         assertEquals(actual, error);
       });
@@ -410,7 +410,7 @@ describe("arrayFrom()", () => {
         };
         const mapFn = spy(returnsNext([10, 11, Promise.reject("error")]));
 
-        const actual = await assertRejects(() => arrayFrom(stream, mapFn));
+        const actual = await assertRejects(() => toArray(stream, mapFn));
 
         assertEquals(actual, "error");
       });
