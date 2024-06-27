@@ -8,11 +8,11 @@ import type { StreamSource } from "../types.ts";
 import { getIterator, iteratorNext } from "../internal/iterator.ts";
 
 /**
- * Creates a new, shallow-copied {@linkcode Array} instance from an async
- * iterable, iterable, or
+ * Creates a new, shallow-copied {@linkcode Array} instance from an
+ * {@linkcode AsyncIterable}, {@linkcode Iterable}, or
  * {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Indexed_collections#working_with_array-like_objects | array-like object}.
  *
- * Like {@linkcode Array.fromAsync()}
+ * Like {@linkcode https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array/fromAsync | Array.fromAsync()}
  *
  * If the object being iterated is a sync iterable, and an error is thrown
  * while iterating, the `return()` method of the underlying iterator will be

@@ -6,7 +6,7 @@
 
 /**
  * Source values that can be converted to ReadableStream by
- * {@linkcode ./readable/from.ts#from | from}.
+ * {@linkcode readable/from/~/from | from}.
  */
 export type StreamSource<T> = AsyncIterable<T> | Iterable<T | PromiseLike<T>>;
 

@@ -17,7 +17,7 @@ export interface PostMessageTarget<T = any> {
  */
 export interface PostMessageOptions<T> {
   /**
-   * Returns an array of {@link https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Transferable_objects | Transferable objects}.
+   * Returns an array of {@link https://developer.mozilla.org/docs/Web/API/Web_Workers_API/Transferable_objects | Transferable objects}.
    *
    * A function that accepts up to two arguments. It is called one time for
    * each chunk written.

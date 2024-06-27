@@ -13,7 +13,7 @@ const NOOP = () => {};
  * Creates a {@linkcode ReadableStream} that emits the resolved element values
  * of the input which is an {@linkcode AsyncIterable} or {@linkcode Iterable}.
  *
- * Like experimental feature {@linkcode ReadableStream.from()}.
+ * Like experimental feature {@linkcode https://developer.mozilla.org/docs/Web/API/ReadableStream/from_static | ReadableStream.from()}
  *
  * @example
  * ```ts
