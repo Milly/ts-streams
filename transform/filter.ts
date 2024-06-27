@@ -80,9 +80,7 @@ export function filter<T>(
  * @returns A TransformStream that emits filtered chunks.
  */
 export function filter<T>(predicate: PredicateFn<T>): TransformStream<T, T>;
-export function filter<T>(
-  predicate: (value: T, index: number) => boolean | Promise<boolean>,
-): TransformStream<T, T> {
+export function filter<T>(predicate: PredicateFn<T>): TransformStream<T, T> {
   if (typeof predicate !== "function") {
     throw new TypeError("'predicate' is not a function");
   }
