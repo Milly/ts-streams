@@ -1,5 +1,5 @@
 /**
- * Provides {@link arrayFrom}.
+ * Provides {@link toArray}.
  *
  * @module
  */
@@ -21,11 +21,11 @@ import { getIterator, iteratorNext } from "../internal/iterator.ts";
  * (see {@link https://github.com/tc39/ecma262/pull/2600 | tc39/ecma262#2600}).
  *
  * ```ts
- * import { arrayFrom } from "@milly/streams/util/array-from";
+ * import { toArray } from "@milly/streams/util/to-array";
  * import { from } from "@milly/streams/readable/from";
  *
  * const stream = from([1, 2, 3]);
- * const array = arrayFrom(stream);
+ * const array = toArray(stream);
  * console.log(array); // [1, 2, 3]
  * ```
  *
@@ -34,14 +34,14 @@ import { getIterator, iteratorNext } from "../internal/iterator.ts";
  * @param mapFn A function to call on every chunk of the stream, and return value is added to the array instead (after being awaited).
  * @returns A new Promise whose fulfillment value is a new Array instance.
  */
-export async function arrayFrom<T, R>(
+export async function toArray<T, R>(
   stream: StreamSource<T> | ArrayLike<T | Promise<T>>,
   mapFn: (element: T, index: number) => R,
 ): Promise<Awaited<R>[]>;
-export async function arrayFrom<T>(
+export async function toArray<T>(
   stream: StreamSource<T> | ArrayLike<T | Promise<T>>,
 ): Promise<Awaited<T>[]>;
-export async function arrayFrom<T, R>(
+export async function toArray<T, R>(
   stream: StreamSource<T> | ArrayLike<T | Promise<T>>,
   mapFn?: (element: T, index: number) => R,
 ): Promise<Awaited<T | R>[]> {

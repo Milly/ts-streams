@@ -52,8 +52,8 @@
     "./writable/post-message": "./writable/post_message.ts",
     "./types": "./types.ts",
     "./util": "./util/mod.ts",
-    "./util/array-from": "./util/array_from.ts",
     "./util/pull": "./util/pull.ts",
+    "./util/to-array": "./util/to_array.ts",
     "./util/write": "./util/write.ts"
   },
   "test": {
@@ -144,8 +144,8 @@
     "@milly/streams/transform/transform": "./transform/transform.ts",
     "@milly/streams/types": "./types.ts",
     "@milly/streams/util": "./util/mod.ts",
-    "@milly/streams/util/array-from": "./util/array_from.ts",
     "@milly/streams/util/pull": "./util/pull.ts",
+    "@milly/streams/util/to-array": "./util/to_array.ts",
     "@milly/streams/util/write": "./util/write.ts",
     "@milly/streams/writable": "./writable/mod.ts",
     "@milly/streams/writable/for-each": "./writable/for_each.ts",
