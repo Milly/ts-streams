@@ -37,7 +37,6 @@ import { toReadableStream } from "../internal/to_readable_stream.ts";
  *
  * @template I The type of chunks from the writable side.
  * @template O The type of chunks to the readable side.
- * @param project A function to execute for each chunk from the source. Its return value is iterable and each chunk is merged into the output.
  * @param project A function that accepts up to two arguments. It is called one time for each chunk from the writable side.
  * @param options.concurrent Number of projects to read in parallel. Default is `Infinity`.
  * @returns A TransformStream that projects each source value into a ReadableStream and merges it into the output.

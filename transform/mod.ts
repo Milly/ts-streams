@@ -34,3 +34,4 @@ export * from "./take_last.ts";
 export * from "./take_while.ts";
 export * from "./tap.ts";
 export * from "./terminate.ts";
+export * from "./transform.ts";
