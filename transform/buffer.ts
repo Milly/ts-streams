@@ -13,6 +13,10 @@ import { map } from "./map.ts";
  * Returns a {@linkcode TransformStream} that buffers chunks from the writable
  * side until `emitter` emits a value.
  *
+ * @template T The type of the chunks in the source stream.
+ * @param emitter The maximum size of the buffer emitted.
+ * @returns A TransformStream that emits arrays of buffered chunks.
+ *
  * @example
  * ```ts
  * import { buffer } from "@milly/streams/transform/buffer";
@@ -28,10 +32,6 @@ import { map } from "./map.ts";
  * const result = await Array.fromAsync(output);
  * console.log(result); // [[0, 1], [2], [3]]
  * ```
- *
- * @template T The type of chunks.
- * @param emitter The maximum size of the buffer emitted.
- * @returns A TransformStream that emits arrays of buffered chunks.
  */
 export function buffer<T>(
   emitter: AsyncIterable<unknown>,

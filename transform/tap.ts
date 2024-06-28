@@ -83,6 +83,10 @@ export interface TapController {
  * Returns a {@linkcode TransformStream} that is used to perform side effects
  * on various events from the writable or the readable side.
  *
+ * @template T The type of the chunks in the source stream.
+ * @param write A predicate function.
+ * @returns A TransformStream that emits source chunks.
+ *
  * @example
  * ```ts
  * import { tap } from "@milly/streams/transform/tap";
@@ -101,10 +105,6 @@ export interface TapController {
  * // 3
  * console.log(result); // [2, 4, 6]
  * ```
- *
- * @template T The type of chunks.
- * @param write A predicate function.
- * @returns A TransformStream that emits source chunks.
  */
 export function tap<T>(
   callbacksAndOptions: TapCallbacks<T> & TapOptions<T>,

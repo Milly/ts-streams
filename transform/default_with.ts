@@ -11,6 +11,13 @@ import { toReadableStream } from "../internal/to_readable_stream.ts";
  * Returns a {@linkcode TransformStream} that emits values from the default
  * stream if the writable side emits no chunks.
  *
+ * @template I The type of the chunks in the source stream.
+ * @template D The resolved element type of the default value.
+ * @param defaultFactory A function called when the writable side stream closed
+ *     and no chunks were written.
+ * @returns A TransformStream that emits the default value if the writable side
+ *     emits no chunks.
+ *
  * @example
  * ```ts
  * import { defaultWith } from "@milly/streams/transform/default-with";
@@ -21,11 +28,6 @@ import { toReadableStream } from "../internal/to_readable_stream.ts";
  * const result = await Array.fromAsync(output);
  * console.log(result); // [42, 123]
  * ```
- *
- * @template I The type of chunks from the writable side.
- * @template D The resolved element type of the default value.
- * @param defaultFactory A function called when the writable side stream closed and no chunks were written.
- * @returns A TransformStream that emits the default value if the writable side emits no chunks.
  */
 export function defaultWith<I, D = I>(
   defaultFactory: FactoryFn<D>,

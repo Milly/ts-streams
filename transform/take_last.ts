@@ -7,7 +7,12 @@
 import { terminate } from "./terminate.ts";
 
 /**
- * Returns a {@linkcode TransformStream} that emits only the last count values.
+ * Returns a {@linkcode TransformStream} that emits only the last `count`
+ * values.
+ *
+ * @template T The type of the chunks in the source stream.
+ * @param count The number of values to emits.
+ * @returns A TransformStream that emits last count chunks.
  *
  * @example
  * ```ts
@@ -19,10 +24,6 @@ import { terminate } from "./terminate.ts";
  * const result = await Array.fromAsync(output);
  * console.log(result); // [4, 5]
  * ```
- *
- * @template T The type of chunks.
- * @param count The number of values to emits.
- * @returns A TransformStream that emits last count chunks.
  */
 export function takeLast<T>(count = 1): TransformStream<T, T> {
   if (count <= 0) return terminate();

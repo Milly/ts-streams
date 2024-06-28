@@ -12,6 +12,10 @@ import { mergeAll } from "../transform/merge_all.ts";
  * Creates a {@linkcode ReadableStream} that merges and emits all higher-order
  * ReadableStream values.
  *
+ * @template T The resolved element type of the input.
+ * @param inputs An AsyncIterable or Iterable whose values are higher-order ReadableStream.
+ * @returns A TransformStream that emits each higher-order ReadableStream values.
+ *
  * @example
  * ```ts
  * import { mergeWith } from "@milly/streams/readable/merge-with";
@@ -32,10 +36,6 @@ import { mergeAll } from "../transform/merge_all.ts";
  * const result = await Array.fromAsync(output);
  * console.log(result); // [1, 2, 2, 1, 2, 3, 1, 2, 3]
  * ```
- *
- * @template T The resolved element type of the input.
- * @param inputs An AsyncIterable or Iterable whose values are higher-order ReadableStream.
- * @returns A TransformStream that emits each higher-order ReadableStream values.
  */
 export function mergeWith<T>(
   inputs: StreamSource<StreamSource<T>>,

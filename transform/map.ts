@@ -17,6 +17,12 @@ import type { ProjectFn } from "../types.ts";
  * the readable side. The next time `project` is called is after the previous
  * value has been resolved.
  *
+ * @template I The type of the chunks in the source stream.
+ * @template O The type of the chunks in the transformed stream.
+ * @param project A function that accepts up to two arguments. It is called
+ *     one time for each chunk from the writable side.
+ * @returns A `TransformStream` that emits mapped chunks.
+ *
  * @example
  * ```ts
  * import { map } from "@milly/streams/transform/map";
@@ -27,11 +33,6 @@ import type { ProjectFn } from "../types.ts";
  * const result = await Array.fromAsync(output);
  * console.log(result); // [2, 4, 6]
  * ```
- *
- * @template I The type of chunks from the writable side.
- * @template O The type of chunks to the readable side.
- * @param project A function that accepts up to two arguments. It is called one time for each chunk from the writable side.
- * @returns A `TransformStream` that emits mapped chunks.
  */
 export function map<I, O>(
   project: ProjectFn<I, O>,

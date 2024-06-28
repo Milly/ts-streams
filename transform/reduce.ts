@@ -14,6 +14,12 @@ import type { AccumulateFn } from "../types.ts";
  * The return value of the accumulator is provided as an argument in the next
  * call to the accumulator. Like {@linkcode Array.prototype.reduce()}.
  *
+ * @template I The type of the chunks in the source stream.
+ * @template A The type of the accumulator result.
+ * @param accumulator A function called when each chunk is emitted from
+ *     the writable side.
+ * @returns A TransformStream that emits the accumulated value.
+ *
  * @example
  * ```ts
  * import { reduce } from "@milly/streams/transform/reduce";
@@ -26,11 +32,6 @@ import type { AccumulateFn } from "../types.ts";
  * const result = await Array.fromAsync(output);
  * console.log(result); // [6]
  * ```
- *
- * @template I The type of chunks from the writable side.
- * @template A The type of the accumulator result.
- * @param accumulator A function called when each chunk is emitted from the writable side.
- * @returns A TransformStream that emits the accumulated value.
  */
 export function reduce<I, A = I>(
   accumulator: AccumulateFn<I, A, I | Awaited<A>>,
@@ -42,6 +43,16 @@ export function reduce<I, A = I>(
  *
  * The return value of the accumulator is provided as an argument in the next
  * call to the accumulator. Like {@linkcode Array.prototype.reduce()}.
+ *
+ * @template I The type of the chunks in the source stream.
+ * @template A The type of the accumulator result.
+ * @template V The initial value type.
+ * @param accumulator A function called when each chunk is emitted from
+ *     the writable side.
+ * @param initialValue The initial value to start the accumulation.
+ *     The first call to the accumulator provides this value as an argument
+ *     instead of chunk.
+ * @returns A TransformStream that emits the accumulated value.
  *
  * @example
  * ```ts
@@ -56,13 +67,6 @@ export function reduce<I, A = I>(
  * const result = await Array.fromAsync(output);
  * console.log(result); // [16]
  * ```
- *
- * @template I The type of chunks from the writable side.
- * @template A The type of the accumulator result.
- * @template V The initial value type.
- * @param accumulator A function called when each chunk is emitted from the writable side.
- * @param initialValue The initial value to start the accumulation. The first call to the accumulator provides this value as an argument instead of chunk.
- * @returns A TransformStream that emits the accumulated value.
  */
 export function reduce<I, A, V = A>(
   accumulator: AccumulateFn<I, A, Awaited<A | V>>,

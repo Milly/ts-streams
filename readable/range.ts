@@ -10,6 +10,10 @@ import { empty } from "./empty.ts";
  * Creates a {@linkcode ReadableStream} that emits a sequence of numbers
  * within specified range.
  *
+ * @param [start=0] The value of first integer in the sequence.
+ * @param count The number of sequential integers to generate.
+ * @returns A ReadableStream that emits a sequence of numbers.
+ *
  * @example
  * ```ts
  * import { range } from "@milly/streams/readable/range";
@@ -18,10 +22,6 @@ import { empty } from "./empty.ts";
  * const result = await Array.fromAsync(output);
  * console.log(result); // [8, 9, 10, 11, 12]
  * ```
- *
- * @param [start=0] The value of first integer in the sequence.
- * @param count The number of sequential integers to generate.
- * @returns A ReadableStream that emits a sequence of numbers.
  */
 export function range(count: number): ReadableStream<number>;
 export function range(start: number, count: number): ReadableStream<number>;

@@ -5,7 +5,11 @@
  */
 
 /**
- * Returns a {@linkcode TransformStream} that skips the last count values.
+ * Returns a {@linkcode TransformStream} that skips the last `count` values.
+ *
+ * @template T The type of the chunks in the source stream.
+ * @param count The number of values to emits.
+ * @returns A TransformStream that skips the last count chunks.
  *
  * @example
  * ```ts
@@ -17,10 +21,6 @@
  * const result = await Array.fromAsync(output);
  * console.log(result); // [1, 2, 3]
  * ```
- *
- * @template T The type of chunks.
- * @param count The number of values to emits.
- * @returns A TransformStream that skips the last count chunks.
  */
 export function skipLast<T>(count = 1): TransformStream<T, T> {
   let buffer: T[] = [];

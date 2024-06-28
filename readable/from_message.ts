@@ -42,6 +42,14 @@ export interface FromMessageOptions<T, R> {
  * If a `predicate` function is specified, its return value will be emitted
  * in chunks. It is called synchronously from the `target.onmessage` handler.
  *
+ * @template T The message data type.
+ * @template R The return type of the `predicate`.
+ * @param target The DOM EventTarget.
+ * @param options Option parameters object.
+ * @returns A ReadableStream that emits data from the given message target.
+ * @throws TypeError If `target.onmessage` is not empty and `options.force`
+ *     is not `true`.
+ *
  * @example
  * ```ts
  * import { fromMessage } from "@milly/streams/readable/from-message";
@@ -55,13 +63,6 @@ export interface FromMessageOptions<T, R> {
  * const result = await Array.fromAsync(output);
  * console.log(result); // [1, "foo", true]
  * ```
- *
- * @template T The message data type.
- * @template R The return type of the `predicate`.
- * @param target The DOM EventTarget.
- * @param options Option parameters object.
- * @returns A ReadableStream that emits data from the given message target.
- * @throws TypeError If `target.onmessage` is not empty and `options.force` is not `true`.
  */
 export function fromMessage<T, R = T>(
   target: FromMessageTarget<T>,
@@ -74,6 +75,14 @@ export function fromMessage<T, R = T>(
  * If a `predicate` function is specified, its return value will be emitted
  * in chunks. It is called synchronously from the `target.onmessage` handler.
  *
+ * @template T The message data type.
+ * @template R The return type of the `predicate`.
+ * @param target The DOM EventTarget.
+ * @param predicate A function that accepts up to two arguments. It is called
+ *     one time for each message from the target.
+ * @returns A ReadableStream that emits data from the given message target.
+ * @throws TypeError If `target.onmessage` is not empty.
+ *
  * @example
  * ```ts
  * import { fromMessage } from "@milly/streams/readable/from-message";
@@ -87,13 +96,6 @@ export function fromMessage<T, R = T>(
  * const result = await Array.fromAsync(output);
  * console.log(result); // [1, "foo", true]
  * ```
- *
- * @template T The message data type.
- * @template R The return type of the `predicate`.
- * @param target The DOM EventTarget.
- * @param predicate A function that accepts up to two arguments. It is called one time for each message from the target.
- * @returns A ReadableStream that emits data from the given message target.
- * @throws TypeError If `target.onmessage` is not empty.
  */
 export function fromMessage<T, R>(
   target: FromMessageTarget<T>,

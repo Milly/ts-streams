@@ -13,6 +13,11 @@ import type { Falsy } from "../internal/types.ts";
  *
  * Like {@linkcode Array.prototype.filter()}.
  *
+ * @template I The type of the chunks in the source stream.
+ * @template O The type of the chunks in the transformed stream.
+ * @param predicate A predicate function.
+ * @returns A TransformStream that emits filtered chunks.
+ *
  * @example
  * ```ts
  * import { filter } from "@milly/streams/transform/filter";
@@ -25,11 +30,6 @@ import type { Falsy } from "../internal/types.ts";
  * const result = await Array.fromAsync(output);
  * console.log(result); // ["a", "b", "c"]
  * ```
- *
- * @template I The type of chunks from the writable side.
- * @template O The type of chunks to the readable side.
- * @param predicate A predicate function.
- * @returns A TransformStream that emits filtered chunks.
  */
 export function filter<I, O extends I>(
   predicate: GuardFn<I, O>,
@@ -39,6 +39,10 @@ export function filter<I, O extends I>(
  * predicate.
  *
  * Like {@linkcode Array.prototype.filter()}.
+ *
+ * @template T The type of the chunks in the source stream.
+ * @param predicate A predicate function.
+ * @returns A TransformStream that emits filtered chunks.
  *
  * @example
  * ```ts
@@ -50,10 +54,6 @@ export function filter<I, O extends I>(
  * const result = await Array.fromAsync(output);
  * console.log(result); // [1, 2, 3]
  * ```
- *
- * @template T The type of chunks from the writable side.
- * @param predicate A predicate function.
- * @returns A TransformStream that emits filtered chunks.
  */
 export function filter<T>(
   predicate: BooleanConstructor,
@@ -63,6 +63,10 @@ export function filter<T>(
  * predicate.
  *
  * Like {@linkcode Array.prototype.filter()}.
+ *
+ * @template T The type of the chunks in the source stream.
+ * @param predicate A predicate function.
+ * @returns A TransformStream that emits filtered chunks.
  *
  * @example
  * ```ts
@@ -74,10 +78,6 @@ export function filter<T>(
  * const result = await Array.fromAsync(output);
  * console.log(result); // [2, 4, 6]
  * ```
- *
- * @template T The type of chunks.
- * @param predicate A predicate function.
- * @returns A TransformStream that emits filtered chunks.
  */
 export function filter<T>(predicate: PredicateFn<T>): TransformStream<T, T>;
 export function filter<T>(predicate: PredicateFn<T>): TransformStream<T, T> {

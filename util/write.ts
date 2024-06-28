@@ -9,6 +9,12 @@
  *
  * If a promise is specified, the resolved value will be written.
  *
+ * @template T The type of the chunks in the stream.
+ * @param stream The stream to write to.
+ * @param values The chunks to write to the stream.
+ * @returns A promise that resolves all values has been written to the stream.
+ *
+ * @example
  * ```ts
  * import { write } from "@milly/streams/util/write";
  *
@@ -24,11 +30,6 @@
  * await write(stream, Promise.resolve(4));
  * console.log(results); // [1, 2, 3, 4]
  * ```
- *
- * @template T The type of the chunk to write.
- * @param stream The stream to write to.
- * @param values The chunk to write to the stream.
- * @returns A promise that resolves all values has been written to the stream.
  */
 export async function write<T>(
   stream: WritableStream<T>,

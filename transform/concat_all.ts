@@ -15,6 +15,9 @@ import { mergeMap } from "./merge_map.ts";
  *
  * Like {@linkcode Array.prototype.flat()} with `depth` to 1.
  *
+ * @template T The type of the chunks in the source stream.
+ * @returns A TransformStream that emits each higher-order ReadableStream values.
+ *
  * @example
  * ```ts
  * import { concatAll } from "@milly/streams/transform/concat-all";
@@ -29,9 +32,6 @@ import { mergeMap } from "./merge_map.ts";
  * const result = await Array.fromAsync(output);
  * console.log(result); // [3, 5, 10, 20, 30, "foo"]
  * ```
- *
- * @template T The type of chunks.
- * @returns A TransformStream that emits each higher-order ReadableStream values.
  */
 export function concatAll<T>(): TransformStream<StreamSource<T>, T> {
   return mergeMap(identity, { concurrent: 1 });

@@ -5,7 +5,11 @@
  */
 
 /**
- * Returns a {@linkcode TransformStream} that skips the first count values.
+ * Returns a {@linkcode TransformStream} that skips the first `count` values.
+ *
+ * @template T The type of the chunks in the source stream.
+ * @param count The number of values to skips.
+ * @returns A TransformStream that skips the first count chunks.
  *
  * @example
  * ```ts
@@ -17,10 +21,6 @@
  * const result = await Array.fromAsync(output);
  * console.log(result); // [4, 5]
  * ```
- *
- * @template T The type of chunks.
- * @param count The number of values to skips.
- * @returns A TransformStream that skips the first count chunks.
  */
 export function skip<T>(count = 1): TransformStream<T, T> {
   let index = 0;

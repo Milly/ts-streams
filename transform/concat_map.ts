@@ -12,6 +12,13 @@ import { mergeMap } from "./merge_map.ts";
  * a {@linkcode ReadableStream} which is concatenated in the output
  * ReadableStream.
  *
+ * @template I The type of the chunks in the source stream.
+ * @template O The type of the chunks in the transformed stream.
+ * @param project A function that accepts up to two arguments. It is called one
+ *     time for each chunk from the writable side.
+ * @returns A TransformStream that projects each source value into
+ *     a ReadableStream and concat it into the output.
+ *
  * @example
  * ```ts
  * import { concatMap } from "@milly/streams/transform/concat-map";
@@ -35,12 +42,6 @@ import { mergeMap } from "./merge_map.ts";
  * const result = await Array.fromAsync(output);
  * console.log(result); // [30, 31, 50, 51]
  * ```
- *
- * @template I The type of chunks from the writable side.
- * @template O The type of chunks to the readable side.
- * @param project A function that accepts up to two arguments. It is called one time for each chunk from the writable side.
- * @returns A TransformStream that emits each higher-order ReadableStream values in order.
- * @returns A TransformStream that projects each source value into a ReadableStream and concat it into the output.
  */
 export function concatMap<I, O>(
   project: ProjectFn<I, StreamSource<O>>,

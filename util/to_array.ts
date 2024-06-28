@@ -8,11 +8,11 @@ import type { StreamSource } from "../types.ts";
 import { getIterator, iteratorNext } from "../internal/iterator.ts";
 
 /**
- * Creates a new, shallow-copied {@linkcode Array} instance from an async
- * iterable, iterable, or
+ * Creates a new, shallow-copied {@linkcode Array} instance from an
+ * {@linkcode AsyncIterable}, {@linkcode Iterable}, or
  * {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Indexed_collections#working_with_array-like_objects | array-like object}.
  *
- * Like {@linkcode Array.fromAsync()}
+ * Like {@linkcode https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array/fromAsync | Array.fromAsync()}
  *
  * If the object being iterated is a sync iterable, and an error is thrown
  * while iterating, the `return()` method of the underlying iterator will be
@@ -20,6 +20,13 @@ import { getIterator, iteratorNext } from "../internal/iterator.ts";
  * `Array.fromAsync()`, but may become the same in the future.
  * (see {@link https://github.com/tc39/ecma262/pull/2600 | tc39/ecma262#2600}).
  *
+ * @template T The type of the elements in the array-like.
+ * @param stream The stream to read from.
+ * @param mapFn A function to call on every chunk of the stream, and return
+ *     value is added to the array instead (after being awaited).
+ * @returns A new Promise whose fulfillment value is a new Array instance.
+ *
+ * @example
  * ```ts
  * import { toArray } from "@milly/streams/util/to-array";
  * import { from } from "@milly/streams/readable/from";
@@ -28,11 +35,6 @@ import { getIterator, iteratorNext } from "../internal/iterator.ts";
  * const array = toArray(stream);
  * console.log(array); // [1, 2, 3]
  * ```
- *
- * @template T The type of the chunk to read.
- * @param stream The stream to read from.
- * @param mapFn A function to call on every chunk of the stream, and return value is added to the array instead (after being awaited).
- * @returns A new Promise whose fulfillment value is a new Array instance.
  */
 export async function toArray<T, R>(
   stream: StreamSource<T> | ArrayLike<T | Promise<T>>,

@@ -13,6 +13,11 @@ import { mergeMap } from "./merge_map.ts";
  * {@linkcode ReadableStream} into a first-order ReadableStream by merging
  * the inner ReadableStreams.
  *
+ * @template T The type of the chunks in the source stream.
+ * @param options.concurrent Number of streams to read in parallel.
+ *     Default is `Infinity`.
+ * @returns A TransformStream that emits each higher-order ReadableStream values.
+ *
  * @example
  * ```ts
  * import { mergeAll } from "@milly/streams/transform/merge-all";
@@ -33,10 +38,6 @@ import { mergeMap } from "./merge_map.ts";
  * const result = await Array.fromAsync(output);
  * console.log(result); // [0, 1, 2, 0, 1, 2, 1, 0, 2]
  * ```
- *
- * @template T The type of chunks.
- * @param options.concurrent Number of streams to read in parallel. Default is `Infinity`.
- * @returns A TransformStream that emits each higher-order ReadableStream values.
  */
 export function mergeAll<T>(
   options?: {
