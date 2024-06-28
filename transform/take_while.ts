@@ -12,7 +12,8 @@ import type { Falsy } from "../internal/types.ts";
  */
 export interface TakeWhileOptions {
   /**
-   * If `true`, the value that caused predicate to return false will also be emitted.
+   * If `true`, the value that caused predicate to return false will also be
+   * emitted.
    *
    * @default {false}
    */
@@ -20,7 +21,13 @@ export interface TakeWhileOptions {
 }
 
 /**
- * Returns a {@linkcode TransformStream} that emits only the first count values.
+ * Returns a {@linkcode TransformStream} that emits only the first `count`
+ * values.
+ *
+ * @template I The type of the chunks in the source stream.
+ * @template O The type of the chunks in the transformed stream.
+ * @param predicate A predicate function.
+ * @returns A TransformStream that emits first count chunks.
  *
  * @example
  * ```ts
@@ -34,18 +41,18 @@ export interface TakeWhileOptions {
  * const result = await Array.fromAsync(output);
  * console.log(result); // ["a", "b"]
  * ```
- *
- * @template I The type of chunks from the writable side.
- * @template O The type of chunks to the readable side.
- * @param predicate A predicate function.
- * @returns A TransformStream that emits first count chunks.
  */
 export function takeWhile<I, O extends I>(
   predicate: GuardFn<I, O>,
   options?: { inclusive?: false },
 ): TransformStream<I, O>;
 /**
- * Returns a {@linkcode TransformStream} that emits only the first count values.
+ * Returns a {@linkcode TransformStream} that emits only the first `count`
+ * values.
+ *
+ * @template T The type of the chunks in the source stream.
+ * @param predicate A predicate function.
+ * @returns A TransformStream that emits first count chunks.
  *
  * @example
  * ```ts
@@ -57,17 +64,19 @@ export function takeWhile<I, O extends I>(
  * const result = await Array.fromAsync(output);
  * console.log(result); // [1, 2]
  * ```
- *
- * @template T The type of chunks from the writable side.
- * @param predicate A predicate function.
- * @returns A TransformStream that emits first count chunks.
  */
 export function takeWhile<T>(
   predicate: BooleanConstructor,
   options?: { inclusive?: false },
 ): TransformStream<T, Exclude<T, Falsy>>;
 /**
- * Returns a {@linkcode TransformStream} that emits values while `predicate` holds true.
+ * Returns a {@linkcode TransformStream} that emits values while `predicate`
+ * holds true.
+ *
+ * @template T The type of the chunks in the source stream.
+ * @param predicate A predicate function.
+ * @param options Option parameters object.
+ * @returns A TransformStream that emits values while `predicate` holds true.
  *
  * @example
  * ```ts
@@ -79,11 +88,6 @@ export function takeWhile<T>(
  * const result = await Array.fromAsync(output);
  * console.log(result); // [1, 2]
  * ```
- *
- * @template T The type of chunks.
- * @param predicate A predicate function.
- * @param options Option parameters object.
- * @returns A TransformStream that emits values while `predicate` holds true.
  */
 export function takeWhile<T>(
   predicate: PredicateFn<T>,

@@ -13,7 +13,14 @@ const NOOP = () => {};
  * Returns a {@linkcode TransformStream} that transforms the source stream into
  * another {@linkcode ReadableStream}.
  *
- * The `source` stream is not automatically closed, that is the developer's responsibility.
+ * The `source` stream is not automatically closed, that is the developer's
+ * responsibility.
+ *
+ * @template I The type of the chunks in the source stream.
+ * @template O The type of the chunks in the transformed stream.
+ * @param transformer A function to transform stream.
+ * @returns A {@linkcode TransformStream} that transforms the source stream by
+ *     the `transformer`.
  *
  * @example
  * ```ts
@@ -29,11 +36,6 @@ const NOOP = () => {};
  * const result = await Array.fromAsync(output);
  * console.log(result); // [10, 20, 30]
  * ```
- *
- * @template I The type of chunks from the writable side.
- * @template O The type of chunks to the readable side.
- * @param transformer A function to transform stream.
- * @returns A {@linkcode TransformStream} that transforms the source stream by the `transformer`.
  */
 export function transform<I, O>(
   transformer: (source: ReadableStream<I>) => StreamSource<O>,

@@ -8,6 +8,8 @@
  * Returns a {@linkcode TransformStream} that emits no values and immediately
  * aborts.
  *
+ * @param reason A string describing why the stream was aborted.
+ *
  * @example
  * ```ts
  * import { abort } from "@milly/streams/transform/abort";
@@ -21,8 +23,6 @@
  *   console.log(e); // "reason"
  * }
  * ```
- *
- * @param reason A string describing why the stream was aborted.
  */
 export function abort(reason?: unknown): TransformStream<unknown, never> {
   return new TransformStream({

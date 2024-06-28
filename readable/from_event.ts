@@ -50,6 +50,14 @@ export interface FromEventOptions<E, R> extends AddEventListenerOptions {
  * If a `predicate` function is specified, its return value will be emitted
  * in chunks. It is called synchronously from event listeners.
  *
+ * @template E The event object type.
+ * @template R The return type of the predicate.
+ * @param target The DOM EventTarget.
+ * @param type The event type.
+ * @param options Options to pass through to the underlying `addEventListener`.
+ *     Default is undefined.
+ * @returns A ReadableStream that emits events from the given event target.
+ *
  * @example
  * ```ts
  * import { fromEvent } from "@milly/streams/readable/from-event";
@@ -66,13 +74,6 @@ export interface FromEventOptions<E, R> extends AddEventListenerOptions {
  * const result = await Array.fromAsync(output);
  * console.log(result); // ["foo"]
  * ```
- *
- * @template E The event object type.
- * @template R The return type of the predicate.
- * @param target The DOM EventTarget.
- * @param type The event type.
- * @param options Options to pass through to the underlying `addEventListener`. Default is undefined.
- * @returns A ReadableStream that emits events from the given event target.
  */
 export function fromEvent<E, R = E>(
   target: EventTargetLike<E>,
@@ -85,6 +86,14 @@ export function fromEvent<E, R = E>(
  *
  * If a `predicate` function is specified, its return value will be emitted
  * in chunks. It is called synchronously from event listeners.
+ *
+ * @template E The event object type.
+ * @template R The return type of the predicate.
+ * @param target The DOM EventTarget.
+ * @param type The event type.
+ * @param predicate A function that accepts up to two arguments. It is called
+ *     one time for each event from the target.
+ * @returns A ReadableStream that emits events from the given event target.
  *
  * @example
  * ```ts
@@ -99,13 +108,6 @@ export function fromEvent<E, R = E>(
  * const result = await Array.fromAsync(output);
  * console.log(result); // ["foo"]
  * ```
- *
- * @template E The event object type.
- * @template R The return type of the predicate.
- * @param target The DOM EventTarget.
- * @param type The event type.
- * @param predicate A function that accepts up to two arguments. It is called one time for each event from the target.
- * @returns A ReadableStream that emits events from the given event target.
  */
 export function fromEvent<E, R>(
   target: EventTargetLike<E>,

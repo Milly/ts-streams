@@ -12,6 +12,13 @@ import { toReadableStream } from "../internal/to_readable_stream.ts";
  * a {@linkcode ReadableStream} which is merged into the output ReadableStream,
  * emitting values only from most recently projected ReadableStream.
  *
+ * @template I The type of the chunks in the source stream.
+ * @template O The type of the chunks in the transformed stream.
+ * @param project A function that accepts up to two arguments. It is called
+ *     one time for each chunk from the writable side.
+ * @returns A TransformStream that projects each source value into
+ *     a ReadableStream and merges it into the output.
+ *
  * @example
  * ```ts
  * import { switchMap } from "@milly/streams/transform/switch-map";
@@ -35,11 +42,6 @@ import { toReadableStream } from "../internal/to_readable_stream.ts";
  * const result = await Array.fromAsync(output);
  * console.log(result); // [0, 0, 1, 1, 2, 2, 2]
  * ```
- *
- * @template I The type of chunks from the writable side.
- * @template O The type of chunks to the readable side.
- * @param project A function that accepts up to two arguments. It is called one time for each chunk from the writable side.
- * @returns A TransformStream that projects each source value into a ReadableStream and merges it into the output.
  */
 export function switchMap<I, O>(
   project: ProjectFn<I, StreamSource<O>>,

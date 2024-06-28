@@ -15,6 +15,10 @@ const NOOP = () => {};
  *
  * Like experimental feature {@linkcode https://developer.mozilla.org/docs/Web/API/ReadableStream/from_static | ReadableStream.from()}
  *
+ * @template T The resolved element type of the input.
+ * @param input An AsyncIterable or Iterable whose values will be emitted.
+ * @returns A ReadableStream that emits the resolved element values of the input.
+ *
  * @example
  * ```ts
  * import { from } from "@milly/streams/readable/from";
@@ -23,10 +27,6 @@ const NOOP = () => {};
  * const result = await Array.fromAsync(output);
  * console.log(result); // [3, 8, 42]
  * ```
- *
- * @template T The resolved element type of the input.
- * @param input An AsyncIterable or Iterable whose values will be emitted.
- * @returns A ReadableStream that emits the resolved element values of the input.
  */
 export function from<T>(input: StreamSource<T>): ReadableStream<T> {
   const iterator = getIterator(input);

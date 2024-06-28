@@ -7,6 +7,13 @@
 /**
  * Pulls the next chunk from the {@linkcode ReadableStream}.
  *
+ * @template T The type of the chunks in the stream.
+ * @param stream The stream to read from.
+ * @param defaultValue The value to return if no next value in the stream.
+ * @returns A promise that resolves with the next chunk in the stream, or
+ *     `undefined` if the stream is closed.
+ *
+ * @example
  * ```ts
  * import { pull } from "@milly/streams/util/pull";
  * import { from } from "@milly/streams/readable/from";
@@ -18,11 +25,6 @@
  * console.log(await pull(stream)); // 3
  * console.log(await pull(stream)); // undefined
  * ```
- *
- * @template T The type of the chunk to read.
- * @param stream The stream to read from.
- * @param defaultValue The value to return if no next value in the stream.
- * @returns A promise that resolves with the next chunk in the stream, or `undefined` if the stream is closed.
  */
 export async function pull<T, D>(
   stream: ReadableStream<T>,

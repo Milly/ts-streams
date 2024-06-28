@@ -12,6 +12,10 @@ import { toReadableStream } from "../internal/to_readable_stream.ts";
  * of the input factory's return value which is an {@linkcode AsyncIterable}
  * or {@linkcode Iterable}.
  *
+ * @template T The resolved element type of the input.
+ * @param inputFactory A function called when the stream piped.
+ * @returns A ReadableStream that emits the resolved element values of the input.
+ *
  * @example
  * ```ts
  * import { defer } from "@milly/streams/readable/defer";
@@ -26,10 +30,6 @@ import { toReadableStream } from "../internal/to_readable_stream.ts";
  * console.log(isFactoryCalled); // true
  * console.log(result); // [3, 4, 5] or [42]
  * ```
- *
- * @template T The resolved element type of the input.
- * @param inputFactory A function called when the stream piped.
- * @returns A ReadableStream that emits the resolved element values of the input.
  */
 export function defer<T>(inputFactory: FactoryFn<T>): ReadableStream<T> {
   if (typeof inputFactory !== "function") {

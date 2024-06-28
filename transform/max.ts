@@ -10,6 +10,11 @@ import { reduce } from "./reduce.ts";
  * Returns a {@linkcode TransformStream} that emits largest value from the
  * writable side.
  *
+ * @template T The type of the chunks in the source stream.
+ * @param comparer The compare function that will use instead of the default
+ *     two-value comparison behavior.
+ * @returns A TransformStream that emits largest value.
+ *
  * @example
  * ```ts
  * import { max } from "@milly/streams/transform/max";
@@ -20,10 +25,6 @@ import { reduce } from "./reduce.ts";
  * const result = await Array.fromAsync(output);
  * console.log(result); // [42]
  * ```
- *
- * @template T The type of chunks.
- * @param comparer The compare function that will use instead of the default two-value comparison behavior.
- * @returns A TransformStream that emits largest value.
  */
 export function max<T>(
   comparer?: (a: T, b: T, index: number) => number | Promise<number>,

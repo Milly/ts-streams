@@ -8,6 +8,11 @@
  * Returns a {@linkcode TransformStream} that pipes multiple TransformStreams
  * serially.
  *
+ * @template I The type of the chunks in the source stream.
+ * @template O The type of the chunks in the transformed stream.
+ * @param transforms An array of TransformStream piped serially.
+ * @returns A piped TransformStream.
+ *
  * @example
  * ```ts
  * import { pipe } from "@milly/streams/transform/pipe";
@@ -25,11 +30,6 @@
  * const result = await Array.fromAsync(output);
  * console.log(result); // [1, 9, 25]
  * ```
- *
- * @template I The type of data that the readable side of the TransformStream accepts.
- * @template O The type of data that the TransformStream transforms the input data into.
- * @param {TransformStream[]} transforms An array of TransformStream piped serially.
- * @returns {TransformStream<I, O>} A piped TransformStream.
  */
 export function pipe<I, O, T1>(
   ...transforms: [

@@ -12,6 +12,10 @@ import { deferred } from "../internal/deferred.ts";
  * If `interval` is specified, first waits for `delay` then emits 0, and emits
  * numbers incremented at each `interval`.
  *
+ * @param delay The amount of time in milliseconds to wait before first emits.
+ * @param [interval] The delay between each value emitted in the interval.
+ * @returns A ReadableStream that waits `delay` then emits count at each `interval`.
+ *
  * @example
  * ```ts
  * import { timer } from "@milly/streams/readable/timer";
@@ -27,10 +31,6 @@ import { deferred } from "../internal/deferred.ts";
  * const result2 = await Array.fromAsync(output2);
  * console.log(result2); // [0, 1, 2, 3]
  * ```
- *
- * @param delay The amount of time in milliseconds to wait before first emits.
- * @param [interval] The delay between each value emitted in the interval.
- * @returns A ReadableStream that waits `delay` then emits count at each `interval`.
  */
 export function timer(delay: number): ReadableStream<0>;
 export function timer(delay: number, interval: number): ReadableStream<number>;

@@ -8,7 +8,12 @@ import type { PredicateFn } from "../types.ts";
 import type { Falsy } from "../internal/types.ts";
 
 /**
- * Returns a {@linkcode TransformStream} that skips values as long as `predicate` holds true.
+ * Returns a {@linkcode TransformStream} that skips values as long as
+ * `predicate` holds true.
+ *
+ * @template T The type of the chunks in the source stream.
+ * @param predicate A predicate function.
+ * @returns A TransformStream that skips values as long as `predicate` holds true.
  *
  * @example
  * ```ts
@@ -20,16 +25,17 @@ import type { Falsy } from "../internal/types.ts";
  * const result = await Array.fromAsync(output);
  * console.log(result); // [0, 3, 4]
  * ```
- *
- * @template T The type of chunks from the writable side.
- * @param predicate A predicate function.
- * @returns A TransformStream that skips values as long as `predicate` holds true.
  */
 export function skipWhile<T>(
   predicate: BooleanConstructor,
 ): TransformStream<T, Exclude<T, Falsy> extends never ? never : T>;
 /**
- * Returns a {@linkcode TransformStream} that skips values as long as `predicate` holds true.
+ * Returns a {@linkcode TransformStream} that skips values as long as
+ * `predicate` holds true.
+ *
+ * @template T The type of the chunks in the source stream.
+ * @param predicate A predicate function.
+ * @returns A TransformStream that skips values as long as `predicate` holds true.
  *
  * @example
  * ```ts
@@ -41,10 +47,6 @@ export function skipWhile<T>(
  * const result = await Array.fromAsync(output);
  * console.log(result); // [3, 2, 0]
  * ```
- *
- * @template T The type of chunks.
- * @param predicate A predicate function.
- * @returns A TransformStream that skips values as long as `predicate` holds true.
  */
 export function skipWhile<T>(predicate: PredicateFn<T>): TransformStream<T, T>;
 export function skipWhile<T>(predicate: PredicateFn<T>): TransformStream<T, T> {

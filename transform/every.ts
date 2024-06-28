@@ -9,9 +9,14 @@ import type { Falsy } from "../internal/types.ts";
 
 /**
  * Returns a {@linkcode TransformStream} that emits whether all chunks from
- * the writable side satisfy the specified predicate.
+ * the writable side satisfy the specified `predicate`.
  *
  * Like {@linkcode Array.prototype.every()}.
+ *
+ * @template T The type of the chunks in the source stream.
+ * @param predicate A predicate function.
+ * @returns A TransformStream that emits whether all chunks satisfy
+ *     the specified `predicate`.
  *
  * @example
  * ```ts
@@ -23,10 +28,6 @@ import type { Falsy } from "../internal/types.ts";
  * const result = await Array.fromAsync(output);
  * console.log(result); // [true]
  * ```
- *
- * @template T The type of chunks from the writable side.
- * @param predicate A predicate function.
- * @returns A TransformStream that emits whether all chunks satisfy the predicate
  */
 export function every<T>(
   predicate: PredicateFn<T>,
