@@ -686,6 +686,35 @@ describe("defer()", () => {
           await assertReadable(actual, expected, {}, "cancel");
         });
       });
+      it("`iterator.return()` rejects", async () => {
+        await testStream(async ({ writable, run, assertReadable }) => {
+          const factory = (): AsyncIterable<string> => ({
+            [Symbol.asyncIterator]() {
+              return {
+                async next() {
+                  await delay(500);
+                  return { done: true, value: undefined };
+                },
+                async return() {
+                  await delay(100);
+                  throw "iterator-return-error";
+                },
+              };
+            },
+          });
+          const dest = writable("---#", "cancel");
+          const expected = "     ---!";
+
+          const actual = defer(factory);
+
+          await run([actual], async (actual) => {
+            const reason = await assertRejects(() => actual.pipeTo(dest));
+            assertEquals(reason, "iterator-return-error");
+          });
+          assertEquals(uncaughtError, undefined);
+          await assertReadable(actual, expected, {}, "cancel");
+        });
+      });
     });
   });
 });

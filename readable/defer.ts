@@ -53,11 +53,12 @@ export function defer<T>(inputFactory: FactoryFn<T>): ReadableStream<T> {
         throw e;
       }
     },
-    cancel(reason) {
+    async cancel(reason) {
       if (reader) {
-        reader.cancel(reason);
+        const cancelPromise = reader.cancel(reason);
         reader.releaseLock();
         reader = undefined;
+        await cancelPromise;
       }
     },
   }, { highWaterMark: 0 });
