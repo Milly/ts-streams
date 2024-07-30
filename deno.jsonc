@@ -92,7 +92,7 @@
     "coverage": "deno coverage .coverage",
     // Clear coverage data
     "coverage:clean": "rm -rf .coverage",
-    "update": "deno run --allow-env --allow-read --allow-write=. --allow-run=git,deno --allow-net=jsr.io jsr:@molt/cli deno.jsonc",
+    "update": "deno run --unstable-kv --allow-env --allow-read --allow-write --allow-run=git,deno --allow-net=jsr.io,api.jsr.io,registry.npmjs.org jsr:@molt/cli@^0.19.0 deno.jsonc",
     "update:commit": "deno task -q update --commit"
   },
   "imports": {
