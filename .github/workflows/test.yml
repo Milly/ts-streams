@@ -136,6 +136,7 @@ jobs:
         experimental: [false]
         include:
           - browser: webkit
+            runner: ubuntu-latest
             experimental: true
     timeout-minutes: 20
     runs-on: ${{ matrix.runner }}
