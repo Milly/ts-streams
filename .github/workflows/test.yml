@@ -19,7 +19,7 @@ jobs:
         runner:
           - ubuntu-latest
         deno-version:
-          - v1.x
+          - 1.x
     runs-on: ${{ matrix.runner }}
     steps:
 
@@ -42,9 +42,11 @@ jobs:
     needs: check
     strategy:
       matrix:
+        runner:
+          - ubuntu-latest
         deno-version:
-          - v1.x
-    runs-on: ubuntu-latest
+          - 1.x
+    runs-on: ${{ matrix.runner }}
     steps:
 
       - uses: actions/checkout@v4
@@ -74,11 +76,13 @@ jobs:
     needs: check
     strategy:
       matrix:
+        runner:
+          - ubuntu-latest
         node-version:
           - 18
           - 20
           - 22
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.runner }}
     steps:
 
       - uses: actions/checkout@v4
@@ -98,6 +102,8 @@ jobs:
     needs: check
     strategy:
       matrix:
+        runner:
+          - ubuntu-latest
         browser:
           - chromium
           - firefox
@@ -106,7 +112,7 @@ jobs:
           - browser: webkit
             experimental: true
     timeout-minutes: 20
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.runner }}
     continue-on-error: ${{ matrix.experimental }}
     steps:
 
