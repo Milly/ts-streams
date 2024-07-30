@@ -80,6 +80,8 @@
   "tasks": {
     // Lint, check format and types
     "check": "deno lint && deno fmt --check && deno check --no-lock *.ts internal/**/*.ts readable/**/*.ts tests/**/*.ts transform/**/*.ts util/**/*.ts writable/**/*.ts",
+    // Check slow types
+    "check:publish": "deno publish --dry-run",
     // Run basic tests
     "test": "deno test",
     // Run all tests including documentation tests, browser tests, and check tasks
