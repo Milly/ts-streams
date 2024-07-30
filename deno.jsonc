@@ -1,6 +1,6 @@
 {
   "name": "@milly/streams",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "exports": {
     ".": "./mod.ts",
     "./readable": "./readable/mod.ts",
@@ -76,9 +76,12 @@
     "node_modules/",
     "test-results/"
   ],
+  "nodeModulesDir": false,
   "tasks": {
     // Lint, check format and types
-    "check": "deno lint && deno fmt --check && deno check *.ts internal/**/*.ts readable/**/*.ts tests/**/*.ts transform/**/*.ts util/**/*.ts writable/**/*.ts",
+    "check": "deno lint && deno fmt --check && deno check --no-lock *.ts internal/**/*.ts readable/**/*.ts tests/**/*.ts transform/**/*.ts util/**/*.ts writable/**/*.ts",
+    // Check slow types
+    "check:publish": "deno publish --dry-run",
     // Run basic tests
     "test": "deno test",
     // Run all tests including documentation tests, browser tests, and check tasks
@@ -91,7 +94,7 @@
     "coverage": "deno coverage .coverage",
     // Clear coverage data
     "coverage:clean": "rm -rf .coverage",
-    "update": "deno run --allow-env --allow-read --allow-write=. --allow-run=git,deno --allow-net=jsr.io jsr:@molt/cli deno.jsonc",
+    "update": "deno run --unstable-kv --allow-env --allow-read --allow-write --allow-run=git,deno --allow-net=jsr.io,api.jsr.io,registry.npmjs.org jsr:@molt/cli@^0.19.0 deno.jsonc",
     "update:commit": "deno task -q update --commit"
   },
   "imports": {
@@ -150,9 +153,9 @@
     "@milly/streams/writable": "./writable/mod.ts",
     "@milly/streams/writable/for-each": "./writable/for_each.ts",
     "@milly/streams/writable/post-message": "./writable/post_message.ts",
-    "@milly/streamtest": "jsr:@milly/streamtest@^1.0.0",
-    "@std/assert": "jsr:@std/assert@0.226.0",
-    "@std/async": "jsr:@std/async@0.224.2",
-    "@std/testing": "jsr:@std/testing@0.225.3"
+    "@milly/streamtest": "jsr:@milly/streamtest@^1.0.1",
+    "@std/assert": "jsr:@std/assert@^1.0.1",
+    "@std/async": "jsr:@std/async@^1.0.1",
+    "@std/testing": "jsr:@std/testing@^1.0.0-rc.5"
   }
 }
