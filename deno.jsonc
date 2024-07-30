@@ -1,6 +1,6 @@
 {
   "name": "@milly/streams",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "exports": {
     ".": "./mod.ts",
     "./readable": "./readable/mod.ts",
