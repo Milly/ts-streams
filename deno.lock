@@ -34,6 +34,12 @@
           "jsr:@std/internal@^1.0.1"
         ]
       },
+      "@std/assert@1.0.2": {
+        "integrity": "ccacec332958126deaceb5c63ff8b4eaf9f5ed0eac9feccf124110435e59e49c",
+        "dependencies": [
+          "jsr:@std/internal@^1.0.1"
+        ]
+      },
       "@std/async@1.0.1": {
         "integrity": "3c7f6324a8a1b47ca657e5a349b511c9a6c2c0729e9d66b223c9ecaac0753ecb"
       },
@@ -95,19 +101,6 @@
       "jsr:@std/assert@^1.0.1",
       "jsr:@std/async@^1.0.1",
       "jsr:@std/testing@^1.0.0-rc.5"
-    ],
-    "packageJson": {
-      "dependencies": [
-        "npm:@jsr/lambdalisue__async@^2.1.1",
-        "npm:@jsr/milly__streamtest@^1.0.1",
-        "npm:@jsr/std__assert@^1.0.1",
-        "npm:@jsr/std__async@^1.0.1",
-        "npm:@jsr/std__testing@^1.0.0-rc.5",
-        "npm:@playwright/test@^1.44.1",
-        "npm:esbuild@^0.21.4",
-        "npm:glob@^10.4.1",
-        "npm:tsx@^4.12.0"
-      ]
-    }
+    ]
   }
 }
