@@ -5,7 +5,7 @@
       "jsr:@lambdalisue/async@^2.1.1": "jsr:@lambdalisue/async@2.1.1",
       "jsr:@milly/streamtest@^1.0.1": "jsr:@milly/streamtest@1.0.1",
       "jsr:@std/assert@^1.0.1": "jsr:@std/assert@1.0.1",
-      "jsr:@std/async@^1.0.1": "jsr:@std/async@1.0.1",
+      "jsr:@std/async@^1.0.1": "jsr:@std/async@1.0.3",
       "jsr:@std/fmt@^1.0.0-rc.1": "jsr:@std/fmt@1.0.0-rc.1",
       "jsr:@std/fs@^1.0.0-rc.5": "jsr:@std/fs@1.0.0",
       "jsr:@std/internal@^1.0.1": "jsr:@std/internal@1.0.1",
@@ -40,8 +40,8 @@
           "jsr:@std/internal@^1.0.1"
         ]
       },
-      "@std/async@1.0.1": {
-        "integrity": "3c7f6324a8a1b47ca657e5a349b511c9a6c2c0729e9d66b223c9ecaac0753ecb"
+      "@std/async@1.0.3": {
+        "integrity": "6ed64678db43451683c6c176a21426a2ccd21ba0269ebb2c36133ede3f165792"
       },
       "@std/fmt@1.0.0-rc.1": {
         "integrity": "3dbbd12f1704c62b5bd33c9ff928c8df47cd5c75f6637201a8c21298b28e43bc"
