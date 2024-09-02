@@ -47,9 +47,11 @@ export interface PostMessageOptions<T> {
  *   result.push(evt.data);
  * };
  * await from([1, "foo", true]).pipeTo(postMessage(port1));
+ * port1.close();
  * // onmessage will be called next tick.
  * setTimeout(() => {
  *   console.log(result); // [1, "foo", true]
+ *   port2.close();
  * }, 0);
  * ```
  *
@@ -80,9 +82,11 @@ export function postMessage<T>(
  *   result.push(evt.data);
  * };
  * await from([1, "foo", true]).pipeTo(postMessage(port1));
+ * port1.close();
  * // onmessage will be called next tick.
  * setTimeout(() => {
  *   console.log(result); // [1, "foo", true]
+ *   port2.close();
  * }, 0);
  * ```
  *
