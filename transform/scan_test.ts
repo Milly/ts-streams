@@ -26,7 +26,10 @@ describe("scan()", () => {
         const stream = scan(accumulator);
 
         assertType<
-          IsExact<typeof stream, TransformStream<number, number | string>>
+          IsExact<
+            typeof stream,
+            TransformStream<number | Promise<number>, number | string>
+          >
         >(true);
         assertInstanceOf(stream.readable, ReadableStream);
         assertInstanceOf(stream.writable, WritableStream);
@@ -41,7 +44,10 @@ describe("scan()", () => {
         const stream = scan(accumulator);
 
         assertType<
-          IsExact<typeof stream, TransformStream<number, number | string>>
+          IsExact<
+            typeof stream,
+            TransformStream<number | Promise<number>, number | string>
+          >
         >(true);
         assertInstanceOf(stream.readable, ReadableStream);
         assertInstanceOf(stream.writable, WritableStream);
@@ -59,7 +65,10 @@ describe("scan()", () => {
         const stream = scan(accumulator, initialValue);
 
         assertType<
-          IsExact<typeof stream, TransformStream<number, string>>
+          IsExact<
+            typeof stream,
+            TransformStream<number | Promise<number>, string>
+          >
         >(true);
         assertInstanceOf(stream.readable, ReadableStream);
         assertInstanceOf(stream.writable, WritableStream);
