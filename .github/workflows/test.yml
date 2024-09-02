@@ -147,10 +147,10 @@ jobs:
         browser:
           - chromium
           - firefox
-        experimental: [false]
+          - webkit
         include:
+          - experimental: false
           - browser: webkit
-            runner: ubuntu-latest
             experimental: true
     timeout-minutes: 20
     runs-on: ${{ matrix.runner }}
