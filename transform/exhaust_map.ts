@@ -39,7 +39,7 @@ import { toReadableStream } from "../internal/to_readable_stream.ts";
  *   ))
  * ));
  * const result = await Array.fromAsync(output);
- * console.log(result); // [0, 0, 1, 0, 1, 2, 1, 2, 2]
+ * console.log(result); // [0, 0, 0, 2, 2, 2]
  * ```
  */
 export function exhaustMap<I, O>(

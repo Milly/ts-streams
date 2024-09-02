@@ -60,8 +60,10 @@ export interface FromMessageOptions<T, R> {
  * port2.postMessage(1);
  * port2.postMessage("foo");
  * port2.postMessage(true);
+ * port2.close();
  * const result = await Array.fromAsync(output);
  * console.log(result); // [1, "foo", true]
+ * port1.close();
  * ```
  */
 export function fromMessage<T, R = T>(
@@ -93,8 +95,10 @@ export function fromMessage<T, R = T>(
  * port2.postMessage(1);
  * port2.postMessage("foo");
  * port2.postMessage(true);
+ * port2.close();
  * const result = await Array.fromAsync(output);
  * console.log(result); // [1, "foo", true]
+ * port1.close();
  * ```
  */
 export function fromMessage<T, R>(
