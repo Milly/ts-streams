@@ -28,12 +28,16 @@ import { terminate } from "./terminate.ts";
 export function take<T>(count = 1): TransformStream<T, T> {
   if (count <= 0) return terminate();
   let index = 0;
-  return new TransformStream({
-    transform(chunk, controller) {
-      controller.enqueue(chunk);
-      if (++index >= count) {
-        controller.terminate();
-      }
+  return new TransformStream(
+    {
+      transform(chunk, controller) {
+        controller.enqueue(chunk);
+        if (++index >= count) {
+          controller.terminate();
+        }
+      },
     },
-  });
+    undefined,
+    { highWaterMark: count },
+  );
 }
