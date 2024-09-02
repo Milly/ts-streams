@@ -36,17 +36,16 @@ export function timer(delay: number): ReadableStream<0>;
 export function timer(delay: number, interval: number): ReadableStream<number>;
 export function timer(delay: number, interval = -1): ReadableStream<number> {
   const { promise, resolve } = deferred<void>();
-  let timer: number | undefined;
+  let timer = 0;
+  let intervalTimer = 0;
   let count = 0;
   return new ReadableStream({
     pull(controller) {
       timer = setTimeout(() => {
         if (0 <= interval) {
-          timer = setInterval(() => {
+          intervalTimer = setInterval(() => {
             controller.enqueue(count++);
           }, interval);
-        } else {
-          timer = undefined;
         }
         controller.enqueue(count++);
         if (interval < 0) {
@@ -58,6 +57,7 @@ export function timer(delay: number, interval = -1): ReadableStream<number> {
     },
     cancel() {
       clearTimeout(timer);
+      clearInterval(intervalTimer);
       resolve();
     },
   });
