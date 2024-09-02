@@ -23,6 +23,8 @@ import { mergeMap } from "./merge_map.ts";
  * import { mergeAll } from "@milly/streams/transform/merge-all";
  * import { from } from "@milly/streams/readable/from";
  * import { map } from "@milly/streams/transform/map";
+ * import { pipe } from "@milly/streams/transform/pipe";
+ * import { take } from "@milly/streams/transform/take";
  * import { timer } from "@milly/streams/readable/timer";
  *
  * // source[0] : 0 ------300ms----------> 0 ------300ms--------> 0 |
@@ -30,9 +32,9 @@ import { mergeMap } from "./merge_map.ts";
  * // source[2] : ---200ms------> 2 ---200ms----> 2 ---200ms----> 2 |
  * // output    : 0 -----> 1 ---> 2 -----> 0 1 -> 2 -----> 1 ---> 0 2 |
  * const source = from([
- *   timer(0, 300).pipeThrough(map(() => 0)),
- *   timer(100, 200).pipeThrough(map(() => 1)),
- *   timer(200, 200).pipeThrough(map(() => 2)),
+ *   timer(0, 300).pipeThrough(pipe(take(3), map(() => 0))),
+ *   timer(100, 200).pipeThrough(pipe(take(3), map(() => 1))),
+ *   timer(200, 200).pipeThrough(pipe(take(3), map(() => 2))),
  * ]);
  * const output = source.pipeThrough(mergeAll());
  * const result = await Array.fromAsync(output);
