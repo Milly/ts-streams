@@ -1,7 +1,7 @@
 import { describe, it } from "#bdd";
 import { assertEquals, assertInstanceOf, assertRejects } from "@std/assert";
 import { assertType, type IsExact } from "@std/testing/types";
-import { promiseState } from "@lambdalisue/async";
+import { promiseState } from "@core/asyncutil";
 import { _test } from "./deferred.ts";
 
 const { _deferred } = _test;
