@@ -40,7 +40,7 @@ import { exhaustMap } from "./exhaust_map.ts";
  * ));
  * const output = source.pipeThrough(exhaustAll());
  * const result = await Array.fromAsync(output);
- * console.log(result); // [0, 0, 1, 0, 1, 2, 1, 2, 2]
+ * console.log(result); // [0, 0, 0, 2, 2, 2]
  * ```
  */
 export function exhaustAll<T>(): TransformStream<StreamSource<T>, T> {
