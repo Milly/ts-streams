@@ -18,8 +18,10 @@ jobs:
       matrix:
         runner:
           - ubuntu-latest
-        deno-version:
-          - 1.x
+        deno:
+          - version: 1.x
+          - version: 1.x
+            future: true
     runs-on: ${{ matrix.runner }}
     steps:
 
@@ -27,7 +29,12 @@ jobs:
 
       - uses: denoland/setup-deno@v1
         with:
-          deno-version: ${{ matrix.deno-version }}
+          deno-version: ${{ matrix.deno.version }}
+
+      - name: Set DENO_FUTURE
+        if: matrix.deno.future == true
+        run: |
+          echo "DENO_FUTURE=1" >> "$GITHUB_ENV"
 
       - uses: actions/cache@v4
         with:
@@ -44,8 +51,8 @@ jobs:
       matrix:
         runner:
           - ubuntu-latest
-        deno-version:
-          - 1.x
+        deno:
+          - version: 1.x
     runs-on: ${{ matrix.runner }}
     steps:
 
@@ -53,7 +60,7 @@ jobs:
 
       - uses: denoland/setup-deno@v1
         with:
-          deno-version: ${{ matrix.deno-version }}
+          deno-version: ${{ matrix.deno.version }}
 
       - uses: actions/cache@v4
         with:
@@ -70,8 +77,10 @@ jobs:
       matrix:
         runner:
           - ubuntu-latest
-        deno-version:
-          - 1.x
+        deno:
+          - version: 1.x
+          - version: 1.x
+            future: true
     runs-on: ${{ matrix.runner }}
     steps:
 
@@ -79,7 +88,12 @@ jobs:
 
       - uses: denoland/setup-deno@v1
         with:
-          deno-version: ${{ matrix.deno-version }}
+          deno-version: ${{ matrix.deno.version }}
+
+      - name: Set DENO_FUTURE
+        if: matrix.deno.future == true
+        run: |
+          echo "DENO_FUTURE=1" >> "$GITHUB_ENV"
 
       - uses: actions/cache@v4
         with:
