@@ -11,7 +11,7 @@
     "test:browser:webkit": "npm run test:browser -- --project webkit"
   },
   "devDependencies": {
-    "@lambdalisue/async": "npm:@jsr/lambdalisue__async@^2.1.1",
+    "@core/asyncutil": "npm:@jsr/core__asyncutil@^1.1.1",
     "@milly/streamtest": "npm:@jsr/milly__streamtest@^1.0.1",
     "@playwright/test": "^1.44.1",
     "@std/assert": "npm:@jsr/std__assert@^1.0.1",

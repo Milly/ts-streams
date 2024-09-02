@@ -2,7 +2,7 @@
   "version": "3",
   "packages": {
     "specifiers": {
-      "jsr:@lambdalisue/async@^2.1.1": "jsr:@lambdalisue/async@2.1.1",
+      "jsr:@core/asyncutil@^1.1.1": "jsr:@core/asyncutil@1.1.1",
       "jsr:@milly/streamtest@^1.0.1": "jsr:@milly/streamtest@1.0.2",
       "jsr:@std/assert@^1.0.1": "jsr:@std/assert@1.0.3",
       "jsr:@std/assert@^1.0.3": "jsr:@std/assert@1.0.3",
@@ -17,8 +17,8 @@
       "npm:@types/sinonjs__fake-timers@^8.1.5": "npm:@types/sinonjs__fake-timers@8.1.5"
     },
     "jsr": {
-      "@lambdalisue/async@2.1.1": {
-        "integrity": "1fc9bc6f4ed50215cd2f7217842b18cea80f81c25744f88f8c5eb4be5a1c9ab4"
+      "@core/asyncutil@1.1.1": {
+        "integrity": "64540c79e023605f1c3cee2a50291d4d83d495b89a2b32c99fd3c2fbf445971c"
       },
       "@milly/streamtest@1.0.2": {
         "integrity": "76b3cf170af04c8cc58f80cf523077cc268a2f64640a4f88c102461084393540",
@@ -91,7 +91,7 @@
   "remote": {},
   "workspace": {
     "dependencies": [
-      "jsr:@lambdalisue/async@^2.1.1",
+      "jsr:@core/asyncutil@^1.1.1",
       "jsr:@milly/streamtest@^1.0.1",
       "jsr:@std/assert@^1.0.1",
       "jsr:@std/async@^1.0.1",
@@ -99,7 +99,7 @@
     ],
     "packageJson": {
       "dependencies": [
-        "npm:@jsr/lambdalisue__async@^2.1.1",
+        "npm:@jsr/core__asyncutil@^1.1.1",
         "npm:@jsr/milly__streamtest@^1.0.1",
         "npm:@jsr/std__assert@^1.0.1",
         "npm:@jsr/std__async@^1.0.1",
