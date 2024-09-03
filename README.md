@@ -14,15 +14,15 @@ TypeScript modules that provides utilities for
 import { from } from "@milly/streams/readable/from";
 import { fromMessage } from "@milly/streams/readable/from-message";
 import { switchMap } from "@milly/streams/transform/switch-map";
+import { take } from "@milly/streams/transform/take";
 import { forEach } from "@milly/streams/writable/for-each";
 import { postMessage } from "@milly/streams/writable/post-message";
-import { delay } from "@std/async/delay";
 
 async function* gen() {
   yield 1;
-  await delay(100);
+  await Promise.resolve();
   yield "foo";
-  await delay(100);
+  await Promise.resolve();
   yield true;
 }
 
@@ -35,12 +35,16 @@ from(gen())
     port1.close();
   });
 
-fromMessage(port2)
+await fromMessage(port2)
+  .pipeThrough(take(6))
   .pipeTo(forEach((chunk) => {
     console.log(chunk);
-  }));
+  }))
+  .finally(() => {
+    port2.close();
+  });
 // output: 1
-// output: numbr
+// output: number
 // output: foo
 // output: string
 // output: true
