@@ -85,11 +85,11 @@
     // Run basic tests
     "test": "deno test",
     // Run all tests including documentation tests, browser tests, and check tasks
-    "test:all": "deno task check && deno task test:doc && npm run test && npm run test:browser:all",
+    "test:all": "deno task check && deno task test && deno task test:doc && npm run test && npm run test:browser:all",
     // Run documentation tests
-    "test:doc": "deno task test --doc",
+    "test:doc": "deno task test --doc --no-run && deno test -A tests/doc.ts -- README.md *.ts internal/**/*.ts readable/**/*.ts tests/**/*.ts transform/**/*.ts util/**/*.ts writable/**/*.ts",
     // Run tests with coverage, parallel execution and shuffling
-    "test:coverage": "deno task coverage:clean && deno task test:doc --parallel --shuffle --coverage=.coverage",
+    "test:coverage": "deno task coverage:clean && deno task test --parallel --shuffle --coverage=.coverage",
     // Generate coverage report
     "coverage": "deno coverage .coverage",
     // Clear coverage data

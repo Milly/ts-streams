@@ -98,13 +98,15 @@ export function fromEvent<E, R = E>(
  * @example
  * ```ts
  * import { fromEvent } from "@milly/streams/readable/from-event";
+ * import { take } from "@milly/streams/transform/take";
  *
  * const abortController = new AbortController();
  * const { signal } = abortController;
  * setTimeout(() => abortController.abort("foo"), 100);
  *
  * // output : --100ms-> "foo" |
- * const output = fromEvent(signal, "abort", () => signal.reason);
+ * const output = fromEvent(signal, "abort", () => signal.reason)
+ *     .pipeThrough(take(1));
  * const result = await Array.fromAsync(output);
  * console.log(result); // ["foo"]
  * ```
