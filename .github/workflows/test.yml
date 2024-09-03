@@ -104,6 +104,9 @@ jobs:
       - name: Test
         run: deno task test:coverage
 
+      - name: Test doc
+        run: deno task test:doc
+
       - name: Coverage
         run: deno task coverage --lcov --output=./lcov
 
