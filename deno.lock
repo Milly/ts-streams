@@ -2,7 +2,7 @@
   "version": "3",
   "packages": {
     "specifiers": {
-      "jsr:@core/asyncutil@^1.1.1": "jsr:@core/asyncutil@1.1.1",
+      "jsr:@core/asyncutil@^1.1.1": "jsr:@core/asyncutil@1.2.0",
       "jsr:@milly/streamtest@^1.0.1": "jsr:@milly/streamtest@1.0.2",
       "jsr:@std/assert@^1.0.1": "jsr:@std/assert@1.0.3",
       "jsr:@std/assert@^1.0.3": "jsr:@std/assert@1.0.3",
@@ -17,8 +17,8 @@
       "npm:@types/sinonjs__fake-timers@^8.1.5": "npm:@types/sinonjs__fake-timers@8.1.5"
     },
     "jsr": {
-      "@core/asyncutil@1.1.1": {
-        "integrity": "64540c79e023605f1c3cee2a50291d4d83d495b89a2b32c99fd3c2fbf445971c"
+      "@core/asyncutil@1.2.0": {
+        "integrity": "9967f15190c60df032c13f72ce5ac73d185c34f31c53dc918d8800025854c118"
       },
       "@milly/streamtest@1.0.2": {
         "integrity": "76b3cf170af04c8cc58f80cf523077cc268a2f64640a4f88c102461084393540",
@@ -96,19 +96,6 @@
       "jsr:@std/assert@^1.0.1",
       "jsr:@std/async@^1.0.1",
       "jsr:@std/testing@^1.0.1"
-    ],
-    "packageJson": {
-      "dependencies": [
-        "npm:@jsr/core__asyncutil@^1.1.1",
-        "npm:@jsr/milly__streamtest@^1.0.1",
-        "npm:@jsr/std__assert@^1.0.1",
-        "npm:@jsr/std__async@^1.0.1",
-        "npm:@jsr/std__testing@^1.0.1",
-        "npm:@playwright/test@^1.44.1",
-        "npm:esbuild@^0.21.4",
-        "npm:glob@^10.4.1",
-        "npm:tsx@^4.12.0"
-      ]
-    }
+    ]
   }
 }
