@@ -95,7 +95,7 @@ describe("postMessage()", () => {
     });
     it("posts the return value of the `transfer` as transferable", async () => {
       await testStream(async ({ readable, run }) => {
-        const target: PostMessageTarget = {
+        const target: PostMessageTarget<Uint8Array> = {
           postMessage: () => unimplemented(),
         };
         const postMessageSpy = stub(target, "postMessage");
@@ -106,7 +106,7 @@ describe("postMessage()", () => {
         });
         const transfer = spy(
           (chunk: Uint8Array, _index: number): Transferable[] => {
-            return [chunk.buffer];
+            return [chunk.buffer as ArrayBuffer];
           },
         );
 
