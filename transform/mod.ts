@@ -10,6 +10,7 @@ export * from "./buffer_count.ts";
 export * from "./concat_all.ts";
 export * from "./concat_map.ts";
 export * from "./count.ts";
+export * from "./debounce_time.ts";
 export * from "./default_with.ts";
 export * from "./delay.ts";
 export * from "./every.ts";
