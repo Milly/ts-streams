@@ -23,6 +23,8 @@ jobs:
           - version: 1.x
             # Remove lock file for Deno 1.x
             remove-lock: true
+            # Fix deno.jsonc for Deno 1.x
+            fix-deno-jsonc: true
           - version: 2.x
     runs-on: ${{ matrix.runner }}
     steps:
@@ -32,6 +34,11 @@ jobs:
       - name: Remove deno.lock
         if: matrix.deno.remove-lock == true
         run: rm -f deno.lock
+
+      - name: Fix deno.jsonc
+        if: matrix.deno.fix-deno-jsonc == true
+        run: |
+          sed -i 's/"nodeModulesDir": "none"/"nodeModulesDir": false/' deno.jsonc
 
       - uses: denoland/setup-deno@v2
         with:
@@ -83,6 +90,8 @@ jobs:
           - version: 1.x
             # Remove lock file for Deno 1.x
             remove-lock: true
+            # Fix deno.jsonc for Deno 1.x
+            fix-deno-jsonc: true
           - version: 2.x
     runs-on: ${{ matrix.runner }}
     steps:
@@ -92,6 +101,11 @@ jobs:
       - name: Remove deno.lock
         if: matrix.deno.remove-lock == true
         run: rm -f deno.lock
+
+      - name: Fix deno.jsonc
+        if: matrix.deno.fix-deno-jsonc == true
+        run: |
+          sed -i 's/"nodeModulesDir": "none"/"nodeModulesDir": false/' deno.jsonc
 
       - uses: denoland/setup-deno@v2
         with:
