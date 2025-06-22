@@ -20,21 +20,21 @@ jobs:
           - ubuntu-latest
         deno:
           - version: 1.x
-          - version: 1.x
-            future: true
+            # Remove lock file for Deno 1.x
+            remove-lock: true
+          - version: 2.x
     runs-on: ${{ matrix.runner }}
     steps:
 
       - uses: actions/checkout@v4
 
+      - name: Remove deno.lock
+        if: matrix.deno.remove-lock == true
+        run: rm -f deno.lock
+
       - uses: denoland/setup-deno@v2
         with:
           deno-version: ${{ matrix.deno.version }}
-
-      - name: Set DENO_FUTURE
-        if: matrix.deno.future == true
-        run: |
-          echo "DENO_FUTURE=1" >> "$GITHUB_ENV"
 
       - uses: actions/cache@v4
         with:
@@ -52,7 +52,7 @@ jobs:
         runner:
           - ubuntu-latest
         deno:
-          - version: 1.x
+          - version: 2.x
     runs-on: ${{ matrix.runner }}
     steps:
 
@@ -79,21 +79,21 @@ jobs:
           - ubuntu-latest
         deno:
           - version: 1.x
-          - version: 1.x
-            future: true
+            # Remove lock file for Deno 1.x
+            remove-lock: true
+          - version: 2.x
     runs-on: ${{ matrix.runner }}
     steps:
 
       - uses: actions/checkout@v4
 
+      - name: Remove deno.lock
+        if: matrix.deno.remove-lock == true
+        run: rm -f deno.lock
+
       - uses: denoland/setup-deno@v2
         with:
           deno-version: ${{ matrix.deno.version }}
-
-      - name: Set DENO_FUTURE
-        if: matrix.deno.future == true
-        run: |
-          echo "DENO_FUTURE=1" >> "$GITHUB_ENV"
 
       - uses: actions/cache@v4
         with:
