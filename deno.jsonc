@@ -76,7 +76,7 @@
     "node_modules/",
     "test-results/"
   ],
-  "nodeModulesDir": false,
+  "nodeModulesDir": "none",
   "tasks": {
     // Lint, check format and types
     "check": "deno lint && deno fmt --check && deno check --no-lock *.ts internal/**/*.ts readable/**/*.ts tests/**/*.ts transform/**/*.ts util/**/*.ts writable/**/*.ts",
