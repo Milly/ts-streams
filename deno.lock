@@ -20,7 +20,7 @@
     "npm:@playwright/test@^1.44.1": "1.53.1",
     "npm:@sinonjs/fake-timers@^13.0.1": "13.0.1",
     "npm:@types/sinonjs__fake-timers@^8.1.5": "8.1.5",
-    "npm:esbuild@~0.21.4": "0.21.5",
+    "npm:esbuild@~0.25.5": "0.25.5",
     "npm:glob@^10.4.1": "10.4.5",
     "npm:tsx@^4.12.0": "4.20.3"
   },
@@ -480,36 +480,6 @@
     "emoji-regex@9.2.2": {
       "integrity": "sha512-L18DaJsXSUk2+42pv8mLs5jJT2hqFkFE4j21wOmgbUqsZ2hL72NsUU785g9RXgo3s0ZNgVl42TiHp3ZtOv/Vyg=="
     },
-    "esbuild@0.21.5": {
-      "integrity": "sha512-mg3OPMV4hXywwpoDxu3Qda5xCKQi+vCTZq8S9J/EpkhB2HzKXq4SNFZE3+NK93JYxc8VMSep+lOUSC/RVKaBqw==",
-      "optionalDependencies": [
-        "@esbuild/aix-ppc64@0.21.5",
-        "@esbuild/android-arm@0.21.5",
-        "@esbuild/android-arm64@0.21.5",
-        "@esbuild/android-x64@0.21.5",
-        "@esbuild/darwin-arm64@0.21.5",
-        "@esbuild/darwin-x64@0.21.5",
-        "@esbuild/freebsd-arm64@0.21.5",
-        "@esbuild/freebsd-x64@0.21.5",
-        "@esbuild/linux-arm@0.21.5",
-        "@esbuild/linux-arm64@0.21.5",
-        "@esbuild/linux-ia32@0.21.5",
-        "@esbuild/linux-loong64@0.21.5",
-        "@esbuild/linux-mips64el@0.21.5",
-        "@esbuild/linux-ppc64@0.21.5",
-        "@esbuild/linux-riscv64@0.21.5",
-        "@esbuild/linux-s390x@0.21.5",
-        "@esbuild/linux-x64@0.21.5",
-        "@esbuild/netbsd-x64@0.21.5",
-        "@esbuild/openbsd-x64@0.21.5",
-        "@esbuild/sunos-x64@0.21.5",
-        "@esbuild/win32-arm64@0.21.5",
-        "@esbuild/win32-ia32@0.21.5",
-        "@esbuild/win32-x64@0.21.5"
-      ],
-      "scripts": true,
-      "bin": true
-    },
     "esbuild@0.25.5": {
       "integrity": "sha512-P8OtKZRv/5J5hhz0cUAdu/cLuPIKXpQl1R9pZtvmHWQvrAUVd0UNIPT4IB4W3rNOqVO0rlqHmCIbSwxh/c9yUQ==",
       "optionalDependencies": [
@@ -677,7 +647,7 @@
     "tsx@4.20.3": {
       "integrity": "sha512-qjbnuR9Tr+FJOMBqJCW5ehvIo/buZq7vH7qD7JziU98h6l3qGy0a/yPFjwO+y0/T7GFpNgNAvEcPPVfyT8rrPQ==",
       "dependencies": [
-        "esbuild@0.25.5",
+        "esbuild",
         "get-tsconfig"
       ],
       "optionalDependencies": [
@@ -728,7 +698,7 @@
         "npm:@jsr/std__async@^1.0.1",
         "npm:@jsr/std__testing@^1.0.1",
         "npm:@playwright/test@^1.44.1",
-        "npm:esbuild@~0.21.4",
+        "npm:esbuild@~0.25.5",
         "npm:glob@^10.4.1",
         "npm:tsx@^4.12.0"
       ]
