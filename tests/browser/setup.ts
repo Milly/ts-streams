@@ -11,10 +11,6 @@ export type TestGlobal = { testResult?: TestResult };
 
 let errors = 0;
 try {
-  const { default: mocha } = await import("https://esm.sh/mocha@10.4.0") as {
-    default: BrowserMocha;
-  };
-
   mocha.setup({
     ui: "bdd",
     reporter: "spec",
