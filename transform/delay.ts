@@ -13,8 +13,8 @@ import { mergeMap } from "./merge_map.ts";
  * from the source {@linkcode ReadableStream} by a given timeout.
  *
  * @template T The type of the chunks in the source stream.
- * @param delay The delay dulation in milliseconds.
- * @returns A TransformStream that emits delayed after the source is emitted.
+ * @param due The delay duration in milliseconds.
+ * @returns A TransformStream that emits values delayed after the source is emitted.
  *
  * @example
  * ```ts

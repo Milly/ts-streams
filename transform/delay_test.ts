@@ -67,8 +67,8 @@ describe("delay()", () => {
     });
     it("terminates immediately if the writable side aborts", async () => {
       await testStream(async ({ readable, assertReadable }) => {
-        const source = readable("         -a----#", {}, "error");
-        const expected = "                ---a--#";
+        const source = readable("-a----#", {}, "error");
+        const expected = "       ---a--#";
 
         const actual = source.pipeThrough(delay(200));
 
