@@ -15,6 +15,7 @@ jobs:
 
   check:
     strategy:
+      fail-fast: false
       matrix:
         runner:
           - ubuntu-latest
@@ -74,6 +75,7 @@ jobs:
   test-deno:
     needs: check
     strategy:
+      fail-fast: false
       matrix:
         runner:
           - ubuntu-latest
@@ -118,6 +120,7 @@ jobs:
   test-node:
     needs: check
     strategy:
+      fail-fast: false
       matrix:
         runner:
           - ubuntu-latest
@@ -144,6 +147,7 @@ jobs:
   test-browser:
     needs: check
     strategy:
+      fail-fast: false
       matrix:
         runner:
           - ubuntu-latest
