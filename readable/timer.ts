@@ -35,24 +35,33 @@ import { deferred } from "../internal/deferred.ts";
 export function timer(delay: number): ReadableStream<0>;
 export function timer(delay: number, interval: number): ReadableStream<number>;
 export function timer(delay: number, interval = -1): ReadableStream<number> {
+  delay = Math.max(delay, 0);
   const { promise, resolve } = deferred<void>();
   let timer = 0;
   let intervalTimer = 0;
   let count = 0;
   return new ReadableStream({
     pull(controller) {
-      timer = setTimeout(() => {
-        if (0 <= interval) {
-          intervalTimer = setInterval(() => {
-            controller.enqueue(count++);
-          }, interval);
-        }
+      const enqueue = () => {
         controller.enqueue(count++);
-        if (interval < 0) {
+      };
+      if (delay === interval) {
+        intervalTimer = setInterval(enqueue, delay);
+      } else if (delay === 0 && interval > 0) {
+        timer = setTimeout(enqueue, 0);
+        intervalTimer = setInterval(enqueue, interval);
+      } else if (interval < 0) {
+        timer = setTimeout(() => {
+          enqueue();
           controller.close();
           resolve();
-        }
-      }, Math.max(delay, 0));
+        }, delay);
+      } else {
+        timer = setTimeout(() => {
+          intervalTimer = setInterval(enqueue, interval);
+          enqueue();
+        }, delay);
+      }
       return promise;
     },
     cancel() {
