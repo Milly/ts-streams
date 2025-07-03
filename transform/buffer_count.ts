@@ -17,11 +17,12 @@
  * ```ts
  * import { bufferCount } from "@milly/streams/transform/buffer-count";
  * import { from } from "@milly/streams/readable/from";
+ * import { assertEquals } from "@std/assert";
  *
  * const source = from([1, 2, 3, 4, 5, 6, 7, 8]);
  * const output = source.pipeThrough(bufferCount(3));
  * const result = await Array.fromAsync(output);
- * console.log(result); // [[1, 2, 3], [4, 5, 6], [7, 8]]
+ * assertEquals(result, [[1, 2, 3], [4, 5, 6], [7, 8]]);
  * ```
  */
 export function bufferCount<T>(bufferSize: number): TransformStream<T, T[]> {

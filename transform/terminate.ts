@@ -12,11 +12,12 @@
  * ```ts
  * import { terminate } from "@milly/streams/transform/terminate";
  * import { from } from "@milly/streams/readable/from";
+ * import { assertEquals } from "@std/assert";
  *
  * const source = from([1, 2, 3]);
  * const output = source.pipeThrough(terminate());
  * const result = await Array.fromAsync(output);
- * console.log(result); // []
+ * assertEquals(result, []);
  * ```
  */
 export function terminate(): TransformStream<unknown, never> {

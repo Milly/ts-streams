@@ -22,11 +22,12 @@ import { toReadableStream } from "../internal/to_readable_stream.ts";
  * ```ts
  * import { defaultWith } from "@milly/streams/transform/default-with";
  * import { from } from "@milly/streams/readable/from";
+ * import { assertEquals } from "@std/assert";
  *
  * const source = from([]);
  * const output = source.pipeThrough(defaultWith(() => [42, 123]));
  * const result = await Array.fromAsync(output);
- * console.log(result); // [42, 123]
+ * assertEquals(result, [42, 123]);
  * ```
  */
 export function defaultWith<I, D = I>(

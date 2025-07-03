@@ -27,6 +27,7 @@ import { mergeMap } from "./merge_map.ts";
  * import { map } from "@milly/streams/transform/map";
  * import { pipe } from "@milly/streams/transform/pipe";
  * import { take } from "@milly/streams/transform/take";
+ * import { assertEquals } from "@std/assert";
  *
  * // source     : 3 5 |
  * // project[0] : -300ms-> 30 -300ms-> 31 |
@@ -40,7 +41,7 @@ import { mergeMap } from "./merge_map.ts";
  *   ))
  * ));
  * const result = await Array.fromAsync(output);
- * console.log(result); // [30, 31, 50, 51]
+ * assertEquals(result, [30, 31, 50, 51]);
  * ```
  */
 export function concatMap<I, O>(

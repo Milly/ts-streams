@@ -11,11 +11,12 @@
  * @example
  * ```ts
  * import { error } from "@milly/streams/readable/error";
+ * import { assertEquals } from "@std/assert";
  *
  * try {
  *   await Array.fromAsync(error("reason"));
  * } catch (e) {
- *   console.log(e); // "reason"
+ *   assertEquals(e, "reason");
  * }
  * ```
  */

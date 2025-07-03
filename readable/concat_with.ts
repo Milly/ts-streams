@@ -20,6 +20,7 @@ import { concatAll } from "../transform/concat_all.ts";
  * ```ts
  * import { concatWith } from "@milly/streams/readable/concat-with";
  * import { from } from "@milly/streams/readable/from";
+ * import { assertEquals } from "@std/assert";
  *
  * const output = concatWith([
  *   [3, 5],
@@ -27,7 +28,7 @@ import { concatAll } from "../transform/concat_all.ts";
  *   from([10, 20, 30]),
  * ]);
  * const result = await Array.fromAsync(output);
- * console.log(result); // [3, 5, 9, 10, 20, 30]
+ * assertEquals(result, [3, 5, 9, 10, 20, 30]);
  * ```
  */
 export function concatWith<T>(

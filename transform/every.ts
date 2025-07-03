@@ -22,11 +22,12 @@ import type { Falsy } from "../internal/types.ts";
  * ```ts
  * import { every } from "@milly/streams/transform/every";
  * import { from } from "@milly/streams/readable/from";
+ * import { assertEquals } from "@std/assert";
  *
  * const source = from([2, 4, 6]);
  * const output = source.pipeThrough(every((v) => v % 2 === 0));
  * const result = await Array.fromAsync(output);
- * console.log(result); // [true]
+ * assertEquals(result, [true]);
  * ```
  */
 export function every<T>(

@@ -93,17 +93,17 @@ export interface TapController {
  * import { from } from "@milly/streams/readable/from";
  * import { map } from "@milly/streams/transform/map";
  * import { pipe } from "@milly/streams/transform/pipe";
+ * import { assertEquals } from "@std/assert";
  *
+ * const log: unknown[] = [];
  * const source = from([1, 2, 3]);
  * const output = source.pipeThrough(pipe(
- *   tap((value) => console.log(value)), // It has no effect on stream.
+ *   tap((value) => log.push(value)), // It has no effect on stream.
  *   map((value) => value * 2),
  * ));
  * const result = await Array.fromAsync(output);
- * // 1
- * // 2
- * // 3
- * console.log(result); // [2, 4, 6]
+ * assertEquals(log, [1, 2, 3]);
+ * assertEquals(result, [2, 4, 6]);
  * ```
  */
 export function tap<T>(

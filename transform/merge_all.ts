@@ -26,6 +26,7 @@ import { mergeMap } from "./merge_map.ts";
  * import { pipe } from "@milly/streams/transform/pipe";
  * import { take } from "@milly/streams/transform/take";
  * import { timer } from "@milly/streams/readable/timer";
+ * import { assertEquals } from "@std/assert";
  *
  * // source[0] : 0 ------300ms----------> 0 ------300ms--------> 0 |
  * // source[1] : -100ms-> 1 ---200ms----> 1 ---200ms----> 1 |
@@ -38,7 +39,7 @@ import { mergeMap } from "./merge_map.ts";
  * ]);
  * const output = source.pipeThrough(mergeAll());
  * const result = await Array.fromAsync(output);
- * console.log(result); // [0, 1, 2, 0, 1, 2, 1, 0, 2]
+ * assertEquals(result, [0, 1, 2, 0, 1, 2, 1, 0, 2]);
  * ```
  */
 export function mergeAll<T>(

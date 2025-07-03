@@ -19,11 +19,12 @@ import type { Falsy } from "../internal/types.ts";
  * ```ts
  * import { skipWhile } from "@milly/streams/transform/skip-while";
  * import { from } from "@milly/streams/readable/from";
+ * import { assertEquals } from "@std/assert";
  *
  * const source = from([1, 2, 0, 3, 4]);
  * const output = source.pipeThrough(skipWhile(Boolean));
  * const result = await Array.fromAsync(output);
- * console.log(result); // [0, 3, 4]
+ * assertEquals(result, [0, 3, 4]);
  * ```
  */
 export function skipWhile<T>(
@@ -41,11 +42,12 @@ export function skipWhile<T>(
  * ```ts
  * import { skipWhile } from "@milly/streams/transform/skip-while";
  * import { from } from "@milly/streams/readable/from";
+ * import { assertEquals } from "@std/assert";
  *
  * const source = from([1, 2, 3, 2, 0]);
  * const output = source.pipeThrough(skipWhile((value) => value <= 2));
  * const result = await Array.fromAsync(output);
- * console.log(result); // [3, 2, 0]
+ * assertEquals(result, [3, 2, 0]);
  * ```
  */
 export function skipWhile<T>(predicate: PredicateFn<T>): TransformStream<T, T>;

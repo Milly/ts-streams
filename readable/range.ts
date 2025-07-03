@@ -17,10 +17,11 @@ import { empty } from "./empty.ts";
  * @example
  * ```ts
  * import { range } from "@milly/streams/readable/range";
+ * import { assertEquals } from "@std/assert";
  *
  * const output = range(8, 5);
  * const result = await Array.fromAsync(output);
- * console.log(result); // [8, 9, 10, 11, 12]
+ * assertEquals(result, [8, 9, 10, 11, 12]);
  * ```
  */
 export function range(count: number): ReadableStream<number>;

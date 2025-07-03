@@ -18,11 +18,12 @@ import { terminate } from "./terminate.ts";
  * ```ts
  * import { take } from "@milly/streams/transform/take";
  * import { from } from "@milly/streams/readable/from";
+ * import { assertEquals } from "@std/assert";
  *
  * const source = from([1, 2, 3, 4, 5]);
  * const output = source.pipeThrough(take(2));
  * const result = await Array.fromAsync(output);
- * console.log(result); // [1, 2]
+ * assertEquals(result, [1, 2]);
  * ```
  */
 export function take<T>(count = 1): TransformStream<T, T> {

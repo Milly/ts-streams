@@ -14,14 +14,14 @@
  * ```ts
  * import { abort } from "@milly/streams/transform/abort";
  * import { from } from "@milly/streams/readable/from";
+ * import { assertEquals, assertRejects } from "@std/assert";
  *
  * const source = from([1, 2, 3]);
  * const output = source.pipeThrough(abort("reason"));
- * try {
+ * const error = await assertRejects(async () => {
  *   await Array.fromAsync(output);
- * } catch (e) {
- *   console.log(e); // "reason"
- * }
+ * });
+ * assertEquals(error, "reason");
  * ```
  */
 export function abort(reason?: unknown): TransformStream<unknown, never> {

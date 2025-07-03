@@ -54,6 +54,7 @@ export interface FromMessageOptions<T, R> {
  * ```ts
  * import { fromMessage } from "@milly/streams/readable/from-message";
  * import { take } from "@milly/streams/transform/take";
+ * import { assertEquals } from "@std/assert";
  *
  * const { port1, port2 } = new MessageChannel();
  * const output = fromMessage(port1).pipeThrough(take(3));
@@ -62,7 +63,7 @@ export interface FromMessageOptions<T, R> {
  * port2.postMessage(true);
  * port2.close();
  * const result = await Array.fromAsync(output);
- * console.log(result); // [1, "foo", true]
+ * assertEquals(result, [1, "foo", true]);
  * port1.close();
  * ```
  */
@@ -89,6 +90,7 @@ export function fromMessage<T, R = T>(
  * ```ts
  * import { fromMessage } from "@milly/streams/readable/from-message";
  * import { take } from "@milly/streams/transform/take";
+ * import { assertEquals } from "@std/assert";
  *
  * const { port1, port2 } = new MessageChannel();
  * const output = fromMessage(port1).pipeThrough(take(3));
@@ -97,7 +99,7 @@ export function fromMessage<T, R = T>(
  * port2.postMessage(true);
  * port2.close();
  * const result = await Array.fromAsync(output);
- * console.log(result); // [1, "foo", true]
+ * assertEquals(result, [1, "foo", true]);
  * port1.close();
  * ```
  */

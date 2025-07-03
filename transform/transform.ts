@@ -26,6 +26,7 @@ const NOOP = () => {};
  * ```ts
  * import { transform } from "@milly/streams/transform/transform";
  * import { from } from "@milly/streams/readable/from";
+ * import { assertEquals } from "@std/assert";
  *
  * const output = from([1, 2, 3])
  *   .pipeThrough(transform(async function* (source) {
@@ -34,7 +35,7 @@ const NOOP = () => {};
  *     }
  *   }));
  * const result = await Array.fromAsync(output);
- * console.log(result); // [10, 20, 30]
+ * assertEquals(result, [10, 20, 30]);
  * ```
  */
 export function transform<I, O>(

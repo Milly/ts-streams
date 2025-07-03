@@ -16,11 +16,12 @@ import { reduce } from "./reduce.ts";
  * ```ts
  * import { count } from "@milly/streams/transform/count";
  * import { from } from "@milly/streams/readable/from";
+ * import { assertEquals } from "@std/assert";
  *
  * const source = from(["a", "b", "c", "d"]);
  * const output = source.pipeThrough(count());
  * const result = await Array.fromAsync(output);
- * console.log(result); // [4]
+ * assertEquals(result, [4]);
  * ```
  */
 export function count(): TransformStream<unknown, number> {

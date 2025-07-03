@@ -20,16 +20,17 @@ import { deferred } from "../internal/deferred.ts";
  * ```ts
  * import { timer } from "@milly/streams/readable/timer";
  * import { take } from "@milly/streams/transform/take";
+ * import { assertEquals } from "@std/assert";
  *
  * // output1 : --100ms-> 0
  * const output1 = timer(100);
  * const result1 = await Array.fromAsync(output1);
- * console.log(result1); // [0]
+ * assertEquals(result1, [0]);
  *
  * // output2 : --200ms-> 0 --50ms-> 1 --50ms-> 2 --50ms-> 3
  * const output2 = timer(200, 50).pipeThrough(take(4));
  * const result2 = await Array.fromAsync(output2);
- * console.log(result2); // [0, 1, 2, 3]
+ * assertEquals(result2, [0, 1, 2, 3]);
  * ```
  */
 export function timer(delay: number): ReadableStream<0>;

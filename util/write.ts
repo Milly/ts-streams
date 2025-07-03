@@ -17,18 +17,18 @@
  * @example
  * ```ts
  * import { write } from "@milly/streams/util/write";
+ * import { assertEquals } from "@std/assert";
  *
- * const results: number[] = [];
+ * const result: number[] = [];
  * const stream = new WritableStream<number>({
  *   write(chunk) {
- *     results.push(chunk);
+ *     result.push(chunk);
  *   },
  * });
- *
  * await write(stream, 1);
  * await write(stream, 2, 3);
  * await write(stream, Promise.resolve(4));
- * console.log(results); // [1, 2, 3, 4]
+ * assertEquals(result, [1, 2, 3, 4]);
  * ```
  */
 export async function write<T>(

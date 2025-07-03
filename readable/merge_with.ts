@@ -23,6 +23,7 @@ import { mergeAll } from "../transform/merge_all.ts";
  * import { pipe } from "@milly/streams/transform/pipe";
  * import { take } from "@milly/streams/transform/take";
  * import { timer } from "@milly/streams/readable/timer";
+ * import { assertEquals } from "@std/assert";
  *
  * // input[0] : 1 --300ms--------------> 1 --300ms------------> 1
  * // input[1] : 2 --200ms-----> 2 --200ms-----> 2 --200ms-----> 2
@@ -34,7 +35,7 @@ import { mergeAll } from "../transform/merge_all.ts";
  *   timer(500, 200).pipeThrough(pipe(take(2), map(() => 3))),
  * ]);
  * const result = await Array.fromAsync(output);
- * console.log(result); // [1, 2, 2, 1, 2, 3, 1, 2, 3]
+ * assertEquals(result, [1, 2, 2, 1, 2, 3, 1, 2, 3]);
  * ```
  */
 export function mergeWith<T>(

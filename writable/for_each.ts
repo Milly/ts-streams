@@ -14,14 +14,20 @@ import type { WriteFn } from "../types.ts";
  * ```ts
  * import { forEach } from "@milly/streams/writable/for-each";
  * import { from } from "@milly/streams/readable/from";
+ * import { assertEquals } from "@std/assert";
+ *
+ * const result: unknown[] = [];
  *
  * await from([1, "foo", true])
  *   .pipeTo(forEach((chunk, index) => {
- *     console.log([chunk, index]);
+ *     result.push([chunk, index]);
  *   }));
- * // output: [1, 0]
- * // output: ["foo", 1]
- * // output: [true, 2]
+ *
+ * assertEquals(result, [
+ *   [1, 0],
+ *   ["foo", 1],
+ *   [true, 2],
+ * ]);
  * ```
  *
  * @template T The chunk type.

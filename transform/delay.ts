@@ -21,13 +21,14 @@ import { mergeMap } from "./merge_map.ts";
  * import { delay } from "@milly/streams/transform/delay";
  * import { take } from "@milly/streams/transform/take";
  * import { timer } from "@milly/streams/readable/timer";
+ * import { assertEquals } from "@std/assert";
  *
  * // source : -100ms-> 0 --200ms--> 1 --200ms--> 2 |
  * // output : -400ms--------------------> 0 --200ms--> 1 --200ms--> 2 |
  * const source = timer(100, 300).pipeThrough(take(3));
  * const output = source.pipeThrough(delay(300));
  * const result = await Array.fromAsync(output);
- * console.log(result); // [0, 1, 2]
+ * assertEquals(result, [0, 1, 2]);
  * ```
  */
 export function delay<T>(due: number): TransformStream<T, T> {
