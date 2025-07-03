@@ -4,7 +4,7 @@
  * @module
  */
 
-import type { StreamSource } from "../types.ts";
+import type { ProjectFn, StreamSource } from "../types.ts";
 import { getIterator, iteratorNext } from "../internal/iterator.ts";
 
 /**
@@ -22,7 +22,7 @@ import { getIterator, iteratorNext } from "../internal/iterator.ts";
  *
  * @template T The type of the elements in the array-like.
  * @param stream The stream to read from.
- * @param mapFn A function to call on every chunk of the stream, and return
+ * @param project A function to call on every chunk of the stream, and return
  *     value is added to the array instead (after being awaited).
  * @returns A new Promise whose fulfillment value is a new Array instance.
  *
@@ -38,14 +38,14 @@ import { getIterator, iteratorNext } from "../internal/iterator.ts";
  */
 export async function toArray<T, R>(
   stream: StreamSource<T> | ArrayLike<T | Promise<T>>,
-  mapFn: (element: T, index: number) => R,
+  project: ProjectFn<T, R>,
 ): Promise<Awaited<R>[]>;
 export async function toArray<T>(
   stream: StreamSource<T> | ArrayLike<T | Promise<T>>,
 ): Promise<Awaited<T>[]>;
 export async function toArray<T, R>(
   stream: StreamSource<T> | ArrayLike<T | Promise<T>>,
-  mapFn?: (element: T, index: number) => R,
+  project?: ProjectFn<T, R>,
 ): Promise<Awaited<T | R>[]> {
   let iterator: AsyncIterator<T> | Iterator<T | PromiseLike<T>>;
   try {
@@ -62,8 +62,8 @@ export async function toArray<T, R>(
     }
     try {
       let value: Awaited<T | R> = await res.value;
-      if (mapFn) {
-        value = await mapFn(value, index++);
+      if (project) {
+        value = await project(value, index++);
       }
       buf.push(value);
     } catch (e) {
