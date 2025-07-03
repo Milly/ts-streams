@@ -30,10 +30,11 @@ import { getIterator, iteratorNext } from "../internal/iterator.ts";
  * ```ts
  * import { toArray } from "@milly/streams/util/to-array";
  * import { from } from "@milly/streams/readable/from";
+ * import { assertEquals } from "@std/assert";
  *
  * const stream = from([1, 2, 3]);
- * const array = toArray(stream);
- * console.log(array); // [1, 2, 3]
+ * const array = await toArray(stream);
+ * assertEquals(array, [1, 2, 3]);
  * ```
  */
 export async function toArray<T, R>(

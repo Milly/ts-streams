@@ -61,6 +61,7 @@ export interface FromEventOptions<E, R> extends AddEventListenerOptions {
  * @example
  * ```ts
  * import { fromEvent } from "@milly/streams/readable/from-event";
+ * import { assertEquals } from "@std/assert";
  *
  * const abortController = new AbortController();
  * const { signal } = abortController;
@@ -72,7 +73,7 @@ export interface FromEventOptions<E, R> extends AddEventListenerOptions {
  *   once: true,
  * });
  * const result = await Array.fromAsync(output);
- * console.log(result); // ["foo"]
+ * assertEquals(result, ["foo"]);
  * ```
  */
 export function fromEvent<E, R = E>(
@@ -99,6 +100,7 @@ export function fromEvent<E, R = E>(
  * ```ts
  * import { fromEvent } from "@milly/streams/readable/from-event";
  * import { take } from "@milly/streams/transform/take";
+ * import { assertEquals } from "@std/assert";
  *
  * const abortController = new AbortController();
  * const { signal } = abortController;
@@ -108,7 +110,7 @@ export function fromEvent<E, R = E>(
  * const output = fromEvent(signal, "abort", () => signal.reason)
  *     .pipeThrough(take(1));
  * const result = await Array.fromAsync(output);
- * console.log(result); // ["foo"]
+ * assertEquals(result, ["foo"]);
  * ```
  */
 export function fromEvent<E, R>(

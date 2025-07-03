@@ -24,13 +24,14 @@ import type { AccumulateFn } from "../types.ts";
  * ```ts
  * import { reduce } from "@milly/streams/transform/reduce";
  * import { from } from "@milly/streams/readable/from";
+ * import { assertEquals } from "@std/assert";
  *
  * const source = from([1, 2, 3]);
  * const output = source.pipeThrough(reduce(
  *   (prev: number, chunk: number) => prev + chunk
  * ));
  * const result = await Array.fromAsync(output);
- * console.log(result); // [6]
+ * assertEquals(result, [6]);
  * ```
  */
 export function reduce<I, A = I>(
@@ -58,6 +59,7 @@ export function reduce<I, A = I>(
  * ```ts
  * import { reduce } from "@milly/streams/transform/reduce";
  * import { from } from "@milly/streams/readable/from";
+ * import { assertEquals } from "@std/assert";
  *
  * const source = from([1, 2, 3]);
  * const output = source.pipeThrough(reduce(
@@ -65,7 +67,7 @@ export function reduce<I, A = I>(
  *   10
  * ));
  * const result = await Array.fromAsync(output);
- * console.log(result); // [16]
+ * assertEquals(result, [16]);
  * ```
  */
 export function reduce<I, A, V = A>(

@@ -23,6 +23,7 @@ import { exhaustMap } from "./exhaust_map.ts";
  * import { map } from "@milly/streams/transform/map";
  * import { pipe } from "@milly/streams/transform/pipe";
  * import { take } from "@milly/streams/transform/take";
+ * import { assertEquals } from "@std/assert";
  *
  * // source:timer  : 0 -300ms------> 1 -300ms------> 2 |
  * // source:map[0] : 0 -200ms-> 0 -200ms-> 0 |
@@ -40,7 +41,7 @@ import { exhaustMap } from "./exhaust_map.ts";
  * ));
  * const output = source.pipeThrough(exhaustAll());
  * const result = await Array.fromAsync(output);
- * console.log(result); // [0, 0, 0, 2, 2, 2]
+ * assertEquals(result, [0, 0, 0, 2, 2, 2]);
  * ```
  */
 export function exhaustAll<T>(): TransformStream<StreamSource<T>, T> {

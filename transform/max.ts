@@ -19,11 +19,12 @@ import { reduce } from "./reduce.ts";
  * ```ts
  * import { max } from "@milly/streams/transform/max";
  * import { from } from "@milly/streams/readable/from";
+ * import { assertEquals } from "@std/assert";
  *
  * const source = from([12, 42, 3, 8, 25]);
  * const output = source.pipeThrough(max());
  * const result = await Array.fromAsync(output);
- * console.log(result); // [42]
+ * assertEquals(result, [42]);
  * ```
  */
 export function max<T>(

@@ -27,6 +27,7 @@ import { toReadableStream } from "../internal/to_readable_stream.ts";
  * import { map } from "@milly/streams/transform/map";
  * import { pipe } from "@milly/streams/transform/pipe";
  * import { take } from "@milly/streams/transform/take";
+ * import { assertEquals } from "@std/assert";
  *
  * // source     : 0 -300ms------> 1 -300ms------> 2 |
  * // project[0] : 0 -200ms-> 0 -200ms-> 0 |
@@ -41,7 +42,7 @@ import { toReadableStream } from "../internal/to_readable_stream.ts";
  *   ))
  * ));
  * const result = await Array.fromAsync(output);
- * console.log(result); // [0, 0, 1, 0, 1, 2, 1, 2, 2]
+ * assertEquals(result, [0, 0, 1, 0, 1, 2, 1, 2, 2]);
  * ```
  */
 export function mergeMap<I, O>(

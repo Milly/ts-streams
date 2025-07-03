@@ -22,10 +22,11 @@ const NOOP = () => {};
  * @example
  * ```ts
  * import { from } from "@milly/streams/readable/from";
+ * import { assertEquals } from "@std/assert";
  *
  * const output = from([3, Promise.resolve(8), 42]);
  * const result = await Array.fromAsync(output);
- * console.log(result); // [3, 8, 42]
+ * assertEquals(result, [3, 8, 42]);
  * ```
  */
 export function from<T>(input: StreamSource<T>): ReadableStream<T> {

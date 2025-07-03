@@ -17,13 +17,14 @@
  * ```ts
  * import { pull } from "@milly/streams/util/pull";
  * import { from } from "@milly/streams/readable/from";
+ * import { assertEquals } from "@std/assert";
  *
  * const stream = from([1, 2, 3]);
  *
- * console.log(await pull(stream)); // 1
- * console.log(await pull(stream)); // 2
- * console.log(await pull(stream)); // 3
- * console.log(await pull(stream)); // undefined
+ * assertEquals(await pull(stream), 1);
+ * assertEquals(await pull(stream), 2);
+ * assertEquals(await pull(stream), 3);
+ * assertEquals(await pull(stream), undefined);
  * ```
  */
 export async function pull<T, D>(

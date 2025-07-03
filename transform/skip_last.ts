@@ -15,11 +15,12 @@
  * ```ts
  * import { skipLast } from "@milly/streams/transform/skip-last";
  * import { from } from "@milly/streams/readable/from";
+ * import { assertEquals } from "@std/assert";
  *
  * const source = from([1, 2, 3, 4, 5]);
  * const output = source.pipeThrough(skipLast(2));
  * const result = await Array.fromAsync(output);
- * console.log(result); // [1, 2, 3]
+ * assertEquals(result, [1, 2, 3]);
  * ```
  */
 export function skipLast<T>(count = 1): TransformStream<T, T> {

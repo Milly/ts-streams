@@ -24,13 +24,14 @@ import type { AccumulateFn } from "../types.ts";
  * ```ts
  * import { scan } from "@milly/streams/transform/scan";
  * import { from } from "@milly/streams/readable/from";
+ * import { assertEquals } from "@std/assert";
  *
  * const source = from([1, 2, 3]);
  * const output = source.pipeThrough(scan(
  *   (prev: number, chunk: number) => prev + chunk
  * ));
  * const result = await Array.fromAsync(output);
- * console.log(result); // [1, 3, 6]
+ * assertEquals(result, [1, 3, 6]);
  * ```
  */
 export function scan<I, A = I>(
@@ -58,6 +59,7 @@ export function scan<I, A = I>(
  * ```ts
  * import { scan } from "@milly/streams/transform/scan";
  * import { from } from "@milly/streams/readable/from";
+ * import { assertEquals } from "@std/assert";
  *
  * const source = from([1, 2, 3]);
  * const output = source.pipeThrough(scan(
@@ -65,7 +67,7 @@ export function scan<I, A = I>(
  *   10
  * ));
  * const result = await Array.fromAsync(output);
- * console.log(result); // [11, 13, 16]
+ * assertEquals(result, [11, 13, 16]);
  * ```
  */
 export function scan<I, A, V = A>(

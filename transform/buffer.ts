@@ -22,6 +22,7 @@ import { map } from "./map.ts";
  * import { buffer } from "@milly/streams/transform/buffer";
  * import { timer } from "@milly/streams/readable/timer";
  * import { take } from "@milly/streams/transform/take";
+ * import { assertEquals } from "@std/assert";
  *
  * // source  : 0 ----100ms----> 1 ----100ms----> 2 ----100ms------> 3   |
  * // emitter : -----150ms---------> 0      --100ms--> 1   |
@@ -30,7 +31,7 @@ import { map } from "./map.ts";
  * const emitter = timer(150, 100).pipeThrough(take(2));
  * const output = source.pipeThrough(buffer(emitter));
  * const result = await Array.fromAsync(output);
- * console.log(result); // [[0, 1], [2], [3]]
+ * assertEquals(result, [[0, 1], [2], [3]]);
  * ```
  */
 export function buffer<T>(

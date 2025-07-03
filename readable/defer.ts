@@ -19,16 +19,17 @@ import { toReadableStream } from "../internal/to_readable_stream.ts";
  * @example
  * ```ts
  * import { defer } from "@milly/streams/readable/defer";
+ * import { assertEquals } from "@std/assert";
  *
  * let isFactoryCalled = false;
- * const output = defer(() => {
+ * const output = defer(function* () {
  *   isFactoryCalled = true;
- *   return Math.random() > 0.5 ? [3, 4, 5] : [Promise.resolve(42)];
+ *   yield* [3, 4, 5];
  * });
- * console.log(isFactoryCalled); // false
+ * assertEquals(isFactoryCalled, false);
  * const result = await Array.fromAsync(output);
- * console.log(isFactoryCalled); // true
- * console.log(result); // [3, 4, 5] or [42]
+ * assertEquals(isFactoryCalled, true);
+ * assertEquals(result, [3, 4, 5]);
  * ```
  */
 export function defer<T>(inputFactory: FactoryFn<T>): ReadableStream<T> {

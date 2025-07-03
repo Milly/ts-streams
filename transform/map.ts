@@ -27,11 +27,12 @@ import type { ProjectFn } from "../types.ts";
  * ```ts
  * import { map } from "@milly/streams/transform/map";
  * import { from } from "@milly/streams/readable/from";
+ * import { assertEquals } from "@std/assert";
  *
  * const source = from([1, 2, 3]);
  * const output = source.pipeThrough(map((v) => v * 2));
  * const result = await Array.fromAsync(output);
- * console.log(result); // [2, 4, 6]
+ * assertEquals(result, [2, 4, 6]);
  * ```
  */
 export function map<I, O>(

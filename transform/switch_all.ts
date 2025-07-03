@@ -23,6 +23,7 @@ import { switchMap } from "./switch_map.ts";
  * import { map } from "@milly/streams/transform/map";
  * import { pipe } from "@milly/streams/transform/pipe";
  * import { take } from "@milly/streams/transform/take";
+ * import { assertEquals } from "@std/assert";
  *
  * // source:timer  : 0 -300ms------> 1 -300ms------> 2 |
  * // source:map[0] : 0 -200ms-> 0 -200ms-> 0 |
@@ -40,7 +41,7 @@ import { switchMap } from "./switch_map.ts";
  * ));
  * const output = source.pipeThrough(switchAll());
  * const result = await Array.fromAsync(output);
- * console.log(result); // [0, 0, 1, 1, 2, 2, 2]
+ * assertEquals(result, [0, 0, 1, 1, 2, 2, 2]);
  * ```
  */
 export function switchAll<T>(): TransformStream<StreamSource<T>, T> {

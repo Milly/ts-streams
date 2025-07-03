@@ -17,6 +17,7 @@ import { switchMap } from "@milly/streams/transform/switch-map";
 import { take } from "@milly/streams/transform/take";
 import { forEach } from "@milly/streams/writable/for-each";
 import { postMessage } from "@milly/streams/writable/post-message";
+import { assertEquals } from "@std/assert";
 
 async function* gen() {
   yield 1;
@@ -31,24 +32,25 @@ const { port1, port2 } = new MessageChannel();
 from(gen())
   .pipeThrough(switchMap((chunk) => [chunk, typeof chunk]))
   .pipeTo(postMessage(port1))
-  .finally(() => {
-    port1.close();
-  });
+  .finally(() => port1.close());
+
+const result: unknown[] = [];
 
 await fromMessage(port2)
   .pipeThrough(take(6))
   .pipeTo(forEach((chunk) => {
-    console.log(chunk);
+    result.push(chunk);
   }))
-  .finally(() => {
-    port2.close();
-  });
-// output: 1
-// output: number
-// output: foo
-// output: string
-// output: true
-// output: boolean
+  .finally(() => port2.close());
+
+assertEquals(result, [
+  1,
+  "number",
+  "foo",
+  "string",
+  true,
+  "boolean",
+]);
 ```
 
 ## License

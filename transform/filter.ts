@@ -22,13 +22,14 @@ import type { Falsy } from "../internal/types.ts";
  * ```ts
  * import { filter } from "@milly/streams/transform/filter";
  * import { from } from "@milly/streams/readable/from";
+ * import { assertEquals } from "@std/assert";
  *
  * const source = from([1, "a", 2, "b", 3, "c"]);
  * const output = source.pipeThrough(
  *   filter((v): v is string => typeof v === "string")
  * );
  * const result = await Array.fromAsync(output);
- * console.log(result); // ["a", "b", "c"]
+ * assertEquals(result, ["a", "b", "c"]);
  * ```
  */
 export function filter<I, O extends I>(
@@ -48,11 +49,12 @@ export function filter<I, O extends I>(
  * ```ts
  * import { filter } from "@milly/streams/transform/filter";
  * import { from } from "@milly/streams/readable/from";
+ * import { assertEquals } from "@std/assert";
  *
  * const source = from([1, null, 2, undefined, false, 3]);
  * const output = source.pipeThrough(filter(Boolean));
  * const result = await Array.fromAsync(output);
- * console.log(result); // [1, 2, 3]
+ * assertEquals(result, [1, 2, 3]);
  * ```
  */
 export function filter<T>(
@@ -72,11 +74,12 @@ export function filter<T>(
  * ```ts
  * import { filter } from "@milly/streams/transform/filter";
  * import { from } from "@milly/streams/readable/from";
+ * import { assertEquals } from "@std/assert";
  *
  * const source = from([1, 2, 3, 4, 5, 6, 7]);
  * const output = source.pipeThrough(filter((v) => v % 2 === 0));
  * const result = await Array.fromAsync(output);
- * console.log(result); // [2, 4, 6]
+ * assertEquals(result, [2, 4, 6]);
  * ```
  */
 export function filter<T>(predicate: PredicateFn<T>): TransformStream<T, T>;

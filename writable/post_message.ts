@@ -41,6 +41,7 @@ export interface PostMessageOptions<T> {
  * import { postMessage } from "@milly/streams/writable/post-message";
  * import { from } from "@milly/streams/readable/from";
  * import { delay } from "@std/async/delay";
+ * import { assertEquals } from "@std/assert";
  *
  * const { port1, port2 } = new MessageChannel();
  * const result: unknown[] = [];
@@ -50,7 +51,7 @@ export interface PostMessageOptions<T> {
  * await from([1, "foo", true]).pipeTo(postMessage(port1));
  * port1.close();
  * await delay(0); // onmessage will be called next tick.
- * console.log(result); // [1, "foo", true]
+ * assertEquals(result, [1, "foo", true]);
  * port2.close();
  * ```
  *
@@ -75,6 +76,7 @@ export function postMessage<T>(
  * import { postMessage } from "@milly/streams/writable/post-message";
  * import { from } from "@milly/streams/readable/from";
  * import { delay } from "@std/async/delay";
+ * import { assertEquals } from "@std/assert";
  *
  * const { port1, port2 } = new MessageChannel();
  * const result: unknown[] = [];
@@ -84,7 +86,7 @@ export function postMessage<T>(
  * await from([1, "foo", true]).pipeTo(postMessage(port1));
  * port1.close();
  * await delay(0); // onmessage will be called next tick.
- * console.log(result); // [1, "foo", true]
+ * assertEquals(result, [1, "foo", true]);
  * port2.close();
  * ```
  *

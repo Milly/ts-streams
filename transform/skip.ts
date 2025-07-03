@@ -15,11 +15,12 @@
  * ```ts
  * import { skip } from "@milly/streams/transform/skip";
  * import { from } from "@milly/streams/readable/from";
+ * import { assertEquals } from "@std/assert";
  *
  * const source = from([1, 2, 3, 4, 5]);
  * const output = source.pipeThrough(skip(3));
  * const result = await Array.fromAsync(output);
- * console.log(result); // [4, 5]
+ * assertEquals(result, [4, 5]);
  * ```
  */
 export function skip<T>(count = 1): TransformStream<T, T> {

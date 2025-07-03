@@ -20,6 +20,7 @@
  * import { interval } from "@milly/streams/readable/interval";
  * import { map } from "@milly/streams/transform/map";
  * import { take } from "@milly/streams/transform/take";
+ * import { assertEquals } from "@std/assert";
  *
  * const source = interval(100);
  * const output = source.pipeThrough(pipe(
@@ -28,7 +29,7 @@
  *   map(value => value * value),
  * ));
  * const result = await Array.fromAsync(output);
- * console.log(result); // [1, 9, 25]
+ * assertEquals(result, [1, 9, 25]);
  * ```
  */
 export function pipe<I, O, T1>(

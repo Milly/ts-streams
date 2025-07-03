@@ -12,7 +12,7 @@ describe("tap()", () => {
       it("emits the source chunk type", () => {
         const source = new ReadableStream<number>();
 
-        const output = source.pipeThrough(tap((value) => console.log(value)));
+        const output = source.pipeThrough(tap((_value): void => {}));
 
         assertType<IsExact<typeof output, ReadableStream<number>>>(true);
       });

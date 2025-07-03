@@ -24,6 +24,7 @@ import { debounce, type DebouncedFunction } from "@std/async/debounce";
  * import { debounceTime } from "@milly/streams/transform/debounce-time";
  * import { from } from "@milly/streams/readable/from";
  * import { delay } from "@std/async";
+ * import { assertEquals } from "@std/assert";
  *
  * // source : 0 -100ms-> 1 ---200ms---> 2 3 ---200ms---> 4 |
  * // output :              -150ms-> 1       -150ms-> 3   4 |
@@ -36,7 +37,7 @@ import { debounce, type DebouncedFunction } from "@std/async/debounce";
  * })());
  * const output = source.pipeThrough(debounceTime(150));
  * const result = await Array.fromAsync(output);
- * console.log(result); // [1, 3, 4]
+ * assertEquals(result, [1, 3, 4]);
  * ```
  */
 export function debounceTime<T>(due: number): TransformStream<T, T> {

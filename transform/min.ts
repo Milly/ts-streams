@@ -19,11 +19,12 @@ import { reduce } from "./reduce.ts";
  * ```ts
  * import { min } from "@milly/streams/transform/min";
  * import { from } from "@milly/streams/readable/from";
+ * import { assertEquals } from "@std/assert";
  *
  * const source = from([12, 42, 3, 8, 25]);
  * const output = source.pipeThrough(min());
  * const result = await Array.fromAsync(output);
- * console.log(result); // [3]
+ * assertEquals(result, [3]);
  * ```
  */
 export function min<T>(

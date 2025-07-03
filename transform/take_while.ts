@@ -33,13 +33,14 @@ export interface TakeWhileOptions {
  * ```ts
  * import { takeWhile } from "@milly/streams/transform/take-while";
  * import { from } from "@milly/streams/readable/from";
+ * import { assertEquals } from "@std/assert";
  *
  * const source = from(["a", "b", 1, 2, "c", 3]);
  * const output = source.pipeThrough(
  *   takeWhile((value: unknown): value is string => typeof value === "string"),
  * );
  * const result = await Array.fromAsync(output);
- * console.log(result); // ["a", "b"]
+ * assertEquals(result, ["a", "b"]);
  * ```
  */
 export function takeWhile<I, O extends I>(
@@ -58,11 +59,12 @@ export function takeWhile<I, O extends I>(
  * ```ts
  * import { takeWhile } from "@milly/streams/transform/take-while";
  * import { from } from "@milly/streams/readable/from";
+ * import { assertEquals } from "@std/assert";
  *
  * const source = from([1, 2, 0, 3, 4]);
  * const output = source.pipeThrough(takeWhile(Boolean));
  * const result = await Array.fromAsync(output);
- * console.log(result); // [1, 2]
+ * assertEquals(result, [1, 2]);
  * ```
  */
 export function takeWhile<T>(
@@ -82,11 +84,12 @@ export function takeWhile<T>(
  * ```ts
  * import { takeWhile } from "@milly/streams/transform/take-while";
  * import { from } from "@milly/streams/readable/from";
+ * import { assertEquals } from "@std/assert";
  *
  * const source = from([1, 2, 3, 2, 0]);
  * const output = source.pipeThrough(takeWhile((value) => value <= 2));
  * const result = await Array.fromAsync(output);
- * console.log(result); // [1, 2]
+ * assertEquals(result, [1, 2]);
  * ```
  */
 export function takeWhile<T>(

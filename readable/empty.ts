@@ -11,9 +11,10 @@
  * @example
  * ```ts
  * import { empty } from "@milly/streams/readable/empty";
+ * import { assertEquals } from "@std/assert";
  *
  * const result = await Array.fromAsync(empty());
- * console.log(result); // []
+ * assertEquals(result, []);
  * ```
  */
 export function empty(): ReadableStream<never> {

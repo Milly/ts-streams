@@ -22,6 +22,7 @@ import { mergeMap } from "./merge_map.ts";
  * ```ts
  * import { concatAll } from "@milly/streams/transform/concat-all";
  * import { from } from "@milly/streams/readable/from";
+ * import { assertEquals } from "@std/assert";
  *
  * const source = from([
  *   [3, 5],
@@ -30,7 +31,7 @@ import { mergeMap } from "./merge_map.ts";
  * ]);
  * const output = source.pipeThrough(concatAll());
  * const result = await Array.fromAsync(output);
- * console.log(result); // [3, 5, 10, 20, 30, "foo"]
+ * assertEquals(result, [3, 5, 10, 20, 30, "foo"]);
  * ```
  */
 export function concatAll<T>(): TransformStream<StreamSource<T>, T> {
