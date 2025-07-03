@@ -35,21 +35,21 @@ describe("toArray()", () => {
       assertEquals(actual, "error");
       assertFalse(stream.locked, "should stream unlocked");
     });
-    describe("if `mapFn` is specified", () => {
+    describe("if `project` is specified", () => {
       it("returns all awaited mapped values in the stream", async () => {
         const stream = from([1, 2, 3]);
-        const mapFn = spy(returnsNext([10, Promise.resolve(11), 12]));
+        const project = spy(returnsNext([10, Promise.resolve(11), 12]));
 
-        const actual = await toArray(stream, mapFn);
+        const actual = await toArray(stream, project);
 
         assertEquals(actual, [10, 11, 12]);
-        assertSpyCalls(mapFn, 3);
-        assertSpyCallArgs(mapFn, 0, [1, 0]);
-        assertSpyCallArgs(mapFn, 1, [2, 1]);
-        assertSpyCallArgs(mapFn, 2, [3, 2]);
+        assertSpyCalls(project, 3);
+        assertSpyCallArgs(project, 0, [1, 0]);
+        assertSpyCallArgs(project, 1, [2, 1]);
+        assertSpyCallArgs(project, 2, [3, 2]);
         assertFalse(stream.locked, "should stream unlocked");
       });
-      it("rejects if `mapFn` throws", async () => {
+      it("rejects if `project` throws", async () => {
         let cancelReason: unknown;
         const stream = new ReadableStream({
           start(controller) {
@@ -62,15 +62,15 @@ describe("toArray()", () => {
           },
         });
         const error = new Error("error");
-        const mapFn = spy(returnsNext([10, 11, error]));
+        const project = spy(returnsNext([10, 11, error]));
 
-        const actual = await assertRejects(() => toArray(stream, mapFn));
+        const actual = await assertRejects(() => toArray(stream, project));
 
         assertEquals(actual, error);
         assertFalse(stream.locked, "should stream unlocked");
         assertEquals(cancelReason, undefined);
       });
-      it("rejects if `mapFn` rejects", async () => {
+      it("rejects if `project` rejects", async () => {
         let cancelReason: unknown;
         const stream = new ReadableStream({
           start(controller) {
@@ -82,9 +82,9 @@ describe("toArray()", () => {
             cancelReason = reason;
           },
         });
-        const mapFn = spy(returnsNext([10, 11, Promise.reject("error")]));
+        const project = spy(returnsNext([10, 11, Promise.reject("error")]));
 
-        const actual = await assertRejects(() => toArray(stream, mapFn));
+        const actual = await assertRejects(() => toArray(stream, project));
 
         assertEquals(actual, "error");
         assertFalse(stream.locked, "should stream unlocked");
@@ -145,7 +145,7 @@ describe("toArray()", () => {
       assertEquals(actual, "error");
       assert(streamClosed, "should closes async iterator");
     });
-    describe("if `mapFn` is specified", () => {
+    describe("if `project` is specified", () => {
       it("returns all awaited mapped values in the stream", async () => {
         let streamClosed = false;
         const stream = {
@@ -159,18 +159,18 @@ describe("toArray()", () => {
             }
           },
         };
-        const mapFn = spy(returnsNext([10, Promise.resolve(11), 12]));
+        const project = spy(returnsNext([10, Promise.resolve(11), 12]));
 
-        const actual = await toArray(stream, mapFn);
+        const actual = await toArray(stream, project);
 
         assertEquals(actual, [10, 11, 12]);
-        assertSpyCalls(mapFn, 3);
-        assertSpyCallArgs(mapFn, 0, [1, 0]);
-        assertSpyCallArgs(mapFn, 1, [2, 1]);
-        assertSpyCallArgs(mapFn, 2, [3, 2]);
+        assertSpyCalls(project, 3);
+        assertSpyCallArgs(project, 0, [1, 0]);
+        assertSpyCallArgs(project, 1, [2, 1]);
+        assertSpyCallArgs(project, 2, [3, 2]);
         assert(streamClosed, "should closes sync iterator");
       });
-      it("rejects if `mapFn` throws", async () => {
+      it("rejects if `project` throws", async () => {
         let streamClosed = false;
         const stream = {
           async *[Symbol.asyncIterator]() {
@@ -184,14 +184,14 @@ describe("toArray()", () => {
           },
         };
         const error = new Error("error");
-        const mapFn = spy(returnsNext([10, 11, error]));
+        const project = spy(returnsNext([10, 11, error]));
 
-        const actual = await assertRejects(() => toArray(stream, mapFn));
+        const actual = await assertRejects(() => toArray(stream, project));
 
         assertEquals(actual, error);
         assert(streamClosed, "should closes async iterator");
       });
-      it("rejects if `mapFn` rejects", async () => {
+      it("rejects if `project` rejects", async () => {
         let streamClosed = false;
         const stream = {
           async *[Symbol.asyncIterator]() {
@@ -204,9 +204,9 @@ describe("toArray()", () => {
             }
           },
         };
-        const mapFn = spy(returnsNext([10, 11, Promise.reject("error")]));
+        const project = spy(returnsNext([10, 11, Promise.reject("error")]));
 
-        const actual = await assertRejects(() => toArray(stream, mapFn));
+        const actual = await assertRejects(() => toArray(stream, project));
 
         assertEquals(actual, "error");
         assert(streamClosed, "should closes async iterator");
@@ -267,7 +267,7 @@ describe("toArray()", () => {
       // Ref: https://github.com/tc39/ecma262/pull/2600
       assert(streamClosed, "should closes sync iterator");
     });
-    describe("if `mapFn` is specified", () => {
+    describe("if `project` is specified", () => {
       it("returns all awaited mapped values in the stream", async () => {
         let streamClosed = false;
         const stream = {
@@ -281,18 +281,18 @@ describe("toArray()", () => {
             }
           },
         };
-        const mapFn = spy(returnsNext([10, Promise.resolve(11), 12]));
+        const project = spy(returnsNext([10, Promise.resolve(11), 12]));
 
-        const actual = await toArray(stream, mapFn);
+        const actual = await toArray(stream, project);
 
         assertEquals(actual, [10, 11, 12]);
-        assertSpyCalls(mapFn, 3);
-        assertSpyCallArgs(mapFn, 0, [1, 0]);
-        assertSpyCallArgs(mapFn, 1, [2, 1]);
-        assertSpyCallArgs(mapFn, 2, [3, 2]);
+        assertSpyCalls(project, 3);
+        assertSpyCallArgs(project, 0, [1, 0]);
+        assertSpyCallArgs(project, 1, [2, 1]);
+        assertSpyCallArgs(project, 2, [3, 2]);
         assert(streamClosed, "should closes sync iterator");
       });
-      it("rejects if `mapFn` throws", async () => {
+      it("rejects if `project` throws", async () => {
         let streamClosed = false;
         const stream = {
           *[Symbol.iterator]() {
@@ -306,14 +306,14 @@ describe("toArray()", () => {
           },
         };
         const error = new Error("error");
-        const mapFn = spy(returnsNext([10, 11, error]));
+        const project = spy(returnsNext([10, 11, error]));
 
-        const actual = await assertRejects(() => toArray(stream, mapFn));
+        const actual = await assertRejects(() => toArray(stream, project));
 
         assertEquals(actual, error);
         assert(streamClosed, "should closes sync iterator");
       });
-      it("rejects if `mapFn` rejects", async () => {
+      it("rejects if `project` rejects", async () => {
         let streamClosed = false;
         const stream = {
           *[Symbol.iterator]() {
@@ -326,9 +326,9 @@ describe("toArray()", () => {
             }
           },
         };
-        const mapFn = spy(returnsNext([10, 11, Promise.reject("error")]));
+        const project = spy(returnsNext([10, 11, Promise.reject("error")]));
 
-        const actual = await assertRejects(() => toArray(stream, mapFn));
+        const actual = await assertRejects(() => toArray(stream, project));
 
         assertEquals(actual, "error");
         assert(streamClosed, "should closes sync iterator");
@@ -369,7 +369,7 @@ describe("toArray()", () => {
 
       assertEquals(actual, "error");
     });
-    describe("if `mapFn` is specified", () => {
+    describe("if `project` is specified", () => {
       it("returns all awaited mapped values in the stream", async () => {
         const stream = {
           length: 3,
@@ -377,17 +377,17 @@ describe("toArray()", () => {
           1: Promise.resolve(2),
           2: Promise.resolve(3),
         };
-        const mapFn = spy(returnsNext([10, Promise.resolve(11), 12]));
+        const project = spy(returnsNext([10, Promise.resolve(11), 12]));
 
-        const actual = await toArray(stream, mapFn);
+        const actual = await toArray(stream, project);
 
         assertEquals(actual, [10, 11, 12]);
-        assertSpyCalls(mapFn, 3);
-        assertSpyCallArgs(mapFn, 0, [1, 0]);
-        assertSpyCallArgs(mapFn, 1, [2, 1]);
-        assertSpyCallArgs(mapFn, 2, [3, 2]);
+        assertSpyCalls(project, 3);
+        assertSpyCallArgs(project, 0, [1, 0]);
+        assertSpyCallArgs(project, 1, [2, 1]);
+        assertSpyCallArgs(project, 2, [3, 2]);
       });
-      it("rejects if `mapFn` throws", async () => {
+      it("rejects if `project` throws", async () => {
         const stream = {
           length: 3,
           0: 1,
@@ -395,22 +395,22 @@ describe("toArray()", () => {
           2: Promise.resolve(3),
         };
         const error = new Error("error");
-        const mapFn = spy(returnsNext([10, 11, error]));
+        const project = spy(returnsNext([10, 11, error]));
 
-        const actual = await assertRejects(() => toArray(stream, mapFn));
+        const actual = await assertRejects(() => toArray(stream, project));
 
         assertEquals(actual, error);
       });
-      it("rejects if `mapFn` rejects", async () => {
+      it("rejects if `project` rejects", async () => {
         const stream = {
           length: 3,
           0: 1,
           1: Promise.resolve(2),
           2: Promise.resolve(3),
         };
-        const mapFn = spy(returnsNext([10, 11, Promise.reject("error")]));
+        const project = spy(returnsNext([10, 11, Promise.reject("error")]));
 
-        const actual = await assertRejects(() => toArray(stream, mapFn));
+        const actual = await assertRejects(() => toArray(stream, project));
 
         assertEquals(actual, "error");
       });
