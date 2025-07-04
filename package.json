@@ -10,12 +10,14 @@
     "test:browser:firefox": "npm run test:browser -- --project firefox",
     "test:browser:webkit": "npm run test:browser -- --project webkit"
   },
+  "dependencies": {
+    "@std/async": "npm:@jsr/std__async@^1.0.1"
+  },
   "devDependencies": {
     "@core/asyncutil": "npm:@jsr/core__asyncutil@^1.1.1",
     "@milly/streamtest": "npm:@jsr/milly__streamtest@^1.0.1",
     "@playwright/test": "^1.44.1",
     "@std/assert": "npm:@jsr/std__assert@^1.0.1",
-    "@std/async": "npm:@jsr/std__async@^1.0.1",
     "@std/testing": "npm:@jsr/std__testing@^1.0.1",
     "esbuild": "^0.25.5",
     "glob": "^10.4.1",
