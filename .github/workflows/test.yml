@@ -43,12 +43,7 @@ jobs:
       - uses: denoland/setup-deno@v2
         with:
           deno-version: ${{ matrix.deno.version }}
-
-      - uses: actions/cache@v4
-        with:
-          key: deno-${{ runner.os }}-${{ hashFiles('deno.lock', '.github/workflows/**') }}
-          restore-keys: deno-${{ runner.os }}-
-          path: ~/.cache/deno
+          cache: true
 
       - name: Check
         run: deno task check
@@ -69,12 +64,7 @@ jobs:
       - uses: denoland/setup-deno@v2
         with:
           deno-version: ${{ matrix.deno.version }}
-
-      - uses: actions/cache@v4
-        with:
-          key: deno-${{ runner.os }}-${{ hashFiles('deno.lock', '.github/workflows/**') }}
-          restore-keys: deno-${{ runner.os }}-
-          path: ~/.cache/deno
+          cache: true
 
       - name: Check slow types
         run: deno task check:publish
@@ -110,12 +100,7 @@ jobs:
       - uses: denoland/setup-deno@v2
         with:
           deno-version: ${{ matrix.deno.version }}
-
-      - uses: actions/cache@v4
-        with:
-          key: deno-${{ runner.os }}-${{ hashFiles('deno.lock', '.github/workflows/**') }}
-          restore-keys: deno-${{ runner.os }}-
-          path: ~/.cache/deno
+          cache: true
 
       - name: Test
         run: deno task test:coverage

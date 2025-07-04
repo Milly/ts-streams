@@ -31,6 +31,7 @@ jobs:
       - uses: denoland/setup-deno@v2
         with:
           deno-version: ${{ matrix.deno.version }}
+          cache: true
 
       - uses: actions/setup-node@v4
         with:
